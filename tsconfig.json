@@ -24,7 +24,8 @@
     "paths": {
       "@core": ["./src/app/core/index"],
       "@features": ["./src/app/features/index"],
-      "@shared": ["./src/app/shared/index"],
+      "@shared": ["./src/app/shared/index"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
