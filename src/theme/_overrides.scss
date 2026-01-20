@@ -1,0 +1,65 @@
+// =============================================================================
+// MODE-SPECIFIC OVERRIDES (iOS & Material Design)
+// =============================================================================
+
+:root.ios,
+:root.md {
+  // Toolbar
+  --ion-toolbar-background: transparent;
+  --ion-toolbar-border-color: transparent;
+  --ion-toolbar-color: #fafafa;
+
+  // Tab Bar
+  --ion-tab-bar-background: var(--glass-bg-solid);
+  --ion-tab-bar-border-color: var(--glass-border);
+  --ion-tab-bar-color: #71717a;
+  --ion-tab-bar-color-selected: #ffffff;
+
+  // Item / List
+  --ion-item-background: transparent;
+  --ion-item-border-color: var(--glass-border);
+  --ion-item-color: #fafafa;
+
+  // Card
+  --ion-card-background: var(--glass-bg);
+}
+
+// iOS-specific backdrop blur
+:root.ios {
+  ion-tab-bar {
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+}
+
+// =============================================================================
+// FLOATING HEADER
+// =============================================================================
+
+ion-header {
+  &.header-floating {
+    position: absolute;
+    top: var(--ion-safe-area-top, 0);
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: var(--space-2) var(--space-3) 0;
+    background: transparent;
+    box-shadow: none;
+
+    ion-toolbar {
+      --background: var(--glass-bg-solid);
+      --border-width: 0;
+      --padding-start: var(--space-3);
+      --padding-end: var(--space-3);
+      border-radius: var(--glass-radius);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+    }
+  }
+}
+
+ion-content.has-floating-header {
+  --padding-top: 70px;
+}

@@ -1,0 +1,78 @@
+// =============================================================================
+// IONIC COMPONENT
+// =============================================================================
+
+ion-title {
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.02em;
+}
+
+ion-card-title {
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+ion-card-subtitle {
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+ion-list-header {
+  font-weight: var(--font-weight-medium);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.5;
+  margin-top: var(--space-6);
+}
+
+ion-item {
+  --padding-start: var(--space-4);
+  --padding-end: var(--space-4);
+  --inner-padding-end: 0;
+
+  ion-label h2 {
+    font-weight: var(--font-weight-medium);
+  }
+
+  ion-label p {
+    opacity: 0.6;
+  }
+}
+
+ion-note {
+  font-weight: var(--font-weight-medium);
+  font-size: 14px;
+}
+
+ion-button {
+  --border-radius: var(--glass-radius-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: -0.01em;
+}
+
+ion-chip {
+  --background: var(--glass-bg-elevated);
+  --color: var(--ion-text-color);
+  font-weight: var(--font-weight-medium);
+}
+
+ion-card {
+  --border-radius: var(--glass-radius);
+  border: 1px solid var(--glass-border);
+  margin: var(--space-4);
+}
+
+ion-input {
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+ion-fab-button {
+  --background: #ffffff;
+  --color: #000000;
+  --box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
