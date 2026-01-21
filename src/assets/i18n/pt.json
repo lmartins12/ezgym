@@ -10,7 +10,8 @@
     "SEARCH": "Buscar",
     "LOADING": "Carregando...",
     "ERROR": "Erro",
-    "SUCCESS": "Sucesso"
+    "SUCCESS": "Sucesso",
+    "CREATE": "Criar"
   },
   "NAV": {
     "HOME": "Início",
@@ -23,5 +24,48 @@
     "LANGUAGE": "Idioma",
     "LANGUAGE_PT": "Português",
     "LANGUAGE_EN": "English"
+  },
+  "WORKOUTS": {
+    "TITLE": "Treinos",
+    "EMPTY_TITLE": "Nenhum treino ainda",
+    "EMPTY_DESCRIPTION": "Crie seu primeiro treino para começar a acompanhar seus treinos",
+    "CREATE_FIRST": "Criar Treino",
+    "CREATE_TITLE": "Criar Treino",
+    "EDIT_TITLE": "Editar Treino",
+    "NAME_LABEL": "Nome do Treino",
+    "DESCRIPTION_LABEL": "Descrição (opcional)",
+    "EXERCISES": "exercícios",
+    "LAST_TRAINED": "Último treino",
+    "DELETE_CONFIRM": "Tem certeza que deseja excluir este treino?",
+    "DELETE_ALL_EXERCISES": "Isso também removerá todos os exercícios deste treino."
+  },
+  "WORKOUT_DETAIL": {
+    "EXERCISES": "Exercícios",
+    "ADD_EXERCISE": "Adicionar Exercício",
+    "NO_EXERCISES": "Nenhum exercício ainda. Adicione seu primeiro exercício para começar.",
+    "START_WORKOUT": "Iniciar Treino",
+    "REORDER_HINT": "Arraste para reordenar exercícios",
+    "DELETE_EXERCISE_CONFIRM": "Remover este exercício do treino?"
+  },
+  "EXERCISE": {
+    "CREATE_TITLE": "Adicionar Exercício",
+    "EDIT_TITLE": "Editar Exercício",
+    "NAME_LABEL": "Nome do Exercício",
+    "MUSCLE_GROUP_LABEL": "Grupo Muscular",
+    "EQUIPMENT_LABEL": "Equipamento (opcional)",
+    "NOTES_LABEL": "Notas (opcional)",
+    "SETTINGS_LABEL": "Configurações para este treino",
+    "SETS_LABEL": "Séries",
+    "REPS_LABEL": "Repetições (ex: 12, 8-10)",
+    "WEIGHT_LABEL": "Carga Alvo (kg)",
+    "REST_LABEL": "Descanso Entre Séries (segundos)",
+    "MUSCLE_CHEST": "Peito",
+    "MUSCLE_BACK": "Costas",
+    "MUSCLE_LEGS": "Pernas",
+    "MUSCLE_SHOULDERS": "Ombros",
+    "MUSCLE_ARMS": "Braços",
+    "MUSCLE_CORE": "Core",
+    "MUSCLE_FULL_BODY": "Corpo Inteiro",
+    "MUSCLE_OTHER": "Outro"
   }
 }

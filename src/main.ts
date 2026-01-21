@@ -1,23 +1,23 @@
+import { provideHttpClient } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  RouteReuseStrategy,
-  provideRouter,
-  withPreloading,
   PreloadAllModules,
+  provideRouter,
+  RouteReuseStrategy,
+  withPreloading,
 } from '@angular/router';
 import {
   IonicRouteStrategy,
   provideIonicAngular,
 } from '@ionic/angular/standalone';
-import { provideHttpClient } from '@angular/common/http';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import {
   provideTranslateHttpLoader,
   TranslateHttpLoader,
 } from '@ngx-translate/http-loader';
 
-import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { routes } from './app/app.routes';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -26,7 +26,7 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(),
     provideTranslateService({
-      defaultLanguage: 'pt',
+      fallbackLang: 'pt',
       loader: {
         provide: TranslateLoader,
         useClass: TranslateHttpLoader,

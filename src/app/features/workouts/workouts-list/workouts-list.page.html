@@ -1,0 +1,42 @@
+<ion-header class="header-floating">
+  <ion-toolbar>
+    <ion-title>{{ 'WORKOUTS.TITLE' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="has-floating-header">
+  @if (loading()) {
+  <div class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  } @else if (workouts().length === 0) {
+  <div class="empty-state">
+    <ion-icon name="barbell-outline" aria-hidden="true"></ion-icon>
+    <h2>{{ 'WORKOUTS.EMPTY_TITLE' | translate }}</h2>
+    <p>{{ 'WORKOUTS.EMPTY_DESCRIPTION' | translate }}</p>
+    <ion-button (click)="openQuickCreate()">
+      {{ 'WORKOUTS.CREATE_FIRST' | translate }}
+    </ion-button>
+  </div>
+  } @else {
+  <ion-list lines="none" inset>
+    @for (workout of workouts(); track workout.id) {
+    <app-workout-card
+      [workout]="workout"
+      (editWorkout)="openEdit($event)"
+      (deleteWorkout)="confirmDelete($event)"
+      (startWorkout)="navigateToWorkout($event)"
+    />
+    }
+  </ion-list>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button
+      (click)="openQuickCreate()"
+      aria-label="{{ 'WORKOUTS.CREATE_TITLE' | translate }}"
+    >
+      <ion-icon name="add" aria-hidden="true"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

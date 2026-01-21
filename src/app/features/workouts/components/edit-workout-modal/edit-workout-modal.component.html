@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ "WORKOUTS.EDIT_TITLE" | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">{{
+        "COMMON.CANCEL" | translate
+      }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="submit()">
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "WORKOUTS.NAME_LABEL" | translate }}
+      </ion-label>
+      <ion-input [(ngModel)]="name" name="name" required />
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "WORKOUTS.DESCRIPTION_LABEL" | translate }}
+      </ion-label>
+      <ion-textarea [(ngModel)]="description" name="description" [rows]="3" />
+    </ion-item>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="submit()">
+      {{ "COMMON.SAVE" | translate }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

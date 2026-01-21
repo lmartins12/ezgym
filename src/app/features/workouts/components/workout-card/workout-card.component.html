@@ -1,0 +1,27 @@
+<ion-item-sliding>
+  <ion-item (click)="navigate()" detail="false">
+    <ion-label>
+      <h2>{{ workout().name }}</h2>
+      <p>
+        {{ workout().exercise_count }} {{ "WORKOUTS.EXERCISES" | translate }}
+      </p>
+      @if (workout().last_trained) {
+        <p class="last-trained">
+          {{ "WORKOUTS.LAST_TRAINED" | translate }}:
+          {{ workout().last_trained | date: "short" }}
+        </p>
+      }
+    </ion-label>
+  </ion-item>
+  <ion-item-options side="end">
+    <ion-item-option (click)="startWorkout.emit(workout().id)" color="primary">
+      <ion-icon slot="icon-only" name="play-outline"></ion-icon>
+    </ion-item-option>
+    <ion-item-option (click)="editWorkout.emit(workout())">
+      <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+    </ion-item-option>
+    <ion-item-option (click)="deleteWorkout.emit(workout().id)" color="danger">
+      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

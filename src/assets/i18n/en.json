@@ -10,7 +10,8 @@
     "SEARCH": "Search",
     "LOADING": "Loading...",
     "ERROR": "Error",
-    "SUCCESS": "Success"
+    "SUCCESS": "Success",
+    "CREATE": "Create"
   },
   "NAV": {
     "HOME": "Home",
@@ -23,5 +24,48 @@
     "LANGUAGE": "Language",
     "LANGUAGE_PT": "Português",
     "LANGUAGE_EN": "English"
+  },
+  "WORKOUTS": {
+    "TITLE": "Workouts",
+    "EMPTY_TITLE": "No workouts yet",
+    "EMPTY_DESCRIPTION": "Create your first workout to start tracking your training",
+    "CREATE_FIRST": "Create Workout",
+    "CREATE_TITLE": "Create Workout",
+    "EDIT_TITLE": "Edit Workout",
+    "NAME_LABEL": "Workout Name",
+    "DESCRIPTION_LABEL": "Description (optional)",
+    "EXERCISES": "exercises",
+    "LAST_TRAINED": "Last trained",
+    "DELETE_CONFIRM": "Are you sure you want to delete this workout?",
+    "DELETE_ALL_EXERCISES": "This will also remove all exercises from this workout."
+  },
+  "WORKOUT_DETAIL": {
+    "EXERCISES": "Exercises",
+    "ADD_EXERCISE": "Add Exercise",
+    "NO_EXERCISES": "No exercises yet. Add your first exercise to start.",
+    "START_WORKOUT": "Start Workout",
+    "REORDER_HINT": "Drag to reorder exercises",
+    "DELETE_EXERCISE_CONFIRM": "Remove this exercise from the workout?"
+  },
+  "EXERCISE": {
+    "CREATE_TITLE": "Add Exercise",
+    "EDIT_TITLE": "Edit Exercise",
+    "NAME_LABEL": "Exercise Name",
+    "MUSCLE_GROUP_LABEL": "Muscle Group",
+    "EQUIPMENT_LABEL": "Equipment (optional)",
+    "NOTES_LABEL": "Notes (optional)",
+    "SETTINGS_LABEL": "Settings for this workout",
+    "SETS_LABEL": "Sets",
+    "REPS_LABEL": "Reps (e.g., 12, 8-10)",
+    "WEIGHT_LABEL": "Target Weight (kg)",
+    "REST_LABEL": "Rest Between Sets (seconds)",
+    "MUSCLE_CHEST": "Chest",
+    "MUSCLE_BACK": "Back",
+    "MUSCLE_LEGS": "Legs",
+    "MUSCLE_SHOULDERS": "Shoulders",
+    "MUSCLE_ARMS": "Arms",
+    "MUSCLE_CORE": "Core",
+    "MUSCLE_FULL_BODY": "Full Body",
+    "MUSCLE_OTHER": "Other"
   }
 }

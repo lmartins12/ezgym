@@ -1,0 +1,64 @@
+<ion-header class="header-floating">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/workouts"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ workout()?.name ?? '...' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        (click)="openEditWorkout()"
+        aria-label="{{ 'COMMON.EDIT' | translate }}"
+      >
+        <ion-icon name="create-outline" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="has-floating-header">
+  @if (workout()?.description) {
+  <ion-card>
+    <ion-card-content>
+      <p>{{ workout()?.description }}</p>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  <ion-list-header>
+    <ion-label>{{ 'WORKOUT_DETAIL.EXERCISES' | translate }}</ion-label>
+    <ion-button fill="clear" (click)="openAddExercise()">
+      <ion-icon name="add-outline" slot="start" aria-hidden="true"></ion-icon>
+      {{ 'WORKOUT_DETAIL.ADD_EXERCISE' | translate }}
+    </ion-button>
+  </ion-list-header>
+
+  @if (loading()) {
+  <div class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+  } @else if (exercises().length === 0) {
+  <div class="empty-exercises">
+    <ion-icon name="fitness-outline" aria-hidden="true"></ion-icon>
+    <p>{{ 'WORKOUT_DETAIL.NO_EXERCISES' | translate }}</p>
+  </div>
+  } @else {
+  <ion-list lines="full">
+    <ion-reorder-group (ionItemReorder)="reorderExercises($event)">
+      @for (exercise of exercises(); track exercise.id) {
+      <app-exercise-list-item
+        [exercise]="exercise"
+        (editExercise)="openEditExercise($event)"
+        (deleteExercise)="confirmDeleteExercise($event)"
+      />
+      }
+    </ion-reorder-group>
+  </ion-list>
+  } @if (exercises().length > 0) {
+  <div class="start-workout-container">
+    <ion-button expand="block" size="large" (click)="startWorkout()">
+      <ion-icon name="play-outline" slot="start" aria-hidden="true"></ion-icon>
+      {{ 'WORKOUT_DETAIL.START_WORKOUT' | translate }}
+    </ion-button>
+  </div>
+  }
+</ion-content>

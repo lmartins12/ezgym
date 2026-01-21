@@ -1,0 +1,26 @@
+<ion-item-sliding>
+  <ion-item>
+    <ion-reorder slot="start"></ion-reorder>
+    <ion-label>
+      <h2>{{ exercise().exercise_name }}</h2>
+      <p>
+        {{ exercise().sets }} × {{ exercise().reps }}
+        @if (exercise().target_weight) {
+          <span> @ {{ exercise().target_weight }}kg</span>
+        }
+        • {{ exercise().rest_seconds }}s
+      </p>
+    </ion-label>
+  </ion-item>
+  <ion-item-options side="end">
+    <ion-item-option (click)="editExercise.emit(exercise())">
+      <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+    </ion-item-option>
+    <ion-item-option
+      (click)="deleteExercise.emit(exercise().id)"
+      color="danger"
+    >
+      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

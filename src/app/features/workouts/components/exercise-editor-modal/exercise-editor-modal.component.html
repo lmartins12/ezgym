@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      @if (exercise()) {
+        {{ "EXERCISE.EDIT_TITLE" | translate }}
+      } @else {
+        {{ "EXERCISE.CREATE_TITLE" | translate }}
+      }
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">{{
+        "COMMON.CANCEL" | translate
+      }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="submit()">
+    <!-- Exercise Name -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.NAME_LABEL" | translate }}
+      </ion-label>
+      <ion-input [(ngModel)]="name" name="name" required autofocus />
+    </ion-item>
+
+    <!-- Muscle Group -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.MUSCLE_GROUP_LABEL" | translate }}
+      </ion-label>
+      <ion-select [(ngModel)]="muscleGroup" name="muscle_group">
+        @for (group of muscleGroups; track group) {
+          <ion-select-option [value]="group">
+            {{ "EXERCISE.MUSCLE_" + group.toUpperCase() | translate }}
+          </ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
+    <!-- Equipment (Optional) -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.EQUIPMENT_LABEL" | translate }}
+      </ion-label>
+      <ion-input [(ngModel)]="equipment" name="equipment" />
+    </ion-item>
+
+    <!-- Notes (Optional) -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.NOTES_LABEL" | translate }}
+      </ion-label>
+      <ion-textarea [(ngModel)]="notes" name="notes" [rows]="2" />
+    </ion-item>
+
+    <!-- Divider -->
+    <ion-item-divider>
+      <ion-label>{{ "EXERCISE.SETTINGS_LABEL" | translate }}</ion-label>
+    </ion-item-divider>
+
+    <!-- Sets -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.SETS_LABEL" | translate }}
+      </ion-label>
+      <ion-input type="number" [(ngModel)]="sets" name="sets" min="1" />
+    </ion-item>
+
+    <!-- Reps -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.REPS_LABEL" | translate }}
+      </ion-label>
+      <ion-input [(ngModel)]="reps" name="reps" />
+    </ion-item>
+
+    <!-- Target Weight (Optional) -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.WEIGHT_LABEL" | translate }}
+      </ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="targetWeight"
+        name="target_weight"
+      />
+    </ion-item>
+
+    <!-- Rest Seconds -->
+    <ion-item>
+      <ion-label position="stacked">
+        {{ "EXERCISE.REST_LABEL" | translate }}
+      </ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="restSeconds"
+        name="rest_seconds"
+        min="0"
+      />
+    </ion-item>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="submit()">
+      {{ "COMMON.SAVE" | translate }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

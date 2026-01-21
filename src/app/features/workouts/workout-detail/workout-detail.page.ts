@@ -1,0 +1,230 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import type { Workout, WorkoutExercise } from '@core';
+import {
+  AlertController,
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonReorderGroup,
+  IonSpinner,
+  IonTitle,
+  IonToolbar,
+  ModalController,
+} from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
+import { addIcons } from 'ionicons';
+import { createOutline, fitnessOutline } from 'ionicons/icons';
+import type { ExerciseData } from '../components';
+import {
+  EditWorkoutModalComponent,
+  ExerciseEditorModalComponent,
+  ExerciseListItemComponent,
+} from '../components';
+import { WorkoutExercisesService, WorkoutsService } from '../services';
+
+@Component({
+  selector: 'app-workout-detail',
+  standalone: true,
+  imports: [
+    CommonModule,
+    TranslateModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButton,
+    IonButtons,
+    IonContent,
+    IonCard,
+    IonCardContent,
+    IonList,
+    IonListHeader,
+    IonLabel,
+    IonReorderGroup,
+    IonSpinner,
+    ExerciseListItemComponent,
+    IonBackButton,
+    IonIcon,
+  ],
+  templateUrl: './workout-detail.page.html',
+  styleUrls: ['./workout-detail.page.scss'],
+})
+export class WorkoutDetailPage {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly workoutsService = inject(WorkoutsService);
+  private readonly exercisesService = inject(WorkoutExercisesService);
+  private readonly modalCtrl = inject(ModalController);
+  private readonly alertCtrl = inject(AlertController);
+
+  public readonly workoutId = signal<string>('');
+  public readonly workout = signal<Workout | null>(null);
+  public readonly exercises = signal<WorkoutExercise[]>([]);
+  public readonly loading = signal(false);
+
+  constructor() {
+    addIcons({
+      createOutline,
+      fitnessOutline,
+    });
+  }
+
+  public async ionViewWillEnter(): Promise<void> {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
+      this.router.navigate(['/workouts']);
+      return;
+    }
+
+    this.workoutId.set(id);
+    await Promise.all([this.loadWorkout(), this.loadExercises()]);
+  }
+
+  private async loadWorkout(): Promise<void> {
+    const id = this.workoutId();
+    if (!id) return;
+
+    const data = await this.workoutsService.getById(id);
+    if (!data) {
+      this.router.navigate(['/workouts']);
+      return;
+    }
+
+    this.workout.set(data);
+  }
+
+  private async loadExercises(): Promise<void> {
+    const id = this.workoutId();
+    if (!id) return;
+
+    this.loading.set(true);
+    try {
+      const data = await this.exercisesService.getByWorkoutId(id);
+      this.exercises.set(data);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  public async openEditWorkout(): Promise<void> {
+    const workout = this.workout();
+    if (!workout) return;
+
+    const modal = await this.modalCtrl.create({
+      component: EditWorkoutModalComponent,
+      componentProps: { workout },
+      breakpoints: [0, 0.7],
+      initialBreakpoint: 0.7,
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss<{
+      name: string;
+      description?: string;
+    }>();
+
+    if (data) {
+      await this.workoutsService.update(
+        workout.id,
+        data.name,
+        data.description,
+      );
+      await this.loadWorkout();
+    }
+  }
+
+  public async openAddExercise(): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: ExerciseEditorModalComponent,
+      breakpoints: [0, 0.9],
+      initialBreakpoint: 0.9,
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss<ExerciseData>();
+
+    if (data) {
+      await this.exercisesService.addExercise({
+        workoutId: this.workoutId(),
+        name: data.name,
+        muscleGroup: data.muscleGroup,
+        equipment: data.equipment,
+        notes: data.notes,
+        sets: data.sets,
+        reps: data.reps,
+        targetWeight: data.targetWeight,
+        restSeconds: data.restSeconds,
+      });
+      await this.loadExercises();
+    }
+  }
+
+  public async openEditExercise(exercise: WorkoutExercise): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: ExerciseEditorModalComponent,
+      componentProps: { exercise },
+      breakpoints: [0, 0.9],
+      initialBreakpoint: 0.9,
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss<ExerciseData>();
+
+    if (data) {
+      await this.exercisesService.updateExercise(exercise.id, {
+        sets: data.sets,
+        reps: data.reps,
+        targetWeight: data.targetWeight,
+        restSeconds: data.restSeconds,
+      });
+      await this.loadExercises();
+    }
+  }
+
+  public async confirmDeleteExercise(exerciseId: string): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      header: '{{ "WORKOUT_DETAIL.DELETE_EXERCISE_CONFIRM" | translate }}',
+      buttons: [
+        {
+          text: '{{ "COMMON.CANCEL" | translate }}',
+          role: 'cancel',
+        },
+        {
+          text: '{{ "COMMON.DELETE" | translate }}',
+          role: 'destructive',
+          handler: async () => {
+            await this.exercisesService.removeExercise(exerciseId);
+            await this.loadExercises();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  public async reorderExercises(event: CustomEvent): Promise<void> {
+    const exerciseIds = event.detail.complete(
+      this.exercises().map((e) => e.id),
+    );
+    await this.exercisesService.reorderExercises(this.workoutId(), exerciseIds);
+    await this.loadExercises();
+  }
+
+  public startWorkout(): void {
+    // TODO: Navigate to workout execution feature
+    console.log('Start workout:', this.workoutId());
+  }
+}
