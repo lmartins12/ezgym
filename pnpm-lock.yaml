@@ -35,6 +35,9 @@ importers:
       '@capacitor-community/sqlite':
         specifier: ^7.0.3
         version: 7.0.3(@capacitor/core@8.0.1)
+      '@capacitor/android':
+        specifier: ^8.0.1
+        version: 8.0.1(@capacitor/core@8.0.1)
       '@capacitor/app':
         specifier: 8.0.0
         version: 8.0.0(@capacitor/core@8.0.1)
@@ -150,6 +153,9 @@ importers:
       karma-jasmine-html-reporter:
         specifier: ~2.1.0
         version: 2.1.0(jasmine-core@5.1.2)(karma-jasmine@5.1.0(karma@6.4.4))(karma@6.4.4)
+      native-run:
+        specifier: ^2.0.3
+        version: 2.0.3
       prettier:
         specifier: ^3.8.0
         version: 3.8.0
@@ -986,6 +992,11 @@ packages:
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@capacitor/core': '>=7.0.0'
+
+  '@capacitor/android@8.0.1':
+    resolution: {integrity: sha512-Mrk2MFKSg9YA4BPLKm03wwFnGKcvzNBERUTcxjW1NkLrF6YhJwygAT69f/YGopFvOhhqdnDPsuZuASUfmpkSpw==}
+    peerDependencies:
+      '@capacitor/core': ^8.0.0
 
   '@capacitor/app@8.0.0':
     resolution: {integrity: sha512-OwzIkUs4w433Bu9WWAEbEYngXEfJXZ9Wmdb8eoaqzYBgB0W9/3Ed/mh6sAYPNBAZlpyarmewgP7Nb+d3Vrh+xA==}
@@ -6769,6 +6780,10 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.0.1
       jeep-sqlite: 2.8.0
+
+  '@capacitor/android@8.0.1(@capacitor/core@8.0.1)':
+    dependencies:
+      '@capacitor/core': 8.0.1
 
   '@capacitor/app@8.0.0(@capacitor/core@8.0.1)':
     dependencies:

@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "android": "ionic cap run android -l --external",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -21,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@capacitor-community/sqlite": "^7.0.3",
+    "@capacitor/android": "^8.0.1",
     "@capacitor/app": "8.0.0",
     "@capacitor/core": "8.0.1",
     "@capacitor/haptics": "8.0.0",
@@ -61,6 +63,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "native-run": "^2.0.3",
     "prettier": "^3.8.0",
     "typescript": "~5.9.0"
   }

@@ -2,5 +2,8 @@
   "typescript.preferences.autoImportFileExcludePatterns": [
     "@ionic/angular/common",
     "@ionic/angular"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
 }
