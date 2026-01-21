@@ -1,0 +1,27 @@
+{
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "ADD": "Add",
+    "CONFIRM": "Confirm",
+    "BACK": "Back",
+    "SEARCH": "Search",
+    "LOADING": "Loading...",
+    "ERROR": "Error",
+    "SUCCESS": "Success"
+  },
+  "NAV": {
+    "HOME": "Home",
+    "WORKOUTS": "Workouts",
+    "EXERCISES": "Exercises",
+    "SETTINGS": "Settings"
+  },
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "LANGUAGE": "Language",
+    "LANGUAGE_PT": "Português",
+    "LANGUAGE_EN": "English"
+  }
+}
