@@ -80,7 +80,8 @@
 // APPLICATION COLORS
 // =============================================================================
 
-:root {
+:root.ios,
+:root.md {
   --ion-background-color: #09090b;
   --ion-background-color-rgb: 9, 9, 11;
 
@@ -94,7 +95,8 @@
 // STEPPED COLORS
 // =============================================================================
 
-:root {
+:root.ios,
+:root.md {
   --ion-background-color-step-50: #141416;
   --ion-background-color-step-100: #1f1f21;
   --ion-background-color-step-150: #2a2a2c;
