@@ -33,11 +33,13 @@
     "CREATE_TITLE": "Create Workout",
     "EDIT_TITLE": "Edit Workout",
     "NAME_LABEL": "Workout Name",
+    "NAME_PLACEHOLDER": "Ex: Chest and Triceps",
     "DESCRIPTION_LABEL": "Description (optional)",
     "EXERCISES": "exercises",
     "LAST_TRAINED": "Last trained",
     "DELETE_CONFIRM": "Are you sure you want to delete this workout?",
-    "DELETE_ALL_EXERCISES": "This will also remove all exercises from this workout."
+    "DELETE_ALL_EXERCISES": "This will also remove all exercises from this workout.",
+    "DETAILS": "Details"
   },
   "WORKOUT_DETAIL": {
     "EXERCISES": "Exercises",

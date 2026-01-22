@@ -10,6 +10,7 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonFooter,
   IonHeader,
   IonIcon,
   IonLabel,
@@ -23,7 +24,12 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { createOutline, fitnessOutline } from 'ionicons/icons';
+import {
+  barbellOutline,
+  createOutline,
+  fitnessOutline,
+  playOutline,
+} from 'ionicons/icons';
 import type { ExerciseData } from '../components';
 import {
   EditWorkoutModalComponent,
@@ -54,6 +60,7 @@ import { WorkoutExercisesService, WorkoutsService } from '../services';
     ExerciseListItemComponent,
     IonBackButton,
     IonIcon,
+    IonFooter,
   ],
   templateUrl: './workout-detail.page.html',
   styleUrls: ['./workout-detail.page.scss'],
@@ -73,8 +80,10 @@ export class WorkoutDetailPage {
 
   constructor() {
     addIcons({
+      playOutline,
       createOutline,
       fitnessOutline,
+      barbellOutline,
     });
   }
 
@@ -122,8 +131,6 @@ export class WorkoutDetailPage {
     const modal = await this.modalCtrl.create({
       component: EditWorkoutModalComponent,
       componentProps: { workout },
-      breakpoints: [0, 0.7],
-      initialBreakpoint: 0.7,
     });
 
     await modal.present();
@@ -146,8 +153,6 @@ export class WorkoutDetailPage {
   public async openAddExercise(): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: ExerciseEditorModalComponent,
-      breakpoints: [0, 0.9],
-      initialBreakpoint: 0.9,
     });
 
     await modal.present();
@@ -174,8 +179,6 @@ export class WorkoutDetailPage {
     const modal = await this.modalCtrl.create({
       component: ExerciseEditorModalComponent,
       componentProps: { exercise },
-      breakpoints: [0, 0.9],
-      initialBreakpoint: 0.9,
     });
 
     await modal.present();

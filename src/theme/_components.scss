@@ -21,11 +21,11 @@ ion-card-subtitle {
 }
 
 ion-list-header {
+  padding-right: calc(var(--ion-safe-area-right, 0px) + 16px);
+  padding-left: calc(var(--ion-safe-area-left, 0px) + 16px);
   font-weight: var(--font-weight-medium);
-  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  opacity: 0.5;
   margin-top: var(--space-6);
 }
 

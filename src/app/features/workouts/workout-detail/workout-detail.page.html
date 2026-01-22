@@ -25,9 +25,13 @@
   }
 
   <ion-list-header>
+    <ion-icon
+      name="barbell-outline"
+      aria-hidden="true"
+      style="font-size: 24px; margin-right: var(--space-2)"
+    ></ion-icon>
     <ion-label>{{ 'WORKOUT_DETAIL.EXERCISES' | translate }}</ion-label>
-    <ion-button fill="clear" (click)="openAddExercise()">
-      <ion-icon name="add-outline" slot="start" aria-hidden="true"></ion-icon>
+    <ion-button fill="solid" color="primary" (click)="openAddExercise()">
       {{ 'WORKOUT_DETAIL.ADD_EXERCISE' | translate }}
     </ion-button>
   </ion-list-header>
@@ -53,12 +57,21 @@
       }
     </ion-reorder-group>
   </ion-list>
-  } @if (exercises().length > 0) {
+  }
+</ion-content>
+
+<ion-footer>
+  @if (exercises().length > 0) {
   <div class="start-workout-container">
-    <ion-button expand="block" size="large" (click)="startWorkout()">
+    <ion-button
+      expand="block"
+      fill="solid"
+      size="default"
+      (click)="startWorkout()"
+    >
       <ion-icon name="play-outline" slot="start" aria-hidden="true"></ion-icon>
       {{ 'WORKOUT_DETAIL.START_WORKOUT' | translate }}
     </ion-button>
   </div>
   }
-</ion-content>
+</ion-footer>

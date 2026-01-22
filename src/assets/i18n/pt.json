@@ -33,11 +33,13 @@
     "CREATE_TITLE": "Criar Treino",
     "EDIT_TITLE": "Editar Treino",
     "NAME_LABEL": "Nome do Treino",
+    "NAME_PLACEHOLDER": "Ex: Peito e Tríceps",
     "DESCRIPTION_LABEL": "Descrição (opcional)",
     "EXERCISES": "exercícios",
     "LAST_TRAINED": "Último treino",
     "DELETE_CONFIRM": "Tem certeza que deseja excluir este treino?",
-    "DELETE_ALL_EXERCISES": "Isso também removerá todos os exercícios deste treino."
+    "DELETE_ALL_EXERCISES": "Isso também removerá todos os exercícios deste treino.",
+    "DETAILS": "Detalhes"
   },
   "WORKOUT_DETAIL": {
     "EXERCISES": "Exercícios",

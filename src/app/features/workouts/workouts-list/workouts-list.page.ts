@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   AlertController,
+  IonAccordionGroup,
   IonButton,
   IonContent,
   IonFab,
@@ -14,9 +15,8 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
-  ModalController,
 } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   add,
@@ -24,12 +24,7 @@ import {
   barbellOutline,
   settingsOutline,
 } from 'ionicons/icons';
-import type { EditWorkoutResult } from '../components';
-import {
-  EditWorkoutModalComponent,
-  QuickCreateWorkoutModalComponent,
-  WorkoutCardComponent,
-} from '../components';
+import { WorkoutCardComponent } from '../components';
 import type { WorkoutDetail } from '../models';
 import { WorkoutsService } from '../services';
 
@@ -37,6 +32,7 @@ import { WorkoutsService } from '../services';
   selector: 'app-workouts-list',
   standalone: true,
   imports: [
+    IonAccordionGroup,
     CommonModule,
     FormsModule,
     TranslateModule,
@@ -57,9 +53,9 @@ import { WorkoutsService } from '../services';
 })
 export class WorkoutsListPage {
   private readonly workoutsService = inject(WorkoutsService);
-  private readonly modalCtrl = inject(ModalController);
   private readonly alertCtrl = inject(AlertController);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   public readonly workouts = signal<WorkoutDetail[]>([]);
   public readonly loading = signal(false);
@@ -77,7 +73,7 @@ export class WorkoutsListPage {
     await this.loadWorkouts();
   }
 
-  private async loadWorkouts(): Promise<void> {
+  public async loadWorkouts(): Promise<void> {
     this.loading.set(true);
     try {
       const data = await this.workoutsService.getAll();
@@ -88,56 +84,45 @@ export class WorkoutsListPage {
   }
 
   public async openQuickCreate(): Promise<void> {
-    const modal = await this.modalCtrl.create({
-      component: QuickCreateWorkoutModalComponent,
-      breakpoints: [0, 0.5],
-      initialBreakpoint: 0.5,
+    const alert = await this.alertCtrl.create({
+      header: this.translate.instant('WORKOUTS.CREATE_TITLE'),
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          placeholder: this.translate.instant('WORKOUTS.NAME_PLACEHOLDER'),
+        },
+      ],
+      buttons: [
+        { text: this.translate.instant('COMMON.CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('COMMON.CREATE'),
+          handler: async (data: { name: string }) => {
+            if (data.name) {
+              const id = await this.workoutsService.create(data.name);
+              this.router.navigate(['/workouts', id]);
+              return true;
+            }
+            return false;
+          },
+        },
+      ],
     });
 
-    await modal.present();
-
-    const { data } = await modal.onWillDismiss<string>();
-
-    if (data) {
-      const id = await this.workoutsService.create(data);
-      this.router.navigate(['/workouts', id]);
-    }
-  }
-
-  public async openEdit(workout: WorkoutDetail): Promise<void> {
-    const modal = await this.modalCtrl.create({
-      component: EditWorkoutModalComponent,
-      componentProps: { workout },
-      breakpoints: [0, 0.7],
-      initialBreakpoint: 0.7,
-    });
-
-    await modal.present();
-
-    const { data } = await modal.onWillDismiss<EditWorkoutResult>();
-
-    if (data) {
-      await this.workoutsService.update(
-        workout.id,
-        data.name,
-        data.description,
-      );
-      await this.loadWorkouts();
-    }
+    await alert.present();
   }
 
   public async confirmDelete(workoutId: string): Promise<void> {
     const alert = await this.alertCtrl.create({
       header: this.workouts().find((w) => w.id === workoutId)?.name,
-      message:
-        '{{ "WORKOUTS.DELETE_CONFIRM" | translate }}\n\n{{ "WORKOUTS.DELETE_ALL_EXERCISES" | translate }}',
+      message: `${this.translate.instant('WORKOUTS.DELETE_CONFIRM')}\n\n${this.translate.instant('WORKOUTS.DELETE_ALL_EXERCISES')}`,
       buttons: [
         {
-          text: '{{ "COMMON.CANCEL" | translate }}',
+          text: this.translate.instant('COMMON.CANCEL'),
           role: 'cancel',
         },
         {
-          text: '{{ "COMMON.DELETE" | translate }}',
+          text: this.translate.instant('COMMON.DELETE'),
           role: 'destructive',
           handler: async () => {
             await this.workoutsService.delete(workoutId);

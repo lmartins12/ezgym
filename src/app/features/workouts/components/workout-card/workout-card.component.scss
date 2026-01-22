@@ -2,3 +2,62 @@
   opacity: 0.6;
   font-size: 13px;
 }
+
+ion-label {
+  h2 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+}
+
+.accordion-content {
+  padding: var(--space-2) 0;
+}
+
+.action-row {
+  display: flex;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.action-btn {
+  flex: 1;
+  height: 80px;
+  --padding-start: 0;
+  --padding-end: 0;
+  margin: 0;
+  font-size: 12px;
+  text-transform: none;
+
+  &.primary {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+  }
+}
+
+.action-btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+
+  ion-icon {
+    font-size: 24px;
+  }
+}
+
+.action-btn-text {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.delete-action {
+  --padding-start: var(--space-4);
+
+  ion-icon {
+    --color: var(--ion-color-danger);
+  }
+}

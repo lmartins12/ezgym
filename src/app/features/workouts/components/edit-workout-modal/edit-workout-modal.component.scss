@@ -1,1 +1,10 @@
-// Styles handled by Ionic theming
+ion-footer {
+  margin-bottom: var(--ion-safe-area-bottom, 0);
+
+  ion-toolbar {
+    --padding-start: var(--space-4);
+    --padding-end: var(--space-4);
+    --padding-top: var(--space-3);
+    --padding-bottom: var(--space-3);
+  }
+}

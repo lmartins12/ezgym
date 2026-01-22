@@ -2,16 +2,15 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  IonAccordion,
+  IonButton,
   IonIcon,
   IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
   IonLabel,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { createOutline, playOutline, trashOutline } from 'ionicons/icons';
+import { listOutline, playOutline, trashOutline } from 'ionicons/icons';
 import type { WorkoutDetail } from '../../models';
 
 @Component({
@@ -21,20 +20,16 @@ import type { WorkoutDetail } from '../../models';
     CommonModule,
     TranslateModule,
     IonItem,
-    IonItemOption,
-    IonItemOptions,
-    IonItemSliding,
+    IonButton,
     IonIcon,
     IonLabel,
+    IonAccordion,
   ],
   templateUrl: './workout-card.component.html',
   styleUrls: ['./workout-card.component.scss'],
 })
 export class WorkoutCardComponent {
   public readonly workout = input.required<WorkoutDetail>();
-
-  @Output()
-  public readonly editWorkout = new EventEmitter<WorkoutDetail>();
 
   @Output()
   public readonly deleteWorkout = new EventEmitter<string>();
@@ -46,8 +41,8 @@ export class WorkoutCardComponent {
 
   constructor() {
     addIcons({
+      listOutline,
       playOutline,
-      createOutline,
       trashOutline,
     });
   }
