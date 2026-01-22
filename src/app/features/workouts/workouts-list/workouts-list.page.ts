@@ -18,7 +18,12 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { add, barbellOutline, settingsOutline } from 'ionicons/icons';
+import {
+  add,
+  addOutline,
+  barbellOutline,
+  settingsOutline,
+} from 'ionicons/icons';
 import type { EditWorkoutResult } from '../components';
 import {
   EditWorkoutModalComponent,
@@ -62,6 +67,7 @@ export class WorkoutsListPage {
   constructor() {
     addIcons({
       add,
+      addOutline,
       settingsOutline,
       barbellOutline,
     });

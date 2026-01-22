@@ -16,13 +16,17 @@ import {
   TranslateHttpLoader,
 } from '@ngx-translate/http-loader';
 
+import { iosTransitionAnimation } from '@ionic/angular/standalone';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({
+      animated: true,
+      navAnimation: iosTransitionAnimation,
+    }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(),
     provideTranslateService({

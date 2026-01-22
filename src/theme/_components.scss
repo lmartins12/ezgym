@@ -71,6 +71,10 @@ ion-input {
   --padding-end: 0;
 }
 
+ion-fab {
+  margin-bottom: var(--ion-safe-area-bottom, 0);
+}
+
 ion-fab-button {
   --background: #ffffff;
   --color: #000000;

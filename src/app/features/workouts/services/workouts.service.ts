@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import type { Workout } from '@core';
 import { DatabaseService } from '@core';
+import { v4 as uuidv4 } from 'uuid';
 import type { WorkoutDetail } from '../models';
 
 @Injectable({ providedIn: 'root' })
@@ -39,7 +40,7 @@ export class WorkoutsService {
   public async create(name: string, description?: string): Promise<string> {
     await this.db.ready();
 
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     const now = Date.now();
 
     await this.db.execute(

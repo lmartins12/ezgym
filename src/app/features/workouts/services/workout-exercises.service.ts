@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import type { Exercise, WorkoutExercise } from '@core';
 import { DatabaseService } from '@core';
+import { v4 as uuidv4 } from 'uuid';
 import type { AddExerciseData, UpdateExerciseData } from '../models';
 
 @Injectable({ providedIn: 'root' })
@@ -36,7 +37,7 @@ export class WorkoutExercisesService {
     const orderIndex = maxOrder + 1;
 
     // Create workout_exercise entry
-    const id = crypto.randomUUID();
+    const id = uuidv4();
 
     await this.db.execute(
       `INSERT INTO workout_exercises
@@ -117,7 +118,7 @@ export class WorkoutExercisesService {
     }
 
     // Create new exercise
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     const now = Date.now();
 
     await this.db.execute(
