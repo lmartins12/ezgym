@@ -1,6 +1,7 @@
 import { Component, inject, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { WorkoutExercise } from '@core';
+import type { MuscleGroup, WorkoutExercise } from '@core';
+import { MUSCLE_GROUPS } from '@core';
 import {
   IonButton,
   IonButtons,
@@ -18,12 +19,11 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
-import { MUSCLE_GROUPS, MuscleGroup } from '../../models';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 export interface ExerciseData {
   name: string;
-  muscleGroup: string;
+  muscleGroup: MuscleGroup;
   equipment?: string;
   notes?: string;
   sets: number;
@@ -72,6 +72,11 @@ export class ExerciseEditorModalComponent {
   public readonly isEdit = false;
 
   private readonly modalCtrl = inject(ModalController);
+  private readonly translate = inject(TranslateService);
+
+  public getMuscleGroupLabel(muscleGroup: MuscleGroup): string {
+    return this.translate.instant(`EXERCISE.MUSCLE_${muscleGroup.toUpperCase()}`);
+  }
 
   public ionViewDidEnter(): void {
     if (this.exercise()) {

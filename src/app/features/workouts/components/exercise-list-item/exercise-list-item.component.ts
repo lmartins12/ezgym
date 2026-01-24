@@ -1,5 +1,6 @@
 import { Component, EventEmitter, input, Output } from '@angular/core';
 import type { WorkoutExercise } from '@core';
+import { MuscleIconComponent } from '@shared';
 import {
   IonIcon,
   IonItem,
@@ -23,6 +24,7 @@ import { createOutline, trashOutline } from 'ionicons/icons';
     IonIcon,
     IonLabel,
     IonReorder,
+    MuscleIconComponent,
   ],
   templateUrl: './exercise-list-item.component.html',
   styleUrls: ['./exercise-list-item.component.scss'],

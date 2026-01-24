@@ -1,4 +1,4 @@
-import type { Workout } from '@core';
+import type { MuscleGroup, Workout } from '@core';
 
 export interface WorkoutDetail extends Workout {
   exercise_count: number;
@@ -8,7 +8,7 @@ export interface WorkoutDetail extends Workout {
 export interface AddExerciseData {
   workoutId: string;
   name: string;
-  muscleGroup: string;
+  muscleGroup: MuscleGroup;
   equipment?: string;
   notes?: string;
   sets: number;
@@ -23,24 +23,3 @@ export interface UpdateExerciseData {
   targetWeight?: number;
   restSeconds: number;
 }
-
-export type MuscleGroup =
-  | 'chest'
-  | 'back'
-  | 'legs'
-  | 'shoulders'
-  | 'arms'
-  | 'core'
-  | 'full_body'
-  | 'other';
-
-export const MUSCLE_GROUPS: readonly MuscleGroup[] = [
-  'chest',
-  'back',
-  'legs',
-  'shoulders',
-  'arms',
-  'core',
-  'full_body',
-  'other',
-] as const;

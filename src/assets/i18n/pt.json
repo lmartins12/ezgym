@@ -61,13 +61,17 @@
     "REPS_LABEL": "Repetições (ex: 12, 8-10)",
     "WEIGHT_LABEL": "Carga Alvo (kg)",
     "REST_LABEL": "Descanso Entre Séries (segundos)",
-    "MUSCLE_CHEST": "Peito",
+    "MUSCLE_ABS": "Abdômen",
     "MUSCLE_BACK": "Costas",
-    "MUSCLE_LEGS": "Pernas",
+    "MUSCLE_BICEPS": "Bíceps",
+    "MUSCLE_CALVES": "Panturrilhas",
+    "MUSCLE_CARDIO": "Cardio",
+    "MUSCLE_CHEST": "Peito",
+    "MUSCLE_FOREARMS": "Antebraços",
+    "MUSCLE_HAMSTRINGS": "Posterior de Coxa",
+    "MUSCLE_QUADRICEPS": "Quadríceps",
     "MUSCLE_SHOULDERS": "Ombros",
-    "MUSCLE_ARMS": "Braços",
-    "MUSCLE_CORE": "Core",
-    "MUSCLE_FULL_BODY": "Corpo Inteiro",
+    "MUSCLE_TRICEPS": "Tríceps",
     "MUSCLE_OTHER": "Outro"
   }
 }

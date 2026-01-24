@@ -1,7 +1,36 @@
+export type MuscleGroup =
+  | 'abs'
+  | 'back'
+  | 'biceps'
+  | 'calves'
+  | 'cardio'
+  | 'chest'
+  | 'forearms'
+  | 'hamstrings'
+  | 'quadriceps'
+  | 'shoulders'
+  | 'triceps'
+  | 'other';
+
+export const MUSCLE_GROUPS: readonly MuscleGroup[] = [
+  'abs',
+  'back',
+  'biceps',
+  'calves',
+  'cardio',
+  'chest',
+  'forearms',
+  'hamstrings',
+  'quadriceps',
+  'shoulders',
+  'triceps',
+  'other',
+] as const;
+
 export interface Exercise {
   id: string;
   name: string;
-  muscle_group: string;
+  muscle_group: MuscleGroup;
   equipment?: string;
   notes?: string;
   created_at: number;
@@ -26,6 +55,7 @@ export interface WorkoutExercise {
   rest_seconds: number;
   target_weight?: number;
   exercise_name?: string;
+  muscle_group?: MuscleGroup;
 }
 
 export interface WorkoutSession {

@@ -61,13 +61,17 @@
     "REPS_LABEL": "Reps (e.g., 12, 8-10)",
     "WEIGHT_LABEL": "Target Weight (kg)",
     "REST_LABEL": "Rest Between Sets (seconds)",
-    "MUSCLE_CHEST": "Chest",
+    "MUSCLE_ABS": "Abs",
     "MUSCLE_BACK": "Back",
-    "MUSCLE_LEGS": "Legs",
+    "MUSCLE_BICEPS": "Biceps",
+    "MUSCLE_CALVES": "Calves",
+    "MUSCLE_CARDIO": "Cardio",
+    "MUSCLE_CHEST": "Chest",
+    "MUSCLE_FOREARMS": "Forearms",
+    "MUSCLE_HAMSTRINGS": "Hamstrings",
+    "MUSCLE_QUADRICEPS": "Quadriceps",
     "MUSCLE_SHOULDERS": "Shoulders",
-    "MUSCLE_ARMS": "Arms",
-    "MUSCLE_CORE": "Core",
-    "MUSCLE_FULL_BODY": "Full Body",
+    "MUSCLE_TRICEPS": "Triceps",
     "MUSCLE_OTHER": "Other"
   }
 }

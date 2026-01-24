@@ -33,7 +33,7 @@
       <ion-select [(ngModel)]="muscleGroup" name="muscle_group">
         @for (group of muscleGroups; track group) {
           <ion-select-option [value]="group">
-            {{ "EXERCISE.MUSCLE_" + group.toUpperCase() | translate }}
+            {{ getMuscleGroupLabel(group) }}
           </ion-select-option>
         }
       </ion-select>

@@ -1,0 +1,16 @@
+@if (hasSvg) {
+  <img
+    [src]="iconPath"
+    [attr.alt]="muscleGroup()"
+    class="muscle-icon muscle-icon--{{ size() }}"
+    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PHBhdGggZD0iTTEyIDh2OCIvPjxwYXRoIGQ9Ik04IDEyaDgiLz48L3N2Zz4='"
+  />
+} @else {
+  <div class="muscle-icon muscle-icon--{{ size() }} muscle-icon--fallback">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 8v8"/>
+      <path d="M8 12h8"/>
+    </svg>
+  </div>
+}
