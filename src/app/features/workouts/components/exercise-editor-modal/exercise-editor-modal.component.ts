@@ -1,4 +1,4 @@
-import { Component, inject, input, model } from '@angular/core';
+import { Component, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, WorkoutExercise } from '@core';
 import {
@@ -54,7 +54,7 @@ export interface ExerciseData {
   styleUrls: ['./exercise-editor-modal.component.scss'],
 })
 export class ExerciseEditorModalComponent {
-  public readonly exercise = input<WorkoutExercise | undefined>();
+  @Input() public exercise?: WorkoutExercise;
 
   public readonly name = model('');
   public readonly muscleGroup = model<MuscleGroup>('chest');
@@ -68,9 +68,9 @@ export class ExerciseEditorModalComponent {
   private readonly modalCtrl = inject(ModalController);
 
   public ionViewDidEnter(): void {
-    if (this.exercise()) {
+    if (this.exercise) {
       // Edit mode - populate with existing data
-      const ex = this.exercise()!;
+      const ex = this.exercise;
       this.name.set(ex.exercise_name ?? '');
       this.sets.set(ex.sets);
       this.reps.set(ex.reps);

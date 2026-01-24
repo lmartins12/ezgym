@@ -1,16 +1,20 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      @if (exercise()) {
+      @if (exercise) {
         {{ "EXERCISE.EDIT_TITLE" | translate }}
       } @else {
         {{ "EXERCISE.CREATE_TITLE" | translate }}
       }
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="close()">{{
-        "COMMON.CANCEL" | translate
-      }}</ion-button>
+      <ion-button
+        (click)="close()"
+        fill="outline"
+        shape="round"
+        color="danger"
+        >{{ "COMMON.CANCEL" | translate }}</ion-button
+      >
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

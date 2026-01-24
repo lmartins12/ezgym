@@ -25,7 +25,11 @@
   }
 }
 
-.start-workout-container {
-  padding: var(--space-4);
-  padding-bottom: env(safe-area-inset-bottom);
+ion-footer {
+  ion-toolbar {
+    --padding-start: var(--space-4);
+    --padding-end: var(--space-4);
+    --padding-top: var(--space-3);
+    --padding-bottom: var(--space-3);
+  }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, model } from '@angular/core';
+import { Component, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, Workout } from '@core';
 import {
@@ -49,7 +49,7 @@ export interface EditWorkoutResult {
   styleUrls: ['./edit-workout-modal.component.scss'],
 })
 export class EditWorkoutModalComponent {
-  public readonly workout = input.required<Workout>();
+  @Input() public workout!: Workout;
 
   public readonly name = model('');
   public readonly description = model('');
@@ -62,9 +62,9 @@ export class EditWorkoutModalComponent {
   }
 
   public ionViewDidEnter(): void {
-    this.name.set(this.workout().name);
-    this.description.set(this.workout().description ?? '');
-    this.muscleGroup.set(this.workout().muscle_group);
+    this.name.set(this.workout.name);
+    this.description.set(this.workout.description ?? '');
+    this.muscleGroup.set(this.workout.muscle_group);
   }
 
   public close(): void {

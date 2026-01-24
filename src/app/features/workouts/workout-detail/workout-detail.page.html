@@ -62,16 +62,16 @@
 
 <ion-footer>
   @if (exercises().length > 0) {
-  <div class="start-workout-container">
+  <ion-toolbar>
     <ion-button
       expand="block"
       fill="solid"
-      size="default"
+      color="primary"
       (click)="startWorkout()"
     >
       <ion-icon name="play-outline" slot="start" aria-hidden="true"></ion-icon>
       {{ 'WORKOUT_DETAIL.START_WORKOUT' | translate }}
     </ion-button>
-  </div>
+  </ion-toolbar>
   }
 </ion-footer>

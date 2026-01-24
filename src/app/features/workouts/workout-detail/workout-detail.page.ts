@@ -22,7 +22,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   barbellOutline,
@@ -66,6 +66,7 @@ import { WorkoutExercisesService, WorkoutsService } from '../services';
   styleUrls: ['./workout-detail.page.scss'],
 })
 export class WorkoutDetailPage {
+  private readonly translate = inject(TranslateService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly workoutsService = inject(WorkoutsService);
@@ -200,14 +201,14 @@ export class WorkoutDetailPage {
 
   public async confirmDeleteExercise(exerciseId: string): Promise<void> {
     const alert = await this.alertCtrl.create({
-      header: '{{ "WORKOUT_DETAIL.DELETE_EXERCISE_CONFIRM" | translate }}',
+      header: this.translate.instant('WORKOUT_DETAIL.DELETE_EXERCISE_CONFIRM'),
       buttons: [
         {
-          text: '{{ "COMMON.CANCEL" | translate }}',
+          text: this.translate.instant('COMMON.CANCEL'),
           role: 'cancel',
         },
         {
-          text: '{{ "COMMON.DELETE" | translate }}',
+          text: this.translate.instant('COMMON.DELETE'),
           role: 'destructive',
           handler: async () => {
             await this.exercisesService.removeExercise(exerciseId);
