@@ -23,6 +23,14 @@
       </ion-label>
       <ion-textarea [(ngModel)]="description" name="description" [rows]="3" />
     </ion-item>
+
+    <!-- Muscle Group -->
+    <div class="ion-padding-top ion-padding-horizontal">
+      <ion-label position="stacked" class="ion-margin-bottom">
+        {{ "EXERCISE.MUSCLE_GROUP_LABEL" | translate }}
+      </ion-label>
+      <app-muscle-group-selector [(muscleGroup)]="muscleGroup" />
+    </div>
   </form>
 </ion-content>
 

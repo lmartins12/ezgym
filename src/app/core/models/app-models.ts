@@ -41,6 +41,7 @@ export interface Workout {
   id: string;
   name: string;
   description?: string;
+  muscle_group?: MuscleGroup;
   created_at: number;
   updated_at: number;
 }

@@ -1,5 +1,10 @@
 <ion-accordion>
   <ion-item slot="header" button detail="false">
+    <app-muscle-icon
+      [muscleGroup]="workout().muscle_group"
+      size="lg"
+      slot="start"
+    />
     <ion-label>
       <h2>{{ workout().name }}</h2>
       <p>

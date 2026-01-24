@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { Workout } from '@core';
+import type { MuscleGroup, Workout } from '@core';
 import {
   IonButton,
   IonButtons,
@@ -17,10 +17,12 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { MuscleGroupSelectorComponent } from '@shared';
 
 export interface EditWorkoutResult {
   name: string;
   description?: string;
+  muscle_group?: MuscleGroup;
 }
 
 @Component({
@@ -41,6 +43,7 @@ export interface EditWorkoutResult {
     IonTextarea,
     IonFooter,
     TranslateModule,
+    MuscleGroupSelectorComponent,
   ],
   templateUrl: './edit-workout-modal.component.html',
   styleUrls: ['./edit-workout-modal.component.scss'],
@@ -50,6 +53,7 @@ export class EditWorkoutModalComponent {
 
   public readonly name = model('');
   public readonly description = model('');
+  public readonly muscleGroup = model<MuscleGroup | undefined>(undefined);
 
   private readonly modalCtrl = inject(ModalController);
 
@@ -60,6 +64,7 @@ export class EditWorkoutModalComponent {
   public ionViewDidEnter(): void {
     this.name.set(this.workout().name);
     this.description.set(this.workout().description ?? '');
+    this.muscleGroup.set(this.workout().muscle_group);
   }
 
   public close(): void {
@@ -77,6 +82,10 @@ export class EditWorkoutModalComponent {
 
     if (this.description()) {
       result.description = this.description();
+    }
+
+    if (this.muscleGroup()) {
+      result.muscle_group = this.muscleGroup();
     }
 
     this.modalCtrl.dismiss(result);

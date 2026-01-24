@@ -27,7 +27,7 @@ const MUSCLE_ICON_MAP: Record<MuscleGroup, string> = {
   styleUrls: ['./muscle-icon.component.scss'],
 })
 export class MuscleIconComponent {
-  public readonly muscleGroup = input.required<MuscleGroup>();
+  public readonly muscleGroup = input<MuscleGroup | undefined>(undefined);
   public readonly size = input<'sm' | 'md' | 'lg'>('md');
 
   protected readonly iconMap = MUSCLE_ICON_MAP;
@@ -39,10 +39,10 @@ export class MuscleIconComponent {
   }
 
   protected get hasSvg(): boolean {
-    return this.iconMap[this.muscleGroup()] !== '';
+    return this.iconMap[this.muscleGroup() ?? 'other'] !== '';
   }
 
   protected get iconPath(): string {
-    return this.iconMap[this.muscleGroup()];
+    return this.iconMap[this.muscleGroup() ?? 'other'];
   }
 }

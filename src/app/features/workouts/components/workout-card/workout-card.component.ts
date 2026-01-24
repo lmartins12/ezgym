@@ -11,6 +11,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { listOutline, playOutline, trashOutline } from 'ionicons/icons';
+import { MuscleIconComponent } from '@shared';
 import type { WorkoutDetail } from '../../models';
 
 @Component({
@@ -24,6 +25,7 @@ import type { WorkoutDetail } from '../../models';
     IonIcon,
     IonLabel,
     IonAccordion,
+    MuscleIconComponent,
   ],
   templateUrl: './workout-card.component.html',
   styleUrls: ['./workout-card.component.scss'],

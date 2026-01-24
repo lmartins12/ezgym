@@ -12,7 +12,7 @@ import { MuscleIconComponent } from '@shared';
   styleUrls: ['./muscle-group-selector.component.scss'],
 })
 export class MuscleGroupSelectorComponent {
-  public readonly muscleGroup = model.required<MuscleGroup>();
+  public readonly muscleGroup = model<MuscleGroup | undefined>(undefined);
   public readonly muscleGroups = MUSCLE_GROUPS;
 
   private readonly translate = inject(TranslateService);

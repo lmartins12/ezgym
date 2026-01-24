@@ -99,7 +99,11 @@ export class WorkoutsListPage {
           text: this.translate.instant('COMMON.CREATE'),
           handler: async (data: { name: string }) => {
             if (data.name) {
-              const id = await this.workoutsService.create(data.name);
+              const id = await this.workoutsService.create(
+                data.name,
+                undefined,
+                undefined,
+              );
               this.router.navigate(['/workouts', id]);
               return true;
             }

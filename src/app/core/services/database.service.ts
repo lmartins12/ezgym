@@ -63,6 +63,7 @@ export class DatabaseService {
         id TEXT PRIMARY KEY NOT NULL,
         name TEXT NOT NULL,
         description TEXT,
+        muscle_group TEXT,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL
       );

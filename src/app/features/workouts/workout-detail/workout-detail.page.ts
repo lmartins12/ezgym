@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import type { Workout, WorkoutExercise } from '@core';
+import type { MuscleGroup, Workout, WorkoutExercise } from '@core';
 import {
   AlertController,
   IonBackButton,
@@ -138,6 +138,7 @@ export class WorkoutDetailPage {
     const { data } = await modal.onWillDismiss<{
       name: string;
       description?: string;
+      muscle_group?: MuscleGroup;
     }>();
 
     if (data) {
@@ -145,6 +146,7 @@ export class WorkoutDetailPage {
         workout.id,
         data.name,
         data.description,
+        data.muscle_group,
       );
       await this.loadWorkout();
     }

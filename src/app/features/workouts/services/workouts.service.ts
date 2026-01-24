@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import type { Workout } from '@core';
+import type { MuscleGroup, Workout } from '@core';
 import { DatabaseService } from '@core';
 import { v4 as uuidv4 } from 'uuid';
 import type { WorkoutDetail } from '../models';
@@ -37,15 +37,19 @@ export class WorkoutsService {
     return result[0] ?? null;
   }
 
-  public async create(name: string, description?: string): Promise<string> {
+  public async create(
+    name: string,
+    description?: string,
+    muscleGroup?: MuscleGroup,
+  ): Promise<string> {
     await this.db.ready();
 
     const id = uuidv4();
     const now = Date.now();
 
     await this.db.execute(
-      'INSERT INTO workouts (id, name, description, created_at, updated_at) VALUES (?, ?, ?, ?, ?)',
-      [id, name, description ?? null, now, now],
+      'INSERT INTO workouts (id, name, description, muscle_group, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
+      [id, name, description ?? null, muscleGroup ?? null, now, now],
     );
 
     return id;
@@ -55,14 +59,15 @@ export class WorkoutsService {
     id: string,
     name: string,
     description?: string,
+    muscleGroup?: MuscleGroup,
   ): Promise<void> {
     await this.db.ready();
 
     const now = Date.now();
 
     await this.db.execute(
-      'UPDATE workouts SET name = ?, description = ?, updated_at = ? WHERE id = ?',
-      [name, description ?? null, now, id],
+      'UPDATE workouts SET name = ?, description = ?, muscle_group = ?, updated_at = ? WHERE id = ?',
+      [name, description ?? null, muscleGroup ?? null, now, id],
     );
   }
 
