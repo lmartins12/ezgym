@@ -1,29 +1,29 @@
 export type MuscleGroup =
-  | 'abs'
+  | 'chest'
+  | 'triceps'
   | 'back'
   | 'biceps'
-  | 'calves'
-  | 'cardio'
-  | 'chest'
-  | 'forearms'
-  | 'hamstrings'
-  | 'quadriceps'
   | 'shoulders'
-  | 'triceps'
+  | 'quadriceps'
+  | 'hamstrings'
+  | 'calves'
+  | 'forearms'
+  | 'abs'
+  | 'cardio'
   | 'other';
 
 export const MUSCLE_GROUPS: readonly MuscleGroup[] = [
-  'abs',
+  'chest',
+  'triceps',
   'back',
   'biceps',
-  'calves',
-  'cardio',
-  'chest',
-  'forearms',
-  'hamstrings',
-  'quadriceps',
   'shoulders',
-  'triceps',
+  'quadriceps',
+  'hamstrings',
+  'calves',
+  'forearms',
+  'abs',
+  'cardio',
   'other',
 ] as const;
 

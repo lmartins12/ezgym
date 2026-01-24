@@ -1,0 +1,19 @@
+<div class="muscle-group-selector">
+  <div class="muscle-group-scroll">
+    @for (group of muscleGroups; track group) {
+      <button
+        type="button"
+        class="muscle-group-item"
+        [class.selected]="isSelected(group)"
+        (click)="selectMuscleGroup(group)"
+        [attr.aria-label]="getMuscleGroupLabel(group)"
+        [attr.aria-pressed]="isSelected(group)"
+      >
+        <app-muscle-icon [muscleGroup]="group" size="md" />
+        <span class="muscle-group-label">
+          {{ getMuscleGroupLabel(group) }}
+        </span>
+      </button>
+    }
+  </div>
+</div>
