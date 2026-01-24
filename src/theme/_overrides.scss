@@ -16,7 +16,7 @@
   --ion-tab-bar-color-selected: #ffffff;
 
   // Item / List
-  --ion-item-background: transparent;
+  --ion-item-background: var(--ion-background-color);
   --ion-item-border-color: var(--glass-border);
   --ion-item-color: #fafafa;
 

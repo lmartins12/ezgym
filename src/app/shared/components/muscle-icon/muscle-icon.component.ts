@@ -1,7 +1,8 @@
 import { Component, input } from '@angular/core';
 import type { MuscleGroup } from '@core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { inject } from '@angular/core';
+import { IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { barbellOutline } from 'ionicons/icons';
 
 const MUSCLE_ICON_MAP: Record<MuscleGroup, string> = {
   abs: 'assets/muscles/abs.svg',
@@ -21,7 +22,7 @@ const MUSCLE_ICON_MAP: Record<MuscleGroup, string> = {
 @Component({
   selector: 'app-muscle-icon',
   standalone: true,
-  imports: [],
+  imports: [IonIcon],
   templateUrl: './muscle-icon.component.html',
   styleUrls: ['./muscle-icon.component.scss'],
 })
@@ -29,9 +30,13 @@ export class MuscleIconComponent {
   public readonly muscleGroup = input.required<MuscleGroup>();
   public readonly size = input<'sm' | 'md' | 'lg'>('md');
 
-  private readonly sanitizer = inject(DomSanitizer);
-
   protected readonly iconMap = MUSCLE_ICON_MAP;
+
+  constructor() {
+    addIcons({
+      barbellOutline,
+    });
+  }
 
   protected get hasSvg(): boolean {
     return this.iconMap[this.muscleGroup()] !== '';
