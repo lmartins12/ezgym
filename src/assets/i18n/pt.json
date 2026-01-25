@@ -19,6 +19,12 @@
     "EXERCISES": "Exercícios",
     "SETTINGS": "Configurações"
   },
+  "TABS": {
+    "WORKOUTS": "Treinos",
+    "SESSION": "Sessão",
+    "DASHBOARD": "Dashboard",
+    "SETTINGS": "Configurações"
+  },
   "SETTINGS": {
     "TITLE": "Configurações",
     "LANGUAGE": "Idioma",
@@ -48,6 +54,14 @@
     "START_WORKOUT": "Iniciar Treino",
     "REORDER_HINT": "Arraste para reordenar exercícios",
     "DELETE_EXERCISE_CONFIRM": "Remover este exercício do treino?"
+  },
+  "SESSION": {
+    "COMING_SOON_TITLE": "Em breve",
+    "COMING_SOON_DESCRIPTION": "O acompanhamento de sessões de treino estará disponível em breve"
+  },
+  "DASHBOARD": {
+    "COMING_SOON_TITLE": "Em breve",
+    "COMING_SOON_DESCRIPTION": "Estatísticas e acompanhamento de progresso estarão disponíveis em breve"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Adicionar Exercício",

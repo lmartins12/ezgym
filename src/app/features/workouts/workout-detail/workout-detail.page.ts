@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import type { MuscleGroup, Workout, WorkoutExercise } from '@core';
 import {
   AlertController,
@@ -69,6 +70,7 @@ export class WorkoutDetailPage {
   private readonly translate = inject(TranslateService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly navCtrl = inject(NavController);
   private readonly workoutsService = inject(WorkoutsService);
   private readonly exercisesService = inject(WorkoutExercisesService);
   private readonly modalCtrl = inject(ModalController);
@@ -91,7 +93,7 @@ export class WorkoutDetailPage {
   public async ionViewWillEnter(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      this.router.navigate(['/workouts']);
+      this.navCtrl.navigateBack('/tabs/workouts');
       return;
     }
 
@@ -105,7 +107,7 @@ export class WorkoutDetailPage {
 
     const data = await this.workoutsService.getById(id);
     if (!data) {
-      this.router.navigate(['/workouts']);
+      this.navCtrl.navigateBack('/tabs/workouts');
       return;
     }
 

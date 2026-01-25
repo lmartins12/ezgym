@@ -19,6 +19,12 @@
     "EXERCISES": "Exercises",
     "SETTINGS": "Settings"
   },
+  "TABS": {
+    "WORKOUTS": "Workouts",
+    "SESSION": "Session",
+    "DASHBOARD": "Dashboard",
+    "SETTINGS": "Settings"
+  },
   "SETTINGS": {
     "TITLE": "Settings",
     "LANGUAGE": "Language",
@@ -48,6 +54,14 @@
     "START_WORKOUT": "Start Workout",
     "REORDER_HINT": "Drag to reorder exercises",
     "DELETE_EXERCISE_CONFIRM": "Remove this exercise from the workout?"
+  },
+  "SESSION": {
+    "COMING_SOON_TITLE": "Coming Soon",
+    "COMING_SOON_DESCRIPTION": "Workout session tracking will be available soon"
+  },
+  "DASHBOARD": {
+    "COMING_SOON_TITLE": "Coming Soon",
+    "COMING_SOON_DESCRIPTION": "Statistics and progress tracking will be available soon"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Add Exercise",

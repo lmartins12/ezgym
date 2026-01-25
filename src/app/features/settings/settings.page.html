@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'SETTINGS.TITLE' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none" inset>
+    <ion-list-header>{{ 'SETTINGS.LANGUAGE' | translate }}</ion-list-header>
+    <ion-item>
+      <ion-icon name="settings-outline" slot="start"></ion-icon>
+      <ion-label>{{ 'SETTINGS.LANGUAGE' | translate }}</ion-label>
+      <ion-select
+        [value]="currentLang()"
+        (ionChange)="onLanguageChange($event)"
+      >
+        <ion-select-option value="pt">
+          {{ 'SETTINGS.LANGUAGE_PT' | translate }}
+        </ion-select-option>
+        <ion-select-option value="en">
+          {{ 'SETTINGS.LANGUAGE_EN' | translate }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>
