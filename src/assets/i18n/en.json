@@ -28,8 +28,8 @@
   "SETTINGS": {
     "TITLE": "Settings",
     "LANGUAGE": "Language",
-    "LANGUAGE_PT": "Português",
-    "LANGUAGE_EN": "English"
+    "LANGUAGE_PT": "Português-BR",
+    "LANGUAGE_EN": "English-US"
   },
   "WORKOUTS": {
     "TITLE": "Workouts",

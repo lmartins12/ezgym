@@ -4,9 +4,7 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
-  IonLabel,
   IonList,
-  IonListHeader,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -14,14 +12,13 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { settingsOutline } from 'ionicons/icons';
+import { caretDownSharp, settingsOutline } from 'ionicons/icons';
 import { LanguageService } from '../../core';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
   imports: [
-    IonListHeader,
     TranslateModule,
     IonHeader,
     IonToolbar,
@@ -29,7 +26,6 @@ import { LanguageService } from '../../core';
     IonContent,
     IonList,
     IonItem,
-    IonLabel,
     IonSelect,
     IonSelectOption,
     IonIcon,
@@ -46,7 +42,7 @@ export class SettingsPage {
   public readonly isEnglish = this.languageService.isEnglish;
 
   constructor() {
-    addIcons({ settingsOutline });
+    addIcons({ caretDownSharp, settingsOutline });
   }
 
   public onLanguageChange(event: CustomEvent): void {
