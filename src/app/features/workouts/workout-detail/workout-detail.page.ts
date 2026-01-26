@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 import type { MuscleGroup, Workout, WorkoutExercise } from '@core';
+import { NavController } from '@ionic/angular';
 import {
   AlertController,
   IonBackButton,
@@ -69,7 +69,6 @@ import { WorkoutExercisesService, WorkoutsService } from '../services';
 export class WorkoutDetailPage {
   private readonly translate = inject(TranslateService);
   private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly navCtrl = inject(NavController);
   private readonly workoutsService = inject(WorkoutsService);
   private readonly exercisesService = inject(WorkoutExercisesService);

@@ -9,7 +9,6 @@ import {
   IonFooter,
   IonHeader,
   IonInput,
-  IonItem,
   IonLabel,
   IonTextarea,
   IonTitle,
@@ -37,7 +36,6 @@ export interface EditWorkoutResult {
     IonButton,
     IonButtons,
     IonContent,
-    IonItem,
     IonLabel,
     IonInput,
     IonTextarea,
@@ -56,10 +54,6 @@ export class EditWorkoutModalComponent {
   public readonly muscleGroup = model<MuscleGroup | undefined>(undefined);
 
   private readonly modalCtrl = inject(ModalController);
-
-  public constructor() {
-    // Initialize with workout data when it's available
-  }
 
   public ionViewDidEnter(): void {
     this.name.set(this.workout.name);
