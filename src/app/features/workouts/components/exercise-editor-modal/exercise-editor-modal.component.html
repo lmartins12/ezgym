@@ -22,15 +22,18 @@
 <ion-content>
   <form (ngSubmit)="submit()">
     <!-- Exercise Name -->
-    <ion-item>
-      <ion-label position="stacked">
-        {{ "EXERCISE.NAME_LABEL" | translate }}
-      </ion-label>
-      <ion-input [(ngModel)]="name" name="name" required autofocus />
-    </ion-item>
+    <ion-input
+      required
+      autofocus
+      name="name"
+      fill="solid"
+      label="{{ 'EXERCISE.NAME_LABEL' | translate }}"
+      labelPlacement="floating"
+      [(ngModel)]="name"
+    />
 
     <!-- Muscle Group -->
-    <div class="ion-padding-top ion-padding-horizontal">
+    <div>
       <ion-label position="stacked" class="ion-margin-bottom">
         {{ "EXERCISE.MUSCLE_GROUP_LABEL" | translate }}
       </ion-label>
@@ -38,20 +41,23 @@
     </div>
 
     <!-- Equipment (Optional) -->
-    <ion-item>
-      <ion-label position="stacked">
-        {{ "EXERCISE.EQUIPMENT_LABEL" | translate }}
-      </ion-label>
-      <ion-input [(ngModel)]="equipment" name="equipment" />
-    </ion-item>
+    <ion-input
+      name="equipment"
+      fill="solid"
+      label="{{ 'EXERCISE.EQUIPMENT_LABEL' | translate }}"
+      labelPlacement="floating"
+      [(ngModel)]="equipment"
+    />
 
     <!-- Notes (Optional) -->
-    <ion-item>
-      <ion-label position="stacked">
-        {{ "EXERCISE.NOTES_LABEL" | translate }}
-      </ion-label>
-      <ion-textarea [(ngModel)]="notes" name="notes" [rows]="2" />
-    </ion-item>
+    <ion-textarea
+      name="notes"
+      fill="solid"
+      label="{{ 'EXERCISE.NOTES_LABEL' | translate }}"
+      labelPlacement="floating"
+      [(ngModel)]="notes"
+      [rows]="2"
+    />
 
     <!-- Divider -->
     <ion-item-divider>
@@ -59,45 +65,46 @@
     </ion-item-divider>
 
     <!-- Sets -->
-    <ion-item>
-      <ion-label position="stacked">
-        {{ "EXERCISE.SETS_LABEL" | translate }}
-      </ion-label>
-      <ion-input type="number" [(ngModel)]="sets" name="sets" min="1" />
-    </ion-item>
+    <ion-input
+      type="number"
+      name="sets"
+      fill="solid"
+      label="{{ 'EXERCISE.SETS_LABEL' | translate }}"
+      labelPlacement="floating"
+      [(ngModel)]="sets"
+      min="1"
+    />
 
     <!-- Reps -->
-    <ion-item>
-      <ion-label position="stacked">
-        {{ "EXERCISE.REPS_LABEL" | translate }}
-      </ion-label>
-      <ion-input [(ngModel)]="reps" name="reps" />
-    </ion-item>
+    <ion-input
+      name="reps"
+      fill="solid"
+      label="{{ 'EXERCISE.REPS_LABEL' | translate }}"
+      labelPlacement="floating"
+      [(ngModel)]="reps"
+    />
 
     <!-- Target Weight (Optional) -->
-    <ion-item>
-      <ion-label position="stacked">
-        {{ "EXERCISE.WEIGHT_LABEL" | translate }}
-      </ion-label>
-      <ion-input
-        type="number"
-        [(ngModel)]="targetWeight"
-        name="target_weight"
-      />
-    </ion-item>
+    <ion-input
+      type="number"
+      name="target_weight"
+      fill="solid"
+      label="{{ 'EXERCISE.WEIGHT_LABEL' | translate }}"
+      labelPlacement="floating"
+      [(ngModel)]="targetWeight"
+    />
 
     <!-- Rest Seconds -->
-    <ion-item>
-      <ion-label position="stacked">
-        {{ "EXERCISE.REST_LABEL" | translate }}
-      </ion-label>
-      <ion-input
-        type="number"
-        [(ngModel)]="restSeconds"
-        name="rest_seconds"
-        min="0"
-      />
-    </ion-item>
+    <ion-input
+      type="number"
+      name="rest_seconds"
+      fill="solid"
+      label="{{ 'EXERCISE.REST_LABEL' | translate }}"
+      labelPlacement="floating"
+      [(ngModel)]="restSeconds"
+      name="rest_seconds"
+      min="0"
+    />
   </form>
 </ion-content>
 
