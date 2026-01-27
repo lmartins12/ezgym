@@ -45,7 +45,7 @@ export class SettingsPage {
     addIcons({ caretDownSharp, settingsOutline });
   }
 
-  public onLanguageChange(event: CustomEvent): void {
+  public async onLanguageChange(event: CustomEvent): Promise<void> {
     const lang = event.detail.value as 'pt' | 'en';
     this.languageService.setLanguage(lang);
   }

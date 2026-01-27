@@ -14,7 +14,7 @@ export class WorkoutsService {
     const sql = `
       SELECT
         w.*,
-        COUNT(we.id) as exercise_count,
+        COUNT(DISTINCT we.id) as exercise_count,
         MAX(ws.started_at) as last_trained
       FROM workouts w
       LEFT JOIN workout_exercises we ON w.id = we.workout_id
