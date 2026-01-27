@@ -14,7 +14,7 @@
       @if (workout().last_trained) {
         <p class="last-trained">
           {{ "WORKOUTS.LAST_TRAINED" | translate }}:
-          {{ workout().last_trained | date: "short" }}
+          {{ workout().last_trained | date: dateFormat() }}
         </p>
       }
     </ion-label>

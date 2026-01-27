@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, input, Output } from '@angular/core';
+import { Component, computed, EventEmitter, inject, input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { LanguageService } from '@core';
 import {
   IonAccordion,
   IonButton,
@@ -9,9 +10,9 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { MuscleIconComponent } from '@shared';
 import { addIcons } from 'ionicons';
 import { listOutline, playOutline, trashOutline } from 'ionicons/icons';
-import { MuscleIconComponent } from '@shared';
 import type { WorkoutDetail } from '../../models';
 
 @Component({
@@ -40,6 +41,11 @@ export class WorkoutCardComponent {
   public readonly startWorkout = new EventEmitter<string>();
 
   private readonly router = inject(Router);
+  private readonly languageService = inject(LanguageService);
+
+  public readonly dateFormat = computed(() =>
+    this.languageService.isPortuguese() ? 'dd/MM/yy, HH:mm' : 'short',
+  );
 
   constructor() {
     addIcons({
