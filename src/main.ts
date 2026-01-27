@@ -1,4 +1,6 @@
+import { registerLocaleData } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
+import ptBr from '@angular/common/locales/pt';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   PreloadAllModules,
@@ -19,6 +21,8 @@ import {
 import { iosTransitionAnimation } from '@ionic/angular/standalone';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
+
+registerLocaleData(ptBr, 'pt-BR');
 
 bootstrapApplication(AppComponent, {
   providers: [
