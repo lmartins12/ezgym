@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import type { MuscleGroup } from '@core';
 import { DatabaseService } from '@core';
 import type { WorkoutEvent } from '../models';
-import { formatDuration } from '../utils';
+import { formatDuration } from '@shared';
 
 /**
  * Result of workout session query with joined workout data.

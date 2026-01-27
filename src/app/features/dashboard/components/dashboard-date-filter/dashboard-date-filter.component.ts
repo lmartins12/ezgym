@@ -39,10 +39,6 @@ export class DashboardDateFilterComponent {
   public readonly isActive = input(false);
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
 
-  protected readonly localeValue = computed(() => this.locale());
-  protected readonly startDateISO = computed(() => this.startDate()?.toISOString() ?? null);
-  protected readonly endDateISO = computed(() => this.endDate()?.toISOString() ?? null);
-
   @Output()
   public readonly filterChanged = new EventEmitter<{
     start: Date | null;
@@ -51,6 +47,10 @@ export class DashboardDateFilterComponent {
 
   @Output()
   public readonly clearFilter = new EventEmitter<void>();
+
+  protected readonly localeValue = computed(() => this.locale());
+  protected readonly startDateISO = computed(() => this.startDate()?.toISOString() ?? null);
+  protected readonly endDateISO = computed(() => this.endDate()?.toISOString() ?? null);
 
   protected onStartDateChange(event: CustomEvent): void {
     const value = event.detail.value;

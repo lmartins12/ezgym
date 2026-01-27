@@ -41,16 +41,6 @@ export interface DateFilter {
 }
 
 /**
- * Calendar day with event indicator.
- */
-export interface CalendarDay {
-  date: Date;
-  hasEvents: boolean;
-  isToday: boolean;
-  isSelected: boolean;
-}
-
-/**
  * Pagination state for infinite scroll.
  */
 export interface PaginationState {
