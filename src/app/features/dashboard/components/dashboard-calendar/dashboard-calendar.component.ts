@@ -1,5 +1,18 @@
-import { Component, computed, EventEmitter, input, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  input,
+  Output,
+} from '@angular/core';
 import { IonDatetime } from '@ionic/angular/standalone';
+
+interface HighlightedDate {
+  date: string;
+  textColor: string;
+  backgroundColor: string;
+  border: string;
+}
 
 @Component({
   selector: 'app-dashboard-calendar',
@@ -12,17 +25,57 @@ export class DashboardCalendarComponent {
   public readonly currentMonth = input.required<Date>();
   public readonly datesWithEvents = input.required<number[]>();
   public readonly selectedDate = input<Date | null>(null);
+  public readonly today = input<Date>(new Date());
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
 
   protected readonly localeValue = computed(() => this.locale());
-  protected readonly currentMonthISO = computed(() => this.currentMonth().toISOString());
-  protected readonly selectedDateISO = computed(() => this.selectedDate()?.toISOString() ?? null);
+  protected readonly currentMonthISO = computed(() =>
+    this.currentMonth().toISOString(),
+  );
+  protected readonly selectedDateISO = computed(
+    () => this.selectedDate()?.toISOString() ?? null,
+  );
+
+  /**
+   * Today's date as ISO string (YYYY-MM-DD) for comparison.
+   */
+  protected readonly todayISO = computed(() =>
+    this.toIsoDateString(this.today()),
+  );
+
+  /**
+   * Set of date strings (YYYY-MM-DD) that have events for O(1) lookup.
+   */
+  protected readonly eventDatesSet = computed(() => {
+    const dateStrings = this.datesWithEvents().map((timestamp) =>
+      this.toIsoDateString(new Date(timestamp)),
+    );
+    return new Set(dateStrings);
+  });
+
+  /**
+   * Formatted highlighted dates for ion-datetime.
+   */
+  protected readonly highlightedDates = computed(() => {
+    return this.datesWithEvents().map((timestamp) =>
+      this.formatHighlightedDate(new Date(timestamp)),
+    );
+  });
 
   @Output()
   public readonly dateSelected = new EventEmitter<Date>();
 
   @Output()
   public readonly monthChanged = new EventEmitter<Date>();
+
+  /**
+   * Check if a date is enabled. Returns true if the date has events OR if it's today.
+   */
+  protected isDateEnabled = (dateString: string): boolean => {
+    return (
+      this.eventDatesSet().has(dateString) || dateString === this.todayISO()
+    );
+  };
 
   protected onDateChange(event: CustomEvent): void {
     const value = event.detail.value;
@@ -31,11 +84,36 @@ export class DashboardCalendarComponent {
 
       // Check if month changed
       const currentMonth = this.currentMonth();
-      if (date.getMonth() !== currentMonth.getMonth() || date.getFullYear() !== currentMonth.getFullYear()) {
+      if (
+        date.getMonth() !== currentMonth.getMonth() ||
+        date.getFullYear() !== currentMonth.getFullYear()
+      ) {
         this.monthChanged.emit(date);
       }
 
       this.dateSelected.emit(date);
     }
+  }
+
+  /**
+   * Convert Date to ISO date string (YYYY-MM-DD) in local timezone.
+   */
+  private toIsoDateString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Format a date as a highlighted date object for ion-datetime.
+   */
+  private formatHighlightedDate(date: Date): HighlightedDate {
+    return {
+      date: this.toIsoDateString(date),
+      textColor: 'var(--ion-text-color)',
+      backgroundColor: 'var(--glass-bg-solid)',
+      border: '1px solid var(--ion-border-color)',
+    };
   }
 }

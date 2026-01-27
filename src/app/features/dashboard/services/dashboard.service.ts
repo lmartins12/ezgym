@@ -130,6 +130,24 @@ export class DashboardService {
   }
 
   /**
+   * Get all unique dates with workout sessions (all time).
+   * Used for calendar highlighting across all months.
+   */
+  async getAllDatesWithEvents(): Promise<number[]> {
+    await this.db.ready();
+
+    const sql = `
+      SELECT DISTINCT started_at
+      FROM workout_sessions
+      ORDER BY started_at DESC
+    `;
+
+    const results = await this.db.query<{ started_at: number }>(sql);
+
+    return results.map((r) => r.started_at);
+  }
+
+  /**
    * Convert WorkoutSession query result to WorkoutEvent.
    */
   workoutSessionToEvent(session: WorkoutSessionQueryResult): WorkoutEvent {

@@ -12,8 +12,6 @@ import { DashboardService } from './services';
 import {
   dateToUnixEndOfDay,
   dateToUnixStartOfDay,
-  getMonthEnd,
-  getMonthStart,
 } from './utils';
 import type { DashboardEvent, PaginationState } from './models';
 
@@ -70,6 +68,7 @@ export class DashboardPage {
   // Calendar state
   public readonly currentMonth = signal(new Date());
   public readonly datesWithEvents = signal<number[]>([]);
+  public readonly today = signal(new Date());
 
   // UI state
   public readonly showBackToTop = signal(false);
@@ -126,12 +125,11 @@ export class DashboardPage {
     }
 
     this.resetPagination();
-    this.loadEventsPage();
+    this.loadEventsPageWithLoading();
   }
 
   public onMonthChanged(month: Date): void {
     this.currentMonth.set(month);
-    this.loadDatesWithEvents();
   }
 
   public onDateRangeChanged(filter: {
@@ -142,7 +140,7 @@ export class DashboardPage {
     this.filterEndDate.set(filter.end);
     this.selectedDate.set(null); // Clear single date selection
     this.resetPagination();
-    this.loadEventsPage();
+    this.loadEventsPageWithLoading();
   }
 
   public clearFilters(): void {
@@ -150,7 +148,7 @@ export class DashboardPage {
     this.filterStartDate.set(null);
     this.filterEndDate.set(null);
     this.resetPagination();
-    this.loadEventsPage();
+    this.loadEventsPageWithLoading();
   }
 
   public onScroll(event: CustomEvent): void {
@@ -164,14 +162,17 @@ export class DashboardPage {
   }
 
   private async loadDatesWithEvents(): Promise<void> {
-    const monthStart = getMonthStart(this.currentMonth());
-    const monthEnd = getMonthEnd(this.currentMonth());
-
-    const dates = await this.dashboardService.getDatesWithEvents(
-      monthStart,
-      monthEnd,
-    );
+    const dates = await this.dashboardService.getAllDatesWithEvents();
     this.datesWithEvents.set(dates);
+  }
+
+  private async loadEventsPageWithLoading(): Promise<void> {
+    this.loading.set(true);
+    try {
+      await this.loadEventsPage();
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   private async loadEventsPage(page: number = 0): Promise<void> {

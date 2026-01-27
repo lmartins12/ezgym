@@ -1,6 +1,8 @@
 <ion-datetime
   [value]="currentMonthISO()"
   [locale]="localeValue()"
+  [highlightedDates]="highlightedDates()"
+  [isDateEnabled]="isDateEnabled"
   presentation="date"
   (ionChange)="onDateChange($event)"
 />
