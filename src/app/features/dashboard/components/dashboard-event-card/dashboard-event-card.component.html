@@ -1,0 +1,32 @@
+<ion-item
+  class="event-card"
+  button="true"
+  detail="false"
+  (click)="onClick()"
+>
+  <div class="event-icon" slot="start">
+    <ion-icon [name]="getIconForType(event().type)" />
+  </div>
+
+  <ion-label>
+    <h2>{{ event().title }}</h2>
+    @if (event().subtitle) {
+      <p class="subtitle">{{ event().subtitle }}</p>
+    }
+    <p class="timestamp">
+      {{ event().timestamp | date: 'shortDate':'':localeValue() }}
+      @if (event().timestamp | date:'shortTime':'':localeValue()) {
+        &bull;
+      }
+      {{ event().timestamp | date:'shortTime':'':localeValue() }}
+    </p>
+  </ion-label>
+
+  @if (muscleGroup) {
+    <app-muscle-icon
+      [muscleGroup]="muscleGroup"
+      size="sm"
+      slot="end"
+    />
+  }
+</ion-item>

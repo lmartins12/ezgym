@@ -1,0 +1,8 @@
+ion-fab {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-4);
+  z-index: 999;
+  --ion-fab-button-background: var(--glass-bg-solid);
+  --ion-fab-button-color: var(--ion-text-color);
+}

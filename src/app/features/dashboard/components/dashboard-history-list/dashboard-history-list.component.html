@@ -1,0 +1,37 @@
+<div class="history-list">
+  @if (loading()) {
+    <div class="loading-state">
+      <ion-spinner name="crescent" />
+    </div>
+  } @else if (events().length === 0) {
+    <div class="empty-state">
+      <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+      <h2>{{ "DASHBOARD.NO_EVENTS" | translate }}</h2>
+      <p>{{ "DASHBOARD.NO_EVENTS_DESC" | translate }}</p>
+    </div>
+  } @else {
+    <ion-list lines="none">
+      @for (event of events(); track event.id) {
+        <app-dashboard-event-card
+          [event]="event"
+          (cardClick)="onEventClick(event)"
+        ></app-dashboard-event-card>
+      }
+    </ion-list>
+
+    @if (hasMore() && !loadingMore()) {
+      <ion-infinite-scroll (ionInfinite)="onLoadMore($event)">
+        <ion-infinite-scroll-content
+          loadingSpinner="crescent"
+          loadingText="{{ 'COMMON.LOADING' | translate }}"
+        ></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    }
+
+    @if (loadingMore()) {
+      <div class="loading-more">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    }
+  }
+</div>

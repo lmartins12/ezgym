@@ -1,0 +1,63 @@
+<div class="date-filter-container">
+  @if (isActive()) {
+    <div class="filter-summary">
+      <span class="filter-label">{{
+        "DASHBOARD.FILTER_ACTIVE" | translate
+      }}</span>
+      <div class="filter-dates">
+        @if (startDate()) {
+          <span>{{
+            startDate() | date: "shortDate" : "" : localeValue()
+          }}</span>
+        }
+        @if (startDate() && endDate()) {
+          <span class="separator">→</span>
+        }
+        @if (endDate()) {
+          <span>{{ endDate() | date: "shortDate" : "" : localeValue() }}</span>
+        }
+      </div>
+      <ion-button fill="clear" size="small" (click)="onClear()">
+        <ion-icon name="close-circle" slot="icon-only" />
+      </ion-button>
+    </div>
+  }
+
+  <div class="filter-controls">
+    <div class="date-input-group">
+      <ion-label position="stacked">
+        {{ "DASHBOARD.FROM_DATE" | translate }}
+      </ion-label>
+      <ion-datetime-button datetime="start-date"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
+            id="start-date"
+            presentation="date"
+            [value]="startDateISO()"
+            [locale]="localeValue()"
+            (ionChange)="onStartDateChange($event)"
+          />
+        </ng-template>
+      </ion-modal>
+    </div>
+
+    <div class="date-input-group">
+      <ion-label position="stacked">
+        {{ "DASHBOARD.TO_DATE" | translate }}
+      </ion-label>
+      <ion-datetime-button datetime="end-date"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
+            id="end-date"
+            presentation="date"
+            [value]="endDateISO()"
+            [locale]="localeValue()"
+            (ionChange)="onEndDateChange($event)"
+          />
+        </ng-template>
+      </ion-modal>
+    </div>
+  </div>
+</div>

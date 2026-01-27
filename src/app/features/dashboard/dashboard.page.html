@@ -4,10 +4,44 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="empty-state">
-    <ion-icon name="stats-chart-outline" aria-hidden="true"></ion-icon>
-    <h2>{{ 'DASHBOARD.COMING_SOON_TITLE' | translate }}</h2>
-    <p>{{ 'DASHBOARD.COMING_SOON_DESCRIPTION' | translate }}</p>
+<ion-content #content (ionScroll)="onScroll($event)" scrollEvents="true">
+  <!-- Calendar Section -->
+  <div class="dashboard-section">
+    <app-dashboard-calendar
+      [currentMonth]="currentMonth()"
+      [datesWithEvents]="datesWithEvents()"
+      [selectedDate]="selectedDate()"
+      [locale]="currentLocale()"
+      (dateSelected)="onDateSelected($event)"
+      (monthChanged)="onMonthChanged($event)"
+    />
+  </div>
+
+  <!-- Date Filter Section -->
+  <div class="dashboard-section">
+    <app-dashboard-date-filter
+      [startDate]="filterStartDate()"
+      [endDate]="filterEndDate()"
+      [isActive]="isFilterActive()"
+      [locale]="currentLocale()"
+      (filterChanged)="onDateRangeChanged($event)"
+      (clearFilter)="clearFilters()"
+    />
+  </div>
+
+  <!-- History List Section -->
+  <div class="dashboard-section">
+    <app-dashboard-history-list
+      [events]="events()"
+      [loading]="loading()"
+      [loadingMore]="loadingMore()"
+      [hasMore]="pagination().hasMore"
+      (loadMore)="loadMoreEvents()"
+    />
   </div>
 </ion-content>
+
+<app-dashboard-back-to-top
+  [visible]="showBackToTop()"
+  (clickTop)="scrollToTop()"
+/>

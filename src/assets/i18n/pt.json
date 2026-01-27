@@ -11,7 +11,8 @@
     "LOADING": "Carregando...",
     "ERROR": "Erro",
     "SUCCESS": "Sucesso",
-    "CREATE": "Criar"
+    "CREATE": "Criar",
+    "CLEAR": "Limpar"
   },
   "NAV": {
     "HOME": "Início",
@@ -60,8 +61,11 @@
     "COMING_SOON_DESCRIPTION": "O acompanhamento de sessões de treino estará disponível em breve"
   },
   "DASHBOARD": {
-    "COMING_SOON_TITLE": "Em breve",
-    "COMING_SOON_DESCRIPTION": "Estatísticas e acompanhamento de progresso estarão disponíveis em breve"
+    "NO_EVENTS": "Nenhum treino encontrado",
+    "NO_EVENTS_DESC": "Você não registrou nenhum treino neste período",
+    "FILTER_ACTIVE": "Filtro ativo",
+    "FROM_DATE": "De",
+    "TO_DATE": "Até"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Adicionar Exercício",

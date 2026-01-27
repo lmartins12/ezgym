@@ -11,7 +11,8 @@
     "LOADING": "Loading...",
     "ERROR": "Error",
     "SUCCESS": "Success",
-    "CREATE": "Create"
+    "CREATE": "Create",
+    "CLEAR": "Clear"
   },
   "NAV": {
     "HOME": "Home",
@@ -60,8 +61,11 @@
     "COMING_SOON_DESCRIPTION": "Workout session tracking will be available soon"
   },
   "DASHBOARD": {
-    "COMING_SOON_TITLE": "Coming Soon",
-    "COMING_SOON_DESCRIPTION": "Statistics and progress tracking will be available soon"
+    "NO_EVENTS": "No workouts found",
+    "NO_EVENTS_DESC": "You haven't recorded any workouts in this period",
+    "FILTER_ACTIVE": "Filter active",
+    "FROM_DATE": "From",
+    "TO_DATE": "To"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Add Exercise",

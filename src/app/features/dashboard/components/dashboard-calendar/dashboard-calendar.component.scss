@@ -1,0 +1,9 @@
+ion-datetime {
+  --background: transparent;
+  --background-rgb: var(--ion-background-color-rgb);
+  border: none;
+
+  &::part(calendar-day) {
+    font-size: 14px;
+  }
+}
