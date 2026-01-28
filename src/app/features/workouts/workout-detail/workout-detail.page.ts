@@ -231,7 +231,8 @@ export class WorkoutDetailPage {
   }
 
   public startWorkout(): void {
-    // TODO: Navigate to workout execution feature
-    console.log('Start workout:', this.workoutId());
+    if (!this.workoutId() || this.exercises().length === 0) return;
+
+    this.navCtrl.navigateForward(`/session/${this.workoutId()}`);
   }
 }

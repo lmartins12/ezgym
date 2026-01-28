@@ -139,7 +139,9 @@ export class WorkoutsListPage {
     await alert.present();
   }
 
-  public navigateToWorkout(workoutId: string): void {
-    this.router.navigate(['/workouts', workoutId]);
+  public startWorkout(workout: WorkoutDetail): void {
+    if (!workout.id || workout.exercise_count === 0) return;
+
+    this.router.navigate(['/session', workout.id]);
   }
 }

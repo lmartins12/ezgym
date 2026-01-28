@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, EventEmitter, inject, input, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  inject,
+  input,
+  Output,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { LanguageService } from '@core';
 import {
@@ -38,7 +45,7 @@ export class WorkoutCardComponent {
   public readonly deleteWorkout = new EventEmitter<string>();
 
   @Output()
-  public readonly startWorkout = new EventEmitter<string>();
+  public readonly startWorkout = new EventEmitter<WorkoutDetail>();
 
   private readonly router = inject(Router);
   private readonly languageService = inject(LanguageService);
