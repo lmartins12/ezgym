@@ -57,7 +57,10 @@
 
         @for (exercise of detailValue.exercises; track exercise.id) {
           <ion-item class="exercise-item" lines="none">
-            <div class="exercise-content" slot="start">
+            <app-muscle-icon [muscleGroup]="exercise.muscleGroup ?? 'other'"
+              style="margin-right: var(--space-4);"
+            ></app-muscle-icon>
+            <div class="exercise-content">
               <div class="exercise-name">{{ exercise.name }}</div>
               <div class="exercise-sets">
                 @for (set of exercise.sets; track set.setNumber) {

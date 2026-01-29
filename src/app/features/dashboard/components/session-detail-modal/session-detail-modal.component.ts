@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
-import { ModalController } from '@ionic/angular/standalone';
 import {
   IonButton,
   IonButtons,
@@ -16,11 +15,12 @@ import {
   IonList,
   IonListHeader,
   IonTitle,
-  IonToolbar,
+  IonToolbar, ModalController
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { MuscleIconComponent } from "@shared";
 import { addIcons } from 'ionicons';
-import { close, fitness, barbell } from 'ionicons/icons';
+import { barbell, close, fitness } from 'ionicons/icons';
 import type { SessionDetail } from '../../models';
 
 addIcons({ close, fitness, barbell });
@@ -46,7 +46,8 @@ addIcons({ close, fitness, barbell });
     IonTitle,
     IonToolbar,
     TranslateModule,
-  ],
+    MuscleIconComponent
+],
   templateUrl: './session-detail-modal.component.html',
   styleUrls: ['./session-detail-modal.component.scss'],
 })

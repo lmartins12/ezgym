@@ -93,10 +93,7 @@
   margin: 0;
 
   ion-list-header {
-    --background: var(--glass-bg-elevated);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--glass-radius-sm);
-    margin-bottom: var(--space-3);
+    padding-left: var(--space-2);
 
     ion-label {
       font-weight: 600;
