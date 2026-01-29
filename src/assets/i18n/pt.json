@@ -109,7 +109,14 @@
     "NO_EVENTS_DESC": "Você não registrou nenhum treino neste período",
     "FILTER_ACTIVE": "Filtro ativo",
     "FROM_DATE": "De",
-    "TO_DATE": "Até"
+    "TO_DATE": "Até",
+    "SESSION_DETAIL": {
+      "TITLE": "Detalhes do Treino",
+      "SETS": "séries",
+      "VOLUME": "volume total",
+      "NOTES": "Notas",
+      "EXERCISES": "Exercícios"
+    }
   },
   "EXERCISE": {
     "CREATE_TITLE": "Adicionar Exercício",

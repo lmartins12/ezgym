@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ 'DASHBOARD.SESSION_DETAIL.TITLE' | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (detail(); as detailValue) {
+    <div class="session-detail-container">
+      <!-- Session Header Card -->
+      <ion-card class="session-header-card">
+        <ion-card-header>
+          <ion-card-title>{{ detailValue.workoutName }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="session-meta">
+            <div class="meta-item">
+              <ion-icon name="fitness"></ion-icon>
+              <span>{{ detailValue.startedAt | date:'longDate':'':locale }}</span>
+            </div>
+            @if (detailValue.finishedAt) {
+              <div class="meta-item">
+                <ion-icon name="barbell"></ion-icon>
+                <span>{{ detailValue.finishedAt - detailValue.startedAt | date:'mm':'' }} min</span>
+              </div>
+            }
+          </div>
+          <div class="session-stats">
+            <div class="stat">
+              <span class="stat-value">{{ totalSets }}</span>
+              <span class="stat-label">{{ 'DASHBOARD.SESSION_DETAIL.SETS' | translate }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">{{ totalVolume }}</span>
+              <span class="stat-label">{{ 'DASHBOARD.SESSION_DETAIL.VOLUME' | translate }}</span>
+            </div>
+          </div>
+          @if (detailValue.notes) {
+            <div class="session-notes">
+              <span class="notes-label">{{ 'DASHBOARD.SESSION_DETAIL.NOTES' | translate }}</span>
+              <span class="notes-text">{{ detailValue.notes }}</span>
+            </div>
+          }
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Exercises List -->
+      <ion-list class="exercises-list">
+        <ion-list-header>
+          <ion-label>{{ 'DASHBOARD.SESSION_DETAIL.EXERCISES' | translate }}</ion-label>
+        </ion-list-header>
+
+        @for (exercise of detailValue.exercises; track exercise.id) {
+          <ion-item class="exercise-item" lines="none">
+            <div class="exercise-content" slot="start">
+              <div class="exercise-name">{{ exercise.name }}</div>
+              <div class="exercise-sets">
+                @for (set of exercise.sets; track set.setNumber) {
+                  <span class="set-badge">
+                    {{ set.reps }} @if (set.weight) {
+                      <span class="set-weight">&times; {{ set.weight }}</span>
+                    }
+                  </span>
+                }
+              </div>
+            </div>
+          </ion-item>
+        }
+      </ion-list>
+    </div>
+  }
+</ion-content>

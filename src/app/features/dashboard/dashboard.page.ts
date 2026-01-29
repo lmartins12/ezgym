@@ -1,20 +1,23 @@
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '@core';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  ModalController,
+} from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
+import { dateToUnixEndOfDay, dateToUnixStartOfDay, isSameDay } from '@shared';
 import {
   DashboardBackToTopComponent,
   DashboardCalendarComponent,
   DashboardDateFilterComponent,
   DashboardHistoryListComponent,
+  SessionDetailModalComponent,
 } from './components';
-import { DashboardService } from './services';
-import {
-  dateToUnixEndOfDay,
-  dateToUnixStartOfDay,
-  isSameDay,
-} from '@shared';
 import type { DashboardEvent, PaginationState } from './models';
+import { DashboardService } from './services';
 
 const PAGE_SIZE = 20;
 
@@ -38,6 +41,7 @@ const PAGE_SIZE = 20;
 export class DashboardPage {
   private readonly dashboardService = inject(DashboardService);
   private readonly languageService = inject(LanguageService);
+  private readonly modalController = inject(ModalController);
 
   @ViewChild('content', { read: IonContent })
   private readonly content?: IonContent;
@@ -162,6 +166,23 @@ export class DashboardPage {
     this.content?.scrollToTop(300);
   }
 
+  public async onEventClick(event: DashboardEvent): Promise<void> {
+    const sessionDetail = await this.dashboardService.getSessionDetail(
+      event.id,
+    );
+
+    const modal = await this.modalController.create({
+      component: SessionDetailModalComponent,
+      componentProps: {
+        sessionDetail,
+        locale: this.currentLocale(),
+      },
+      backdropDismiss: true,
+    });
+
+    await modal.present();
+  }
+
   private async loadDatesWithEvents(): Promise<void> {
     const dates = await this.dashboardService.getAllDatesWithEvents();
     this.datesWithEvents.set(dates);
@@ -209,7 +230,10 @@ export class DashboardPage {
       endDate,
     );
 
-    const totalLoaded = page === 0 ? newEvents.length : this.pagination().totalLoaded + newEvents.length;
+    const totalLoaded =
+      page === 0
+        ? newEvents.length
+        : this.pagination().totalLoaded + newEvents.length;
 
     this.pagination.update((p) => ({
       ...p,

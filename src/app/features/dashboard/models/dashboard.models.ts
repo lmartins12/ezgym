@@ -49,3 +49,37 @@ export interface PaginationState {
   hasMore: boolean;
   totalLoaded: number;
 }
+
+/**
+ * Individual set log in a session.
+ */
+export interface SessionSetLog {
+  setNumber: number;
+  reps: number;
+  weight: number | null;
+  rpe: number | null;
+}
+
+/**
+ * Exercise with its sets in a session.
+ */
+export interface SessionExercise {
+  id: string;
+  name: string;
+  muscleGroup: MuscleGroup | null;
+  equipment: string | null;
+  sets: SessionSetLog[];
+}
+
+/**
+ * Complete session detail for modal display.
+ */
+export interface SessionDetail {
+  sessionId: string;
+  workoutName: string;
+  muscleGroup: MuscleGroup | null;
+  startedAt: number;
+  finishedAt: number | null;
+  notes: string | null;
+  exercises: SessionExercise[];
+}

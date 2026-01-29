@@ -38,6 +38,7 @@
       [loadingMore]="loadingMore()"
       [hasMore]="pagination().hasMore"
       (loadMore)="loadMoreEvents()"
+      (eventClick)="onEventClick($event)"
     />
   </div>
 </ion-content>

@@ -109,7 +109,14 @@
     "NO_EVENTS_DESC": "You haven't recorded any workouts in this period",
     "FILTER_ACTIVE": "Filter active",
     "FROM_DATE": "From",
-    "TO_DATE": "To"
+    "TO_DATE": "To",
+    "SESSION_DETAIL": {
+      "TITLE": "Workout Details",
+      "SETS": "sets",
+      "VOLUME": "total volume",
+      "NOTES": "Notes",
+      "EXERCISES": "Exercises"
+    }
   },
   "EXERCISE": {
     "CREATE_TITLE": "Add Exercise",
