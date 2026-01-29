@@ -24,6 +24,7 @@ import { barbell, playCircle, settings, statsChart } from 'ionicons/icons';
   templateUrl: './tabs.page.html',
 })
 export class TabsPage {
+  private activeTab?: HTMLElement;
   protected readonly translate = inject(TranslateService);
 
   constructor() {
@@ -33,5 +34,31 @@ export class TabsPage {
       settings,
       statsChart,
     });
+  }
+
+  tabChange(tabsRef: IonTabs) {
+    this.activeTab = tabsRef.outlet.activatedView?.element;
+  }
+
+  ionViewWillLeave() {
+    this.propagateToActiveTab('ionViewWillLeave');
+  }
+
+  ionViewDidLeave() {
+    this.propagateToActiveTab('ionViewDidLeave');
+  }
+
+  ionViewWillEnter() {
+    this.propagateToActiveTab('ionViewWillEnter');
+  }
+
+  ionViewDidEnter() {
+    this.propagateToActiveTab('ionViewDidEnter');
+  }
+
+  private propagateToActiveTab(eventName: string) {
+    if (this.activeTab) {
+      this.activeTab.dispatchEvent(new CustomEvent(eventName));
+    }
   }
 }

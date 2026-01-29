@@ -85,6 +85,7 @@ export class DatabaseService {
         id TEXT PRIMARY KEY NOT NULL,
         workout_id TEXT NOT NULL,
         started_at INTEGER NOT NULL,
+        status TEXT NOT NULL DEFAULT 'IN_PROGRESS',
         finished_at INTEGER,
         notes TEXT,
         FOREIGN KEY (workout_id) REFERENCES workouts(id) ON DELETE CASCADE
@@ -109,6 +110,15 @@ export class DatabaseService {
     `;
 
     await this.db.execute(schema);
+
+    // Migration: Add status column if it doesn't exist (for existing installs)
+    try {
+      await this.db.execute(
+        `ALTER TABLE workout_sessions ADD COLUMN status TEXT DEFAULT 'IN_PROGRESS'`,
+      );
+    } catch (e) {
+      // Column likely already exists, ignore
+    }
   }
 
   public async getExerciseProgress(

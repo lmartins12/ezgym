@@ -5,13 +5,11 @@ import type { MuscleGroup, Workout, WorkoutExercise } from '@core';
 import { NavController } from '@ionic/angular';
 import {
   AlertController,
-  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
   IonContent,
-  IonFooter,
   IonHeader,
   IonIcon,
   IonLabel,
@@ -26,6 +24,7 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
+  arrowBackOutline,
   barbellOutline,
   createOutline,
   fitnessOutline,
@@ -59,9 +58,7 @@ import { WorkoutExercisesService, WorkoutsService } from '../services';
     IonReorderGroup,
     IonSpinner,
     ExerciseListItemComponent,
-    IonBackButton,
     IonIcon,
-    IonFooter,
   ],
   templateUrl: './workout-detail.page.html',
   styleUrls: ['./workout-detail.page.scss'],
@@ -86,18 +83,23 @@ export class WorkoutDetailPage {
       createOutline,
       fitnessOutline,
       barbellOutline,
+      arrowBackOutline,
     });
   }
 
   public async ionViewWillEnter(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      this.navCtrl.navigateBack('/tabs/workouts');
+      this.navigateWorkouts();
       return;
     }
 
     this.workoutId.set(id);
     await Promise.all([this.loadWorkout(), this.loadExercises()]);
+  }
+
+  public navigateWorkouts(): void {
+    this.navCtrl.navigateBack('/tabs/workouts');
   }
 
   private async loadWorkout(): Promise<void> {
@@ -106,7 +108,7 @@ export class WorkoutDetailPage {
 
     const data = await this.workoutsService.getById(id);
     if (!data) {
-      this.navCtrl.navigateBack('/tabs/workouts');
+      this.navigateWorkouts();
       return;
     }
 
@@ -228,11 +230,5 @@ export class WorkoutDetailPage {
     );
     await this.exercisesService.reorderExercises(this.workoutId(), exerciseIds);
     await this.loadExercises();
-  }
-
-  public startWorkout(): void {
-    if (!this.workoutId() || this.exercises().length === 0) return;
-
-    this.navCtrl.navigateForward(`/session/${this.workoutId()}`);
   }
 }

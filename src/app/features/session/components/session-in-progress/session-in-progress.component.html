@@ -1,0 +1,193 @@
+<div class="progress-container">
+  <!-- Exercise Carousel -->
+  <div class="exercise-carousel">
+    <div class="exercise-scroll">
+      @for (state of exerciseStates(); track state.index) {
+        <button
+          type="button"
+          class="exercise-item"
+          [class.active]="state.isActive"
+          [class.complete]="state.isComplete"
+          (click)="selectExercise(state.index)"
+          [attr.aria-label]="state.exercise.exercise_name"
+          [attr.aria-pressed]="state.isActive"
+        >
+          <app-muscle-icon
+            [muscleGroup]="state.exercise.muscle_group"
+            size="md"
+          />
+          <span class="exercise-name">{{ state.exercise.exercise_name }}</span>
+          <span class="exercise-target"
+            >{{ state.exercise.sets }}×{{ state.exercise.reps }}</span
+          >
+        </button>
+      }
+    </div>
+  </div>
+  <!-- Exercise Info Header -->
+  <div class="exercise-header">
+    <div class="exercise-info">
+      <app-muscle-icon
+        [muscleGroup]="currentExercise().muscle_group"
+      ></app-muscle-icon>
+      <div class="exercise-name">
+        <h2>{{ currentExercise().exercise_name }}</h2>
+        <p>
+          {{ "SESSION.IN_PROGRESS.TARGET" | translate }}:
+          {{ currentExercise().sets }} x {{ currentExercise().reps }}
+          @if (currentExercise().target_weight) {
+            <span>@ {{ currentExercise().target_weight }}kg</span>
+          }
+        </p>
+      </div>
+    </div>
+    <div class="set-counter">
+      {{ nextSetNumber() }} / {{ currentExercise().sets }}
+    </div>
+  </div>
+
+  <!-- Input Card -->
+  <ion-card class="input-card">
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-item lines="none" class="input-item">
+              <ion-label position="stacked">{{
+                "SESSION.IN_PROGRESS.REPS" | translate
+              }}</ion-label>
+              <ion-input
+                type="number"
+                [(ngModel)]="reps"
+                placeholder="0"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item lines="none" class="input-item">
+              <ion-label position="stacked">{{
+                "SESSION.IN_PROGRESS.WEIGHT" | translate
+              }}</ion-label>
+              <ion-input
+                type="number"
+                [(ngModel)]="weight"
+                placeholder="0"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div class="rpe-container">
+              <div class="rpe-header">
+                <ion-label
+                  >{{ "SESSION.IN_PROGRESS.RPE" | translate }}:
+                  {{ rpe }}</ion-label
+                >
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  class="info-button"
+                  (click)="showRPEInfo()"
+                  aria-label="Show RPE information"
+                >
+                  <ion-icon
+                    name="information-circle-outline"
+                    slot="icon-only"
+                  />
+                </ion-button>
+              </div>
+              <ion-range
+                min="1"
+                max="10"
+                step="1"
+                snaps="true"
+                [(ngModel)]="rpe"
+              ></ion-range>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-button
+        expand="block"
+        (click)="onLogSet()"
+        [color]="editingSetId() ? 'warning' : 'primary'"
+        [disabled]="!reps || weight === null"
+      >
+        @if (editingSetId()) {
+          {{ "SESSION.IN_PROGRESS.UPDATE_SET" | translate }}
+        } @else {
+          {{ "SESSION.IN_PROGRESS.COMPLETE_SET" | translate }}
+        }
+        <ion-icon slot="end" name="checkmark-circle"></ion-icon>
+      </ion-button>
+
+      @if (editingSetId()) {
+        <ion-button
+          expand="block"
+          fill="clear"
+          color="medium"
+          (click)="cancelEdit()"
+        >
+          {{ "COMMON.CANCEL" | translate }}
+        </ion-button>
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Logs List -->
+  <div class="logs-list">
+    <ion-list-header>
+      <ion-label>{{ "SESSION.IN_PROGRESS.HISTORY" | translate }}</ion-label>
+    </ion-list-header>
+
+    <ion-list lines="none">
+      @for (log of currentLogs(); track log.id) {
+        <ion-item
+          button
+          (click)="editSet(log)"
+          [color]="editingSetId() === log.id ? 'light' : ''"
+        >
+          <ion-icon
+            slot="start"
+            name="create-outline"
+            color="primary"
+          ></ion-icon>
+          <ion-label>
+            <h3>
+              {{ "SESSION.IN_PROGRESS.SET" | translate }}
+              {{ log.set_number + 1 }}
+            </h3>
+            <p>{{ log.reps }} reps @ {{ log.weight }}kg (RPE: {{ log.rpe }})</p>
+          </ion-label>
+          <ion-button
+            fill="clear"
+            color="danger"
+            slot="end"
+            (click)="$event.stopPropagation(); deleteSet.emit(log.id)"
+          >
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      }
+
+      @if (currentLogs().length === 0) {
+        <ion-item class="empty-state">
+          <ion-label>{{ "SESSION.IN_PROGRESS.NO_SETS" | translate }}</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  </div>
+
+  <ion-button
+    class="finish-button"
+    expand="block"
+    [fill]="allExercisesComplete() ? 'solid' : 'clear'"
+    [color]="allExercisesComplete() ? 'success' : 'warning'"
+    (click)="finishSession.emit()"
+  >
+    <ion-icon name="checkmark-circle" slot="start" />
+    {{ "SESSION.IN_PROGRESS.FINISH" | translate }}
+  </ion-button>
+</div>

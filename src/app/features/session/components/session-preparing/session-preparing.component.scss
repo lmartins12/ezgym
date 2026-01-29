@@ -1,0 +1,62 @@
+.preparing-container {
+  padding: 16px;
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 24px;
+}
+
+.summary-card {
+  margin: 0;
+  box-shadow: none;
+  border-radius: 16px;
+}
+
+.exercises-section {
+  flex: 1;
+  overflow-y: auto;
+
+  h3 {
+    margin: 0 0 12px 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  ion-list {
+    background: transparent;
+    padding: 0;
+  }
+
+  .exercise-item {
+    --background: transparent;
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    margin-bottom: 8px;
+
+    h2 {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+
+    ion-note {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+}
+
+.actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

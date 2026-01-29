@@ -34,6 +34,10 @@ export const routes: Routes = [
     loadComponent: () => import('@features').then((m) => m.WorkoutDetailPage),
   },
   {
+    path: 'session/:id',
+    loadComponent: () => import('@features').then((m) => m.SessionPage),
+  },
+  {
     path: '',
     redirectTo: '/tabs/workouts',
     pathMatch: 'full',

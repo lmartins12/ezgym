@@ -1,0 +1,54 @@
+<div class="finishing-container">
+  <ion-card class="summary-card">
+    <ion-card-header>
+      <ion-card-title>{{
+        "SESSION.FINISHING.TITLE" | translate
+      }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="label">{{
+            "SESSION.FINISHING.DURATION" | translate
+          }}</span>
+          <span class="value">{{ duration() }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">{{ "SESSION.FINISHING.SETS" | translate }}</span>
+          <span class="value">{{ totalSets() }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">{{
+            "SESSION.FINISHING.VOLUME" | translate
+          }}</span>
+          <span class="value">{{ totalVolume() }}kg</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="notes-card">
+    <ion-card-content>
+      <ion-textarea
+        [(ngModel)]="notes"
+        placeholder="{{ 'SESSION.FINISHING.NOTES_PLACEHOLDER' | translate }}"
+        autoGrow="true"
+        rows="3"
+      ></ion-textarea>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="actions">
+    <ion-button expand="block" fill="solid" color="primary" (click)="onSave()">
+      {{ "SESSION.FINISHING.SAVE_FINISH" | translate }}
+    </ion-button>
+    <ion-button
+      expand="block"
+      fill="clear"
+      color="secondary"
+      (click)="resumeSession.emit()"
+    >
+      {{ "SESSION.FINISHING.RESUME" | translate }}
+    </ion-button>
+  </div>
+</div>

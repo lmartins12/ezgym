@@ -1,0 +1,69 @@
+<div class="preparing-container">
+  <ion-card class="summary-card">
+    <ion-card-header>
+      <ion-card-subtitle>{{
+        "SESSION.PREPARING.SUBTITLE" | translate
+      }}</ion-card-subtitle>
+      <ion-card-title>{{ workout().name }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @if (workout().description; as description) {
+        <p>{{ description }}</p>
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <div class="exercises-section">
+    <h3>
+      {{ "SESSION.PREPARING.EXERCISES_LIST" | translate }} ({{
+        exercises().length
+      }})
+    </h3>
+
+    <ion-list lines="none">
+      @for (exercise of exercises(); track exercise.id) {
+        <ion-item class="exercise-item">
+          <app-muscle-icon
+            [muscleGroup]="exercise.muscle_group"
+            slot="start"
+          ></app-muscle-icon>
+          <ion-label>
+            <h2>{{ exercise.exercise_name }}</h2>
+            <p>
+              {{ exercise.sets }} x {{ exercise.reps }}
+              @if (exercise.target_weight) {
+                <span>@ {{ exercise.target_weight }}kg</span>
+              }
+            </p>
+          </ion-label>
+          @if (exercise.rest_seconds) {
+            <ion-note slot="end">
+              <ion-icon name="time-outline"></ion-icon>
+              {{ exercise.rest_seconds }}s
+            </ion-note>
+          }
+        </ion-item>
+      }
+    </ion-list>
+  </div>
+
+  <div class="actions">
+    <ion-button
+      expand="block"
+      fill="solid"
+      color="primary"
+      (click)="startSession.emit()"
+    >
+      {{ "SESSION.PREPARING.START" | translate }}
+      <ion-icon slot="end" name="time-outline"></ion-icon>
+    </ion-button>
+    <ion-button
+      expand="block"
+      fill="clear"
+      color="danger"
+      (click)="cancelSession.emit()"
+    >
+      {{ "COMMON.CANCEL" | translate }}
+    </ion-button>
+  </div>
+</div>

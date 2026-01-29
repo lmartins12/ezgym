@@ -35,7 +35,15 @@ export function getMonthStart(date: Date): number {
  * Get end of month as Unix timestamp.
  */
 export function getMonthEnd(date: Date): number {
-  const d = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
+  const d = new Date(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    0,
+    23,
+    59,
+    59,
+    999,
+  );
   return d.getTime();
 }
 

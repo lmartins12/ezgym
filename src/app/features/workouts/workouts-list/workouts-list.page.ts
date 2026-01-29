@@ -69,8 +69,8 @@ export class WorkoutsListPage {
     });
   }
 
-  public async ionViewWillEnter(): Promise<void> {
-    await this.loadWorkouts();
+  public ionViewWillEnter(): void {
+    this.loadWorkouts();
   }
 
   public async loadWorkouts(): Promise<void> {

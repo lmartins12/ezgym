@@ -57,8 +57,52 @@
     "DELETE_EXERCISE_CONFIRM": "Remover este exercício do treino?"
   },
   "SESSION": {
-    "COMING_SOON_TITLE": "Em breve",
-    "COMING_SOON_DESCRIPTION": "O acompanhamento de sessões de treino estará disponível em breve"
+    "TITLE": "Sessão de Treino",
+    "PREPARING": {
+      "START": "Iniciar Treino",
+      "SUBTITLE": "Pronto para começar?",
+      "EXERCISES_LIST": "Exercícios de hoje"
+    },
+    "IN_PROGRESS": {
+      "TARGET": "Alvo",
+      "REPS": "Repetições",
+      "WEIGHT": "Carga (kg)",
+      "COMPLETE_SET": "Registrar Série",
+      "UPDATE_SET": "Atualizar Série",
+      "HISTORY": "Histórico",
+      "SET": "Série",
+      "NO_SETS": "Nenhuma série registrada",
+      "PREV": "Anterior",
+      "NEXT": "Próximo",
+      "FINISH": "Finalizar Treino",
+      "RPE": "RPE",
+      "RPE_INFO_TITLE": "O que é RPE?",
+      "RPE_INFO_MESSAGE": "Taxa de Percepção de Esforço (escala 0-10):|n|n10 = Esforço máximo, impossível fazer outra rep|n9 = Muito difícil, conseguiria mais 1 rep|n8 = Difícil, conseguiria mais 2 reps|n7 = Moderadamente difícil, conseguiria mais 3 reps|n6 = Moderado, conseguiria 4+ reps|n|nUse RPE para registrar o esforço de cada série e ajustar o treino conforme seu nível de energia diário.",
+      "RPE_INFO_CLOSE": "Entendi"
+    },
+    "FINISHING": {
+      "TITLE": "Resumo da Sessão",
+      "DURATION": "Duração",
+      "SETS": "Total de Séries",
+      "VOLUME": "Volume Total",
+      "NOTES_PLACEHOLDER": "Adicione notas sobre este treino...",
+      "SAVE_FINISH": "Salvar e Finalizar",
+      "RESUME": "Retomar Sessão"
+    },
+    "DASHBOARD": {
+      "ACTIVE_SESSION": "Sessão em Andamento",
+      "RESUME_DESCRIPTION": "Você tem uma sessão ativa. Deseja continuar?",
+      "RESUME": "Retomar Sessão",
+      "NO_SESSION": "Nenhuma sessão ativa",
+      "START_DESCRIPTION": "Inicie um novo treino para acompanhar seu progresso.",
+      "GO_TO_WORKOUTS": "Ir para Treinos"
+    },
+    "EXIT": {
+      "TITLE": "Sair da Sessão?",
+      "MESSAGE": "Você tem uma sessão em andamento. O que deseja fazer?",
+      "DISCARD": "Descartar Sessão",
+      "RESUME_LATER": "Continuar Depois"
+    }
   },
   "DASHBOARD": {
     "NO_EVENTS": "Nenhum treino encontrado",

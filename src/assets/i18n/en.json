@@ -57,8 +57,52 @@
     "DELETE_EXERCISE_CONFIRM": "Remove this exercise from the workout?"
   },
   "SESSION": {
-    "COMING_SOON_TITLE": "Coming Soon",
-    "COMING_SOON_DESCRIPTION": "Workout session tracking will be available soon"
+    "TITLE": "Workout Session",
+    "PREPARING": {
+      "START": "Start Workout",
+      "SUBTITLE": "Ready to start?",
+      "EXERCISES_LIST": "Exercises for today"
+    },
+    "IN_PROGRESS": {
+      "TARGET": "Target",
+      "REPS": "Reps",
+      "WEIGHT": "Weight (kg)",
+      "COMPLETE_SET": "Log Set",
+      "UPDATE_SET": "Update Set",
+      "HISTORY": "History",
+      "SET": "Set",
+      "NO_SETS": "No sets logged yet",
+      "PREV": "Previous",
+      "NEXT": "Next",
+      "FINISH": "Finish Session",
+      "RPE": "RPE",
+      "RPE_INFO_TITLE": "What is RPE?",
+      "RPE_INFO_MESSAGE": "Rate of Perceived Exertion (0-10 scale):|n|n10 = Maximum effort, couldn't do another rep|n9 = Very hard, could do 1 more rep|n8 = Hard, could do 2 more reps|n7 = Moderately hard, could do 3 more reps|n6 = Moderate, could do 4+ more reps|n|nUse RPE to track how hard each set feels and adjust training based on your daily energy levels.",
+      "RPE_INFO_CLOSE": "Got it"
+    },
+    "FINISHING": {
+      "TITLE": "Session Summary",
+      "DURATION": "Duration",
+      "SETS": "Total Sets",
+      "VOLUME": "Total Volume",
+      "NOTES_PLACEHOLDER": "Add notes about this session...",
+      "SAVE_FINISH": "Save & Finish",
+      "RESUME": "Resume Session"
+    },
+    "DASHBOARD": {
+      "ACTIVE_SESSION": "Session in Progress",
+      "RESUME_DESCRIPTION": "You have an active session. Do you want to continue?",
+      "RESUME": "Resume Session",
+      "NO_SESSION": "No Active Session",
+      "START_DESCRIPTION": "Start a new workout to track your progress.",
+      "GO_TO_WORKOUTS": "Go to Workouts"
+    },
+    "EXIT": {
+      "TITLE": "Exit Session?",
+      "MESSAGE": "You have a session in progress. What would you like to do?",
+      "DISCARD": "Discard Session",
+      "RESUME_LATER": "Resume Later"
+    }
   },
   "DASHBOARD": {
     "NO_EVENTS": "No workouts found",
