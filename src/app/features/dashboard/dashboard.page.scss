@@ -7,6 +7,8 @@ ion-content {
 
 .dashboard-section {
   margin-bottom: var(--space-6);
+  display: flex;
+  justify-content: center;
 
   &:last-child {
     margin-bottom: 0;

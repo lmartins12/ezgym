@@ -24,7 +24,6 @@
       <p>{{ 'SESSION.DASHBOARD.RESUME_DESCRIPTION' | translate }}</p>
       <ion-button
         expand="block"
-        style="margin-top: 16px"
         [routerLink]="['/session', session.workout_id]"
       >
         {{ 'SESSION.DASHBOARD.RESUME' | translate }}
@@ -33,14 +32,10 @@
   </ion-card>
   } @else {
   <div class="empty-state">
-    <ion-icon name="barbell-outline" size="large"></ion-icon>
-    <h3>{{ 'SESSION.DASHBOARD.NO_SESSION' | translate }}</h3>
+    <ion-icon name="barbell-outline" aria-hidden="true"></ion-icon>
+    <h2>{{ 'SESSION.DASHBOARD.NO_SESSION' | translate }}</h2>
     <p>{{ 'SESSION.DASHBOARD.START_DESCRIPTION' | translate }}</p>
-    <ion-button
-      expand="block"
-      style="margin-top: 16px"
-      routerLink="/tabs/workouts"
-    >
+    <ion-button routerLink="/tabs/workouts">
       {{ 'SESSION.DASHBOARD.GO_TO_WORKOUTS' | translate }}
     </ion-button>
   </div>
