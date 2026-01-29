@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ 'SESSION.TITLE' | translate }}</ion-title>
+    <ion-title [style.textAlign]=" !isDashboard() ? 'start' : 'center'">{{ 'SESSION.TITLE' | translate }}</ion-title>
     @if (!isDashboard()) {
     <ion-buttons slot="end">
       <ion-button (click)="onExitSession()">

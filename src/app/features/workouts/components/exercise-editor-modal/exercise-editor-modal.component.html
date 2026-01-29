@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
+    <ion-title style="text-align: start">
       @if (exercise) {
         {{ "EXERCISE.EDIT_TITLE" | translate }}
       } @else {
@@ -10,7 +10,7 @@
     <ion-buttons slot="end">
       <ion-button
         (click)="close()"
-        fill="outline"
+        fill="clear"
         shape="round"
         color="danger"
         >{{ "COMMON.CANCEL" | translate }}</ion-button

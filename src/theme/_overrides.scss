@@ -35,9 +35,14 @@
 // Tab Bar specific styles
 ion-tab-bar {
   --background: var(--ion-color-primary-contrast);
-  border-radius: var(--space-10) var(--space-10) 0 0;
+  border-radius: var(--space-4) var(--space-4) 0 0;
   border-top: 1px solid var(--glass-border);
   height: calc(var(--space-12) + var(--ion-safe-area-bottom, 0px));
+}
+
+ion-header {
+  background: var(--ion-color-primary-contrast);
+  border-radius: 0 0 var(--space-4) var(--space-4);
 }
 
 // RPE Info Alert - preserve line breaks and adjust size
