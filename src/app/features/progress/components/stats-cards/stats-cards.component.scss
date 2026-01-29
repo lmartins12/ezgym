@@ -1,0 +1,70 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.stat-card {
+  --background: var(--ion-background-color);
+  --border-color: var(--glass-border);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  margin: 0;
+
+  ion-card-content {
+    padding: var(--space-4);
+  }
+}
+
+.stat-card-full {
+  grid-column: 1 / -1;
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--glass-bg-elevated);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-sm);
+
+    ion-icon {
+      font-size: 20px;
+      color: var(--ion-color-primary);
+    }
+  }
+
+  .stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+    line-height: 1;
+  }
+
+  .stat-value-small {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ion-text-color-step-650);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}

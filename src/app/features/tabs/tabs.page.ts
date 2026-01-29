@@ -8,7 +8,7 @@ import {
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { barbell, playCircle, settings, statsChart } from 'ionicons/icons';
+import { barbell, playCircle, settings, statsChart, trendingUp } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tabs',
@@ -33,6 +33,7 @@ export class TabsPage {
       playCircle,
       settings,
       statsChart,
+      trendingUp,
     });
   }
 

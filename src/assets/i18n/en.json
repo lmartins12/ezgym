@@ -24,6 +24,7 @@
     "WORKOUTS": "Workouts",
     "SESSION": "Session",
     "DASHBOARD": "Dashboard",
+    "PROGRESS": "Progress",
     "SETTINGS": "Settings"
   },
   "SETTINGS": {
@@ -117,6 +118,21 @@
       "NOTES": "Notes",
       "EXERCISES": "Exercises"
     }
+  },
+  "PROGRESS": {
+    "TITLE": "Progress",
+    "NO_DATA": "No progress data yet",
+    "TOTAL_WORKOUTS": "Total Workouts",
+    "TOTAL_VOLUME": "Total Volume",
+    "WEEKLY_FREQUENCY": "Weekly Avg",
+    "CURRENT_STREAK": "Current Streak",
+    "LAST_WORKOUT": "Last Workout",
+    "FREQUENT_WORKOUTS": "Most Frequent Workouts",
+    "NO_WORKOUTS": "No workouts recorded",
+    "EXERCISE_PRS": "Personal Records",
+    "NO_PRS": "No records yet",
+    "MUSCLE_DISTRIBUTION": "Muscle Distribution",
+    "NO_DISTRIBUTION": "No distribution data"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Add Exercise",

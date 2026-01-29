@@ -1,0 +1,116 @@
+.frequent-workouts-card {
+  --background: var(--glass-bg);
+  --border-color: var(--glass-border);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  margin: var(--space-3) 0;
+
+  ion-card-content {
+    padding: 0;
+  }
+}
+
+.workouts-list {
+  --background: transparent;
+
+  ion-list-header {
+    margin: 0;
+
+    ion-label {
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--ion-text-color);
+    }
+  }
+}
+
+.loading-placeholder {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+
+  p {
+    color: var(--ion-text-color-step-550);
+    font-size: 14px;
+  }
+}
+
+.workout-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--glass-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .workout-main {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    .workout-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--glass-bg-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--glass-radius-sm);
+
+      ion-icon {
+        font-size: 18px;
+        color: var(--ion-color-primary);
+      }
+    }
+
+    .workout-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      flex: 1;
+
+      .workout-name {
+        font-weight: 600;
+        font-size: 15px;
+        color: var(--ion-text-color);
+      }
+
+      .workout-count {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ion-color-primary);
+        background: var(--glass-bg-elevated);
+        padding: var(--space-1) var(--space-2);
+        border-radius: var(--glass-radius-sm);
+      }
+    }
+  }
+
+  .workout-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-left: 52px;
+
+    ion-icon {
+      font-size: 14px;
+      color: var(--ion-text-color-step-650);
+    }
+
+    span {
+      font-size: 13px;
+      color: var(--ion-text-color-step-550);
+    }
+  }
+}

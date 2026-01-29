@@ -1,0 +1,94 @@
+<div class="stats-grid">
+  <!-- Total Workouts -->
+  <ion-card class="stat-card">
+    <ion-card-content>
+      <div class="stat-content">
+        <div class="stat-icon">
+          <ion-icon name="barbell"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats()?.totalWorkouts ?? 0 }}</span>
+          <span class="stat-label">{{
+            "PROGRESS.TOTAL_WORKOUTS" | translate
+          }}</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Total Volume -->
+  <ion-card class="stat-card">
+    <ion-card-content>
+      <div class="stat-content">
+        <div class="stat-icon">
+          <ion-icon name="fitness"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{
+            stats()?.totalVolume ?? 0 | number: "1.0-0"
+          }}</span>
+          <span class="stat-label">{{
+            "PROGRESS.TOTAL_VOLUME" | translate
+          }}</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Weekly Frequency -->
+  <ion-card class="stat-card">
+    <ion-card-content>
+      <div class="stat-content">
+        <div class="stat-icon">
+          <ion-icon name="calendar-number"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{
+            stats()?.averageWeeklyFrequency ?? 0 | number: "1.0-1"
+          }}</span>
+          <span class="stat-label">{{
+            "PROGRESS.WEEKLY_FREQUENCY" | translate
+          }}</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Current Streak -->
+  <ion-card class="stat-card">
+    <ion-card-content>
+      <div class="stat-content">
+        <div class="stat-icon">
+          <ion-icon name="trending-up"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats()?.currentStreak ?? 0 }}</span>
+          <span class="stat-label">{{
+            "PROGRESS.CURRENT_STREAK" | translate
+          }}</span>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Last Workout -->
+  @if (stats()?.lastWorkoutDate) {
+    <ion-card class="stat-card stat-card-full">
+      <ion-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <ion-icon name="time"></ion-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">{{
+              "PROGRESS.LAST_WORKOUT" | translate
+            }}</span>
+            <span class="stat-value-small">{{
+              stats()?.lastWorkoutDate | date: "longDate" : "" : localeValue()
+            }}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+</div>

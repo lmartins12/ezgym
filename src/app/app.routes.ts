@@ -19,6 +19,10 @@ export const routes: Routes = [
         loadComponent: () => import('@features').then((m) => m.DashboardPage),
       },
       {
+        path: 'progress',
+        loadComponent: () => import('@features').then((m) => m.ProgressPage),
+      },
+      {
         path: 'settings',
         loadComponent: () => import('@features').then((m) => m.SettingsPage),
       },

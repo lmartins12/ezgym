@@ -18,16 +18,17 @@
     "HOME": "Início",
     "WORKOUTS": "Treinos",
     "EXERCISES": "Exercícios",
-    "SETTINGS": "Configurações"
+    "SETTINGS": "Ajustes"
   },
   "TABS": {
     "WORKOUTS": "Treinos",
     "SESSION": "Sessão",
     "DASHBOARD": "Dashboard",
-    "SETTINGS": "Configurações"
+    "PROGRESS": "Progresso",
+    "SETTINGS": "Ajustes"
   },
   "SETTINGS": {
-    "TITLE": "Configurações",
+    "TITLE": "Ajustes",
     "LANGUAGE": "Idioma",
     "LANGUAGE_PT": "Português-BR",
     "LANGUAGE_EN": "English-US"
@@ -118,6 +119,21 @@
       "EXERCISES": "Exercícios"
     }
   },
+  "PROGRESS": {
+    "TITLE": "Progresso",
+    "NO_DATA": "Nenhum dado de progresso ainda",
+    "TOTAL_WORKOUTS": "Total de Treinos",
+    "TOTAL_VOLUME": "Volume Total",
+    "WEEKLY_FREQUENCY": "Média Semanal",
+    "CURRENT_STREAK": "Streak Atual",
+    "LAST_WORKOUT": "Último Treino",
+    "FREQUENT_WORKOUTS": "Treinos Mais Frequentes",
+    "NO_WORKOUTS": "Nenhum treino registrado",
+    "EXERCISE_PRS": "Recordes Pessoais",
+    "NO_PRS": "Nenhum recorde registrado",
+    "MUSCLE_DISTRIBUTION": "Distribuição Muscular",
+    "NO_DISTRIBUTION": "Nenhum dado de distribuição"
+  },
   "EXERCISE": {
     "CREATE_TITLE": "Adicionar Exercício",
     "EDIT_TITLE": "Editar Exercício",
@@ -125,7 +141,7 @@
     "MUSCLE_GROUP_LABEL": "Grupo Muscular",
     "EQUIPMENT_LABEL": "Equipamento (opcional)",
     "NOTES_LABEL": "Notas (opcional)",
-    "SETTINGS_LABEL": "Configurações para este treino",
+    "SETTINGS_LABEL": "Ajustes para este treino",
     "SETS_LABEL": "Séries",
     "REPS_LABEL": "Repetições (ex: 12, 8-10)",
     "WEIGHT_LABEL": "Carga Alvo (kg)",
