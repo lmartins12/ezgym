@@ -30,9 +30,9 @@ import {
   fitnessOutline,
   playOutline,
 } from 'ionicons/icons';
-import type { ExerciseData } from '../components';
+import type { ExerciseData, WorkoutFormResult } from '../components';
 import {
-  EditWorkoutModalComponent,
+  WorkoutFormModalComponent,
   ExerciseEditorModalComponent,
   ExerciseListItemComponent,
 } from '../components';
@@ -133,17 +133,13 @@ export class WorkoutDetailPage {
     if (!workout) return;
 
     const modal = await this.modalCtrl.create({
-      component: EditWorkoutModalComponent,
+      component: WorkoutFormModalComponent,
       componentProps: { workout },
     });
 
     await modal.present();
 
-    const { data } = await modal.onWillDismiss<{
-      name: string;
-      description?: string;
-      muscle_group?: MuscleGroup;
-    }>();
+    const { data } = await modal.onWillDismiss<WorkoutFormResult>();
 
     if (data) {
       await this.workoutsService.update(

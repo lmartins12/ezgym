@@ -15,6 +15,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
@@ -24,7 +25,11 @@ import {
   barbellOutline,
   settingsOutline,
 } from 'ionicons/icons';
-import { WorkoutCardComponent } from '../components';
+import {
+  WorkoutCardComponent,
+  WorkoutFormModalComponent,
+  type WorkoutFormResult,
+} from '../components';
 import type { WorkoutDetail } from '../models';
 import { WorkoutsService } from '../services';
 
@@ -56,6 +61,7 @@ export class WorkoutsListPage {
   private readonly alertCtrl = inject(AlertController);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
+  private readonly modalCtrl = inject(ModalController);
 
   public readonly workouts = signal<WorkoutDetail[]>([]);
   public readonly loading = signal(false);
@@ -83,37 +89,24 @@ export class WorkoutsListPage {
     }
   }
 
-  public async openQuickCreate(): Promise<void> {
-    const alert = await this.alertCtrl.create({
-      header: this.translate.instant('WORKOUTS.CREATE_TITLE'),
-      inputs: [
-        {
-          name: 'name',
-          type: 'text',
-          placeholder: this.translate.instant('WORKOUTS.NAME_PLACEHOLDER'),
-        },
-      ],
-      buttons: [
-        { text: this.translate.instant('COMMON.CANCEL'), role: 'cancel' },
-        {
-          text: this.translate.instant('COMMON.CREATE'),
-          handler: async (data: { name: string }) => {
-            if (data.name) {
-              const id = await this.workoutsService.create(
-                data.name,
-                undefined,
-                undefined,
-              );
-              this.router.navigate(['/workouts', id]);
-              return true;
-            }
-            return false;
-          },
-        },
-      ],
+  public async openCreateModal(): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: WorkoutFormModalComponent,
+      componentProps: { workout: undefined },
     });
 
-    await alert.present();
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss<WorkoutFormResult>();
+
+    if (data) {
+      const id = await this.workoutsService.create(
+        data.name,
+        data.description,
+        data.muscle_group,
+      );
+      this.router.navigate(['/workouts', id]);
+    }
   }
 
   public async confirmDelete(workoutId: string): Promise<void> {

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title style="text-align: start">
-      {{ "WORKOUTS.EDIT_TITLE" | translate }}
+      {{ isEditMode() ? "WORKOUTS.EDIT_TITLE" : "WORKOUTS.CREATE_TITLE" | translate }}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button

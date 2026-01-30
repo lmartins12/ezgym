@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, model } from '@angular/core';
+import { Component, computed, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, Workout } from '@core';
 import {
@@ -18,14 +18,14 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { MuscleGroupSelectorComponent } from '@shared';
 
-export interface EditWorkoutResult {
+export interface WorkoutFormResult {
   name: string;
   description?: string;
   muscle_group?: MuscleGroup;
 }
 
 @Component({
-  selector: 'app-edit-workout-modal',
+  selector: 'app-workout-form-modal',
   standalone: true,
   imports: [
     CommonModule,
@@ -43,22 +43,25 @@ export interface EditWorkoutResult {
     TranslateModule,
     MuscleGroupSelectorComponent,
   ],
-  templateUrl: './edit-workout-modal.component.html',
-  styleUrls: ['./edit-workout-modal.component.scss'],
+  templateUrl: './workout-form-modal.component.html',
+  styleUrls: ['./workout-form-modal.component.scss'],
 })
-export class EditWorkoutModalComponent {
-  @Input() public workout!: Workout;
+export class WorkoutFormModalComponent {
+  @Input() public workout?: Workout;
 
   public readonly name = model('');
   public readonly description = model('');
   public readonly muscleGroup = model<MuscleGroup | undefined>(undefined);
+  protected readonly isEditMode = computed(() => !!this.workout);
 
   private readonly modalCtrl = inject(ModalController);
 
   public ionViewDidEnter(): void {
-    this.name.set(this.workout.name);
-    this.description.set(this.workout.description ?? '');
-    this.muscleGroup.set(this.workout.muscle_group);
+    if (this.workout) {
+      this.name.set(this.workout.name);
+      this.description.set(this.workout.description ?? '');
+      this.muscleGroup.set(this.workout.muscle_group);
+    }
   }
 
   public close(): void {
@@ -70,7 +73,7 @@ export class EditWorkoutModalComponent {
       return;
     }
 
-    const result: EditWorkoutResult = {
+    const result: WorkoutFormResult = {
       name: this.name(),
     };
 
