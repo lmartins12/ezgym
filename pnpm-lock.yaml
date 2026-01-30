@@ -65,6 +65,9 @@ importers:
       '@capacitor/status-bar':
         specifier: 8.0.0
         version: 8.0.0(@capacitor/core@8.0.1)
+      '@capgo/capacitor-navigation-bar':
+        specifier: ^8.0.14
+        version: 8.0.14(@capacitor/core@8.0.1)
       '@ionic/angular':
         specifier: ^8.0.0
         version: 8.7.17(779e92b12364ecfade5acc83c4c09d29)
@@ -1060,6 +1063,11 @@ packages:
 
   '@capacitor/synapse@1.0.4':
     resolution: {integrity: sha512-/C1FUo8/OkKuAT4nCIu/34ny9siNHr9qtFezu4kxm6GY1wNFxrCFWjfYx5C1tUhVGz3fxBABegupkpjXvjCHrw==}
+
+  '@capgo/capacitor-navigation-bar@8.0.14':
+    resolution: {integrity: sha512-uL04TiMyqacLNTXfxKyKfrq8qVHRKYAg4RhglhFwVvSrwG9/BY7Ea2ll2WHXd99ZkxLDfvD32+WQG9tCKie/lQ==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -6836,6 +6844,10 @@ snapshots:
       '@capacitor/core': 8.0.1
 
   '@capacitor/synapse@1.0.4': {}
+
+  '@capgo/capacitor-navigation-bar@8.0.14(@capacitor/core@8.0.1)':
+    dependencies:
+      '@capacitor/core': 8.0.1
 
   '@colors/colors@1.5.0': {}
 

@@ -28,6 +28,6 @@
   }
 
   &:not(.muscle-icon--fallback) {
-    filter: brightness(0) invert(1);
+    filter: var(--muscle-icon-filter, brightness(0) invert(1));
   }
 }

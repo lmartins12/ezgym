@@ -31,7 +31,8 @@
     "TITLE": "Ajustes",
     "LANGUAGE": "Idioma",
     "LANGUAGE_PT": "Português-BR",
-    "LANGUAGE_EN": "English-US"
+    "LANGUAGE_EN": "English-US",
+    "DARK_MODE": "Modo Escuro"
   },
   "WORKOUTS": {
     "TITLE": "Treinos",

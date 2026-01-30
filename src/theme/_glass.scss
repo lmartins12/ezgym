@@ -2,12 +2,21 @@
 // GLASSMORPHISM
 // =============================================================================
 
+// Light theme (default)
 :root {
+  --glass-bg: rgba(0, 0, 0, 0.03);
+  --glass-bg-elevated: rgba(0, 0, 0, 0.06);
+  --glass-bg-solid: rgba(245, 245, 245, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-blur: blur(16px);
+  --glass-radius: 14px;
+  --glass-radius-sm: 10px;
+}
+
+// Dark theme
+.ion-palette-dark {
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-bg-elevated: rgba(255, 255, 255, 0.06);
   --glass-bg-solid: rgba(24, 24, 27, 0.85);
   --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: blur(16px);
-  --glass-radius: 14px;
-  --glass-radius-sm: 10px;
 }

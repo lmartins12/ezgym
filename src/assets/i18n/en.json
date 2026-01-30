@@ -31,7 +31,8 @@
     "TITLE": "Settings",
     "LANGUAGE": "Language",
     "LANGUAGE_PT": "Português-BR",
-    "LANGUAGE_EN": "English-US"
+    "LANGUAGE_EN": "English-US",
+    "DARK_MODE": "Dark Mode"
   },
   "WORKOUTS": {
     "TITLE": "Workouts",

@@ -4,16 +4,18 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonLabel,
   IonList,
   IonSelect,
   IonSelectOption,
   IonTitle,
+  IonToggle,
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { caretDownSharp, settingsOutline } from 'ionicons/icons';
-import { LanguageService } from '../../core';
+import { caretDownSharp, moonOutline, settingsOutline } from 'ionicons/icons';
+import { LanguageService, ThemeService } from '../../core';
 
 @Component({
   selector: 'app-settings',
@@ -26,8 +28,10 @@ import { LanguageService } from '../../core';
     IonContent,
     IonList,
     IonItem,
+    IonLabel,
     IonSelect,
     IonSelectOption,
+    IonToggle,
     IonIcon,
   ],
   templateUrl: './settings.page.html',
@@ -35,18 +39,24 @@ import { LanguageService } from '../../core';
 })
 export class SettingsPage {
   private readonly languageService = inject(LanguageService);
+  private readonly themeService = inject(ThemeService);
   protected readonly translate = inject(TranslateService);
 
   public readonly currentLang = this.languageService.language;
   public readonly isPortuguese = this.languageService.isPortuguese;
   public readonly isEnglish = this.languageService.isEnglish;
+  public readonly isDarkMode = this.themeService.isDarkMode;
 
   constructor() {
-    addIcons({ caretDownSharp, settingsOutline });
+    addIcons({ caretDownSharp, moonOutline, settingsOutline });
   }
 
   public async onLanguageChange(event: CustomEvent): Promise<void> {
     const lang = event.detail.value as 'pt' | 'en';
     this.languageService.setLanguage(lang);
+  }
+
+  public async toggleTheme(): Promise<void> {
+    await this.themeService.toggleTheme();
   }
 }

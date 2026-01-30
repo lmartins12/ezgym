@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { DatabaseService } from './core';
+import { DatabaseService, ThemeService } from './core';
 
 @Component({
   selector: 'app-root',
@@ -13,12 +13,14 @@ import { DatabaseService } from './core';
 })
 export class AppComponent {
   private readonly databaseService = inject(DatabaseService);
+  private readonly themeService = inject(ThemeService);
 
-  constructor() {
+  constructor() { 
     this.initApp();
   }
 
   private async initApp(): Promise<void> {
     await this.databaseService.initialize();
+    await this.themeService.initTheme();
   }
 }

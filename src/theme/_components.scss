@@ -72,7 +72,7 @@ ion-fab {
 }
 
 ion-fab-button {
-  --background: #ffffff;
-  --color: #000000;
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
   --box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }

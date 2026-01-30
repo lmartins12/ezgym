@@ -24,5 +24,11 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+
+    <ion-item>
+      <ion-icon name="moon-outline" slot="start"></ion-icon>
+      <ion-label>{{ 'SETTINGS.DARK_MODE' | translate }}</ion-label>
+      <ion-toggle slot="end" [checked]="isDarkMode()" (ionChange)="toggleTheme()"></ion-toggle>
+    </ion-item>
   </ion-list>
 </ion-content>

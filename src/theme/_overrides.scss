@@ -7,18 +7,18 @@
   // Toolbar
   --ion-toolbar-background: transparent;
   --ion-toolbar-border-color: transparent;
-  --ion-toolbar-color: #fafafa;
+  --ion-toolbar-color: var(--ion-text-color);
 
   // Tab Bar
   --ion-tab-bar-background: var(--glass-bg-solid);
   --ion-tab-bar-border-color: var(--glass-border);
   --ion-tab-bar-color: #71717a;
-  --ion-tab-bar-color-selected: #ffffff;
+  --ion-tab-bar-color-selected: var(--ion-color-primary);
 
   // Item / List
   --ion-item-background: var(--ion-background-color);
   --ion-item-border-color: var(--glass-border);
-  --ion-item-color: #fafafa;
+  --ion-item-color: var(--ion-text-color);
 
   // Card
   --ion-card-background: var(--glass-bg);
@@ -34,14 +34,14 @@
 
 // Tab Bar specific styles
 ion-tab-bar {
-  --background: var(--ion-color-primary-contrast);
+  --background: var(--ion-background-color);
   border-radius: var(--space-4) var(--space-4) 0 0;
   border-top: 1px solid var(--glass-border);
   height: calc(var(--space-12) + var(--ion-safe-area-bottom, 0px));
 }
 
 ion-header {
-  background: var(--ion-color-primary-contrast);
+  background: var(--ion-background-color);
   border-radius: 0 0 var(--space-4) var(--space-4);
 }
 
