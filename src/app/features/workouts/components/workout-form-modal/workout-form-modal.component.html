@@ -1,16 +1,16 @@
 <ion-header>
   <ion-toolbar>
     <ion-title style="text-align: start">
-      {{ isEditMode() ? "WORKOUTS.EDIT_TITLE" : "WORKOUTS.CREATE_TITLE" | translate }}
+      {{
+        isEditMode()
+          ? ("WORKOUTS.EDIT_TITLE" | translate)
+          : ("WORKOUTS.CREATE_TITLE" | translate)
+      }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button
-        (click)="close()"
-        fill="clear"
-        shape="round"
-        color="danger"
-        >{{ "COMMON.CANCEL" | translate }}</ion-button
-      >
+      <ion-button (click)="close()" fill="clear" shape="round" color="danger">{{
+        "COMMON.CANCEL" | translate
+      }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

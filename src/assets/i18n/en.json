@@ -155,9 +155,11 @@
     "MUSCLE_CHEST": "Chest",
     "MUSCLE_FOREARMS": "Forearms",
     "MUSCLE_HAMSTRINGS": "Hamstrings",
+    "MUSCLE_LOWER": "Lower",
     "MUSCLE_QUADRICEPS": "Quadriceps",
     "MUSCLE_SHOULDERS": "Shoulders",
     "MUSCLE_TRICEPS": "Triceps",
+    "MUSCLE_UPPER": "Upper",
     "MUSCLE_OTHER": "Other"
   }
 }

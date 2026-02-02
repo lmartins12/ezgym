@@ -155,9 +155,11 @@
     "MUSCLE_CHEST": "Peito",
     "MUSCLE_FOREARMS": "Antebraço",
     "MUSCLE_HAMSTRINGS": "Posterior",
+    "MUSCLE_LOWER": "Inferior",
     "MUSCLE_QUADRICEPS": "Quadríceps",
     "MUSCLE_SHOULDERS": "Ombros",
     "MUSCLE_TRICEPS": "Tríceps",
+    "MUSCLE_UPPER": "Superior",
     "MUSCLE_OTHER": "Outro"
   }
 }
