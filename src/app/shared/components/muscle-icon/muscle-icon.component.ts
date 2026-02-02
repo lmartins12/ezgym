@@ -13,10 +13,12 @@ const MUSCLE_ICON_MAP: Record<MuscleGroup, string> = {
   chest: 'assets/muscles/chest.svg',
   forearms: 'assets/muscles/forearms.svg',
   hamstrings: 'assets/muscles/hamstrings.svg',
+  lower: 'assets/muscles/lower.svg',
   quadriceps: 'assets/muscles/quadriceps.svg',
   shoulders: 'assets/muscles/shoulders.svg',
   triceps: 'assets/muscles/triceps.svg',
-  other: '', // Will use Ionic icon fallback
+  upper: 'assets/muscles/upper.svg',
+  other: '',
 };
 
 @Component({

@@ -70,3 +70,5 @@ testem.log
 Thumbs.db
 
 docs
+
+resources/android/**/*

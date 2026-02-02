@@ -1,4 +1,6 @@
 export type MuscleGroup =
+  | 'upper'
+  | 'lower'
   | 'chest'
   | 'triceps'
   | 'back'
@@ -13,6 +15,8 @@ export type MuscleGroup =
   | 'other';
 
 export const MUSCLE_GROUPS: readonly MuscleGroup[] = [
+  'upper',
+  'lower',
   'chest',
   'triceps',
   'back',
