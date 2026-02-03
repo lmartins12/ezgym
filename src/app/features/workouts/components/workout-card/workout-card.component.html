@@ -1,5 +1,15 @@
-<ion-accordion>
-  <ion-item slot="header" button detail="false">
+<ion-item-sliding>
+  <ion-item-options side="start">
+    <ion-item-option
+      (click)="startWorkout.emit(workout())"
+      [color]="workout().exercise_count > 0 ? 'primary' : 'medium'"
+      [disabled]="workout().exercise_count === 0"
+    >
+      <ion-icon slot="icon-only" name="play-outline"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item button detail="false" lines="full" (click)="navigate()">
     <app-muscle-icon
       [muscleGroup]="workout().muscle_group"
       size="lg"
@@ -18,50 +28,12 @@
         </p>
       }
     </ion-label>
+    <ion-reorder slot="end"></ion-reorder>
   </ion-item>
 
-  <div slot="content" class="accordion-content">
-    <!-- Fileira 1: Detalhes (esquerda) + Iniciar (direita) -->
-    <div class="action-row">
-      <ion-button
-        class="action-btn"
-        shape="round"
-        fill="outline"
-        (click)="navigate()"
-      >
-        <div class="action-btn-content">
-          <ion-icon name="list-outline"></ion-icon>
-          <span class="action-btn-text">{{
-            "WORKOUTS.DETAILS" | translate
-          }}</span>
-        </div>
-      </ion-button>
-
-      <ion-button
-        class="action-btn"
-        shape="round"
-        fill="solid"
-        [disabled]="workout().exercise_count === 0"
-        (click)="startWorkout.emit(workout())"
-      >
-        <div class="action-btn-content">
-          <ion-icon name="play-outline"></ion-icon>
-          <span class="action-btn-text">{{
-            "WORKOUT_DETAIL.START_WORKOUT" | translate
-          }}</span>
-        </div>
-      </ion-button>
-    </div>
-
-    <!-- Fileira 2: Excluir -->
-    <ion-button
-      fill="clear"
-      color="danger"
-      expand="block"
-      (click)="deleteWorkout.emit(workout().id)"
-    >
-      <ion-icon name="trash-outline" slot="start"></ion-icon>
-      <ion-label color="danger">{{ "COMMON.DELETE" | translate }}</ion-label>
-    </ion-button>
-  </div>
-</ion-accordion>
+  <ion-item-options side="end">
+    <ion-item-option (click)="deleteWorkout.emit(workout().id)" color="danger">
+      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

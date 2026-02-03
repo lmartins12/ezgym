@@ -10,11 +10,13 @@ import {
 import { Router } from '@angular/router';
 import { LanguageService } from '@core';
 import {
-  IonAccordion,
-  IonButton,
   IonIcon,
   IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
   IonLabel,
+  IonReorder,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared';
@@ -29,10 +31,12 @@ import type { WorkoutDetail } from '../../models';
     CommonModule,
     TranslateModule,
     IonItem,
-    IonButton,
+    IonItemSliding,
+    IonItemOptions,
+    IonItemOption,
     IonIcon,
     IonLabel,
-    IonAccordion,
+    IonReorder,
     MuscleIconComponent,
   ],
   templateUrl: './workout-card.component.html',

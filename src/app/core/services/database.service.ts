@@ -64,6 +64,7 @@ export class DatabaseService {
         name TEXT NOT NULL,
         description TEXT,
         muscle_group TEXT,
+        order_index INTEGER NOT NULL DEFAULT 0,
         created_at INTEGER NOT NULL,
         updated_at INTEGER NOT NULL
       );
@@ -159,5 +160,12 @@ export class DatabaseService {
       this.db = null;
       this.isReady.set(false);
     }
+  }
+
+  public async updateWorkoutOrder(workoutId: string, orderIndex: number): Promise<void> {
+    await this.execute(
+      'UPDATE workouts SET order_index = ? WHERE id = ?',
+      [orderIndex, workoutId],
+    );
   }
 }

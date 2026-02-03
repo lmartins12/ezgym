@@ -55,7 +55,7 @@ export class ExerciseEditorModalComponent {
   @Input() public exercise?: WorkoutExercise;
 
   public readonly name = model('');
-  public readonly muscleGroup = model<MuscleGroup>('chest');
+  public readonly muscleGroup = model<MuscleGroup>('upper');
   public readonly equipment = model('');
   public readonly notes = model('');
   public readonly sets = model(3);

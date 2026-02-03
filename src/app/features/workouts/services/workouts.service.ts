@@ -20,7 +20,7 @@ export class WorkoutsService {
       LEFT JOIN workout_exercises we ON w.id = we.workout_id
       LEFT JOIN workout_sessions ws ON w.id = ws.workout_id
       GROUP BY w.id
-      ORDER BY w.updated_at DESC
+      ORDER BY w.order_index ASC, w.updated_at DESC
     `;
 
     return this.db.query<WorkoutDetail>(sql);
@@ -75,5 +75,10 @@ export class WorkoutsService {
     await this.db.ready();
 
     await this.db.execute('DELETE FROM workouts WHERE id = ?', [id]);
+  }
+
+  public async updateOrderIndex(workoutId: string, orderIndex: number): Promise<void> {
+    await this.db.ready();
+    await this.db.updateWorkoutOrder(workoutId, orderIndex);
   }
 }

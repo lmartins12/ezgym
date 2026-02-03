@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   AlertController,
-  IonAccordionGroup,
   IonButton,
   IonContent,
   IonFab,
@@ -12,6 +11,7 @@ import {
   IonHeader,
   IonIcon,
   IonList,
+  IonReorderGroup,
   IonSpinner,
   IonTitle,
   IonToolbar,
@@ -37,7 +37,6 @@ import { WorkoutsService } from '../services';
   selector: 'app-workouts-list',
   standalone: true,
   imports: [
-    IonAccordionGroup,
     CommonModule,
     FormsModule,
     TranslateModule,
@@ -47,6 +46,7 @@ import { WorkoutsService } from '../services';
     IonButton,
     IonContent,
     IonList,
+    IonReorderGroup,
     IonFab,
     IonFabButton,
     IonIcon,
@@ -136,5 +136,18 @@ export class WorkoutsListPage {
     if (!workout.id || workout.exercise_count === 0) return;
 
     this.router.navigate(['/session', workout.id]);
+  }
+
+  public reorderWorkouts(event: CustomEvent): void {
+    const workouts = this.workouts();
+    const newOrder = event.detail.complete(workouts);
+
+    this.updateWorkoutsOrder(newOrder);
+  }
+
+  private async updateWorkoutsOrder(workouts: WorkoutDetail[]): Promise<void> {
+    for (let i = 0; i < workouts.length; i++) {
+      await this.workoutsService.updateOrderIndex(workouts[i].id, i);
+    }
   }
 }

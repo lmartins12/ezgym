@@ -19,17 +19,20 @@
     </ion-button>
   </div>
   } @else {
-  <ion-list lines="none" inset>
-    <ion-accordion-group multiple="false">
-      @for (workout of workouts(); track workout.id) {
+  <ion-reorder-group
+    (ionItemReorder)="reorderWorkouts($event)"
+    disabled="false"
+  >
+    @for (workout of workouts(); track workout.id) {
+    <ion-list lines="none" inset>
       <app-workout-card
         [workout]="workout"
         (deleteWorkout)="confirmDelete($event)"
         (startWorkout)="startWorkout($event)"
       />
-      }
-    </ion-accordion-group>
-  </ion-list>
+    </ion-list>
+    }
+  </ion-reorder-group>
   }
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">

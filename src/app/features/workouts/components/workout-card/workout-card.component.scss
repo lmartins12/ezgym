@@ -12,52 +12,19 @@ ion-label {
   }
 }
 
-.accordion-content {
-  padding: var(--space-2) 0;
-}
-
-.action-row {
-  display: flex;
-  gap: var(--space-3);
-  padding: 0 var(--space-3);
-  margin-bottom: var(--space-4);
-}
-
-.action-btn {
-  flex: 1;
-  height: 80px;
-  --padding-start: 0;
-  --padding-end: 0;
-  margin: 0;
-  font-size: 12px;
-  text-transform: none;
-
-  &.primary {
-    --background: var(--ion-color-primary);
-    --color: var(--ion-color-primary-contrast);
-  }
-}
-
-.action-btn-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
+// Estilo para o botão Play inline
+ion-button[slot="end"] {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  margin-inline-end: var(--space-2);
 
   ion-icon {
-    font-size: 24px;
+    font-size: 20px;
   }
 }
 
-.action-btn-text {
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.delete-action {
-  --padding-start: var(--space-4);
-
-  ion-icon {
-    --color: var(--ion-color-danger);
-  }
+// Estilo para o handle de reordenação
+ion-reorder {
+  --color: var(--ion-color-medium);
+  opacity: 0.5;
 }
