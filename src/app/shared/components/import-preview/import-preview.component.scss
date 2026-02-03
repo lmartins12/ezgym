@@ -1,0 +1,92 @@
+.import-preview {
+  &__card {
+    margin: var(--space-4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  &__content {
+    padding: var(--space-4);
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) 0;
+
+    &--main {
+      margin-bottom: var(--space-3);
+    }
+
+    &--new {
+      margin-top: var(--space-3);
+    }
+
+    &--existing {
+      margin-top: var(--space-3);
+    }
+  }
+
+  &__icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+
+    &--main {
+      color: var(--ion-color-primary);
+    }
+
+    &--new {
+      color: var(--ion-color-success);
+    }
+
+    &--existing {
+      color: var(--ion-color-medium);
+    }
+  }
+
+  &__text {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  &__count {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ion-text-color);
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: var(--ion-color-medium);
+  }
+
+  &__exercise-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
+  &__exercise-tag {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--glass-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+
+    &--new {
+      background: rgba(var(--ion-color-success-rgb), 0.15);
+      color: var(--ion-color-success);
+    }
+
+    &--existing {
+      background: rgba(var(--ion-color-medium-rgb), 0.15);
+      color: var(--ion-color-medium);
+    }
+  }
+}

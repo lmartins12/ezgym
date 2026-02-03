@@ -1,0 +1,37 @@
+@if (hasErrors()) {
+  <ion-card class="validation-list__card validation-list__card--error">
+    <ion-list class="validation-list__list" lines="none">
+      @for (error of errors(); track error) {
+        <ion-item class="validation-list__item validation-list__item--error">
+          <ion-icon
+            name="alert-circle"
+            slot="start"
+            class="validation-list__icon validation-list__icon--error"
+          ></ion-icon>
+          <ion-label class="validation-list__label">
+            {{ getErrorMessage(error) }}
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  </ion-card>
+}
+
+@if (hasWarnings()) {
+  <ion-card class="validation-list__card validation-list__card--warning">
+    <ion-list class="validation-list__list" lines="none">
+      @for (warning of warnings(); track warning.type) {
+        <ion-item class="validation-list__item validation-list__item--warning">
+          <ion-icon
+            name="warning-outline"
+            slot="start"
+            class="validation-list__icon validation-list__icon--warning"
+          ></ion-icon>
+          <ion-label class="validation-list__label">
+            {{ getWarningMessage(warning) }}
+          </ion-label>
+        </ion-item>
+      }
+    </ion-list>
+  </ion-card>
+}

@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      @if (showIntroMessage) {
+        <span class="ai-prompt-modal__badge">
+          <ion-icon name="sparkles-outline"></ion-icon>
+        </span>
+      }
+      {{ promptTitleKey | translate }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ai-prompt-modal__content">
+  @if (showIntroMessage) {
+    <p class="ai-prompt-modal__intro-message">{{ introMessage }}</p>
+  }
+
+  <div class="ai-prompt__content">
+    <p class="ai-prompt__intro">{{ promptIntroKey | translate }}</p>
+
+    <div class="ai-prompt__how-to-use">
+      <h4>{{ howToUseKey | translate }}</h4>
+      <ol>
+        @for (step of howToUseSteps; track step) {
+          <li>{{ step | translate }}</li>
+        }
+      </ol>
+    </div>
+
+    <pre class="ai-prompt__text">{{ promptTextKey | translate }}</pre>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button
+      (click)="onCopyPrompt()"
+      expand="block"
+      color="primary"
+      style="margin: var(--space-4)"
+    >
+      <ion-icon name="clipboard-outline" slot="start"></ion-icon>
+      {{ copyPromptKey | translate }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

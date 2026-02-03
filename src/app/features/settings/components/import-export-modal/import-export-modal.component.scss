@@ -1,0 +1,98 @@
+.import-export-modal {
+  &__header {
+    ion-toolbar {
+      --background: var(--glass-bg);
+      border-bottom: 1px solid var(--glass-border);
+    }
+  }
+
+  &__content {
+    --background: var(--ion-background-color);
+  }
+
+  &__tabs {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    padding-bottom: 0;
+  }
+
+  &__tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    border-radius: var(--glass-radius);
+    background: rgba(var(--ion-color-medium-rgb), 0.1);
+    border: 1px solid transparent;
+    color: var(--ion-color-medium);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    ion-icon {
+      font-size: 1.5rem;
+    }
+
+    &--active {
+      background: var(--ion-color-primary);
+      color: var(--ion-color-primary-contrast);
+      border-color: var(--ion-color-primary);
+    }
+  }
+
+  &__tab-content {
+    padding: var(--space-4);
+  }
+
+  &__description {
+    margin: 0 0 var(--space-4);
+    font-size: 0.875rem;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  &__json-actions {
+    display: flex;
+    gap: var(--space-2);
+
+    ion-button {
+      flex: 1;
+    }
+  }
+
+  &__json-output {
+    --background: var(--ion-background-color-step-50);
+    --color: var(--ion-text-color);
+    --padding-start: var(--space-3);
+    --padding-end: var(--space-3);
+    margin-top: var(--space-4);
+    font-family: "Courier New", monospace;
+    font-size: 0.75rem;
+    border-radius: var(--glass-radius);
+  }
+
+  &__json-input {
+    --background: var(--ion-background-color-step-50);
+    --color: var(--ion-text-color);
+    --padding-start: var(--space-3);
+    --padding-end: var(--space-3);
+    font-family: "Courier New", monospace;
+    font-size: 0.875rem;
+    border-radius: var(--glass-radius);
+  }
+
+  &__import-button {
+    margin-top: var(--space-4);
+  }
+}

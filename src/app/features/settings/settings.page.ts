@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { LanguageService, ThemeService } from '@core';
 import {
   IonContent,
   IonHeader,
@@ -11,11 +12,16 @@ import {
   IonTitle,
   IonToggle,
   IonToolbar,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { caretDownSharp, moonOutline, settingsOutline } from 'ionicons/icons';
-import { LanguageService, ThemeService } from '../../core';
+import {
+  caretDownSharp,
+  moonOutline,
+  settingsOutline,
+} from 'ionicons/icons';
+import { ImportExportModalComponent } from './components/import-export-modal';
 
 @Component({
   selector: 'app-settings',
@@ -40,6 +46,8 @@ import { LanguageService, ThemeService } from '../../core';
 export class SettingsPage {
   private readonly languageService = inject(LanguageService);
   private readonly themeService = inject(ThemeService);
+  private readonly modalCtrl = inject(ModalController);
+
   protected readonly translate = inject(TranslateService);
 
   public readonly currentLang = this.languageService.language;
@@ -48,7 +56,11 @@ export class SettingsPage {
   public readonly isDarkMode = this.themeService.isDarkMode;
 
   constructor() {
-    addIcons({ caretDownSharp, moonOutline, settingsOutline });
+    addIcons({
+      caretDownSharp,
+      moonOutline,
+      settingsOutline,
+    });
   }
 
   public async onLanguageChange(event: CustomEvent): Promise<void> {
@@ -58,5 +70,13 @@ export class SettingsPage {
 
   public async toggleTheme(): Promise<void> {
     await this.themeService.toggleTheme();
+  }
+
+  public async openImportExport(): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: ImportExportModalComponent,
+    });
+
+    await modal.present();
   }
 }

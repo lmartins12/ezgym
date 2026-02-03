@@ -1,0 +1,52 @@
+.validation-list {
+  &__card {
+    margin: var(--space-4);
+    border-radius: var(--glass-radius);
+
+    &--error {
+      background: rgba(var(--ion-color-danger-rgb), 0.1);
+      border: 1px solid var(--ion-color-danger);
+    }
+
+    &--warning {
+      background: rgba(var(--ion-color-warning-rgb), 0.1);
+      border: 1px solid var(--ion-color-warning);
+    }
+  }
+
+  &__list {
+    padding: 0;
+  }
+
+  &__item {
+    --padding-start: var(--space-3);
+    --padding-end: var(--space-3);
+    --inner-padding-end: 0;
+
+    &--error {
+      --background: transparent;
+    }
+
+    &--warning {
+      --background: transparent;
+    }
+  }
+
+  &__icon {
+    font-size: 1.25rem;
+    margin-right: var(--space-2);
+
+    &--error {
+      color: var(--ion-color-danger);
+    }
+
+    &--warning {
+      color: var(--ion-color-warning);
+    }
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: var(--ion-text-color);
+  }
+}
