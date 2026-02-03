@@ -10,9 +10,9 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AlertController } from '@ionic/angular/standalone';
 import type { SetLog, WorkoutExercise, WorkoutSession } from '@core';
 import {
+  AlertController,
   IonButton,
   IonCard,
   IonCardContent,
@@ -117,9 +117,7 @@ export class SessionInProgressComponent {
   });
 
   protected readonly allExercisesComplete = computed(() => {
-    return this.exercises().every((_, index) =>
-      this.isExerciseComplete(index),
-    );
+    return this.exercises().every((_, index) => this.isExerciseComplete(index));
   });
 
   constructor() {
@@ -182,6 +180,7 @@ export class SessionInProgressComponent {
         weight: this.weight,
         rpe: this.rpe,
       });
+      this.checkAndAdvanceToNextExercise(true);
     }
   }
 
@@ -195,14 +194,16 @@ export class SessionInProgressComponent {
   public async showRPEInfo(): Promise<void> {
     const alert = await this.alertCtrl.create({
       header: this.translate.instant('SESSION.IN_PROGRESS.RPE_INFO_TITLE'),
-      message: this.translate.instant('SESSION.IN_PROGRESS.RPE_INFO_MESSAGE').replace(/\|n/g, '\n'),
+      message: this.translate
+        .instant('SESSION.IN_PROGRESS.RPE_INFO_MESSAGE')
+        .replace(/\|n/g, '\n'),
       cssClass: 'rpe-info-alert',
       buttons: [
         {
           text: this.translate.instant('SESSION.IN_PROGRESS.RPE_INFO_CLOSE'),
-          role: 'cancel'
-        }
-      ]
+          role: 'cancel',
+        },
+      ],
     });
     await alert.present();
   }
@@ -213,6 +214,30 @@ export class SessionInProgressComponent {
       (log) => log.exercise_id === exercise.exercise_id,
     );
     return exerciseLogs.length >= exercise.sets;
+  }
+
+  private checkAndAdvanceToNextExercise(newSetAdded: boolean = false): void {
+    const currentIndex = this.currentExerciseIndex();
+    const currentExercise = this.exercises()[currentIndex];
+
+    const exerciseLogs = this.setLogs().filter(
+      (log) => log.exercise_id === currentExercise.exercise_id,
+    );
+    const expectedLogCount = newSetAdded
+      ? exerciseLogs.length + 1
+      : exerciseLogs.length;
+
+    if (expectedLogCount < currentExercise.sets) {
+      return;
+    }
+
+    for (let i = currentIndex + 1; i < this.exercises().length; i++) {
+      if (!this.isExerciseComplete(i)) {
+        this.currentExerciseIndex.set(i);
+        this.resetForm();
+        return;
+      }
+    }
   }
 
   private scrollToActiveExercise(): void {
