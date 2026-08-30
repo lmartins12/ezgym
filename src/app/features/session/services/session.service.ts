@@ -1,25 +1,30 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { DatabaseService } from '@core/services/database.service';
 import { ExerciseRepository } from '@core/services/exercise-repository.service';
+import { HapticsService } from '@core/services/haptics.service';
 import type {
   SetLog,
   Workout,
   WorkoutExercise,
   WorkoutSession,
 } from '@core/models/app-models';
-import { NavController } from '@ionic/angular';
 import { v4 as uuidv4 } from 'uuid';
 
 export type SessionState =
   'PREPARING' | 'IN_PROGRESS' | 'FINISHING' | 'COMPLETED';
 
+/**
+ * Root-singleton session store: an in-progress workout must survive
+ * tab switches, so the state intentionally outlives the session route.
+ * Navigation decisions belong to SessionPage, not here.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class SessionService {
   private readonly dbService = inject(DatabaseService);
   private readonly exerciseRepository = inject(ExerciseRepository);
-  private readonly navCtrl = inject(NavController);
+  private readonly haptics = inject(HapticsService);
 
   // State Signals
   public readonly state = signal<SessionState>('PREPARING');
@@ -32,29 +37,6 @@ export class SessionService {
   public readonly isSessionActive = computed(
     () => this.state() === 'IN_PROGRESS' || this.state() === 'FINISHING',
   );
-
-  /**
-   * Helper for vibration feedback (Web Vibration API)
-   */
-  private triggerHaptic(intensity: 'light' | 'medium' = 'light'): void {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      try {
-        navigator.vibrate(intensity === 'medium' ? 60 : 35);
-      } catch {
-        // Ignore if blocked by browser policy
-      }
-    }
-  }
-
-  private triggerVibrate(): void {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      try {
-        navigator.vibrate([100, 50, 100]);
-      } catch {
-        // Ignore
-      }
-    }
-  }
 
   /**
    * Initialize for Dashboard: Check for ANY active session.
@@ -78,10 +60,12 @@ export class SessionService {
   }
 
   /**
-   * Initialize the session view (Preparing state)
-   * Loads workout details but does NOT create a session in DB yet.
+   * Initialize the session view for a workout.
+   * Recovers an abandoned active session for the same workout when one
+   * exists, otherwise prepares a fresh PREPARING state.
+   * @returns false when the workout does not exist (caller navigates).
    */
-  public async initialize(workoutId: string): Promise<void> {
+  public async initialize(workoutId: string): Promise<boolean> {
     this.resetState();
     await this.dbService.initialize();
     const db = this.dbService.db;
@@ -110,7 +94,7 @@ export class SessionService {
         this.setLogs.set(logs.sort((a, b) => a.set_number - b.set_number));
         this.activeSession.set(existingSession);
         this.state.set('IN_PROGRESS');
-        return;
+        return true;
       }
     }
 
@@ -118,9 +102,7 @@ export class SessionService {
     const workout = await db.workouts.get(workoutId);
 
     if (!workout) {
-      console.error('Workout not found');
-      this.navCtrl.navigateBack('/tabs/workouts');
-      return;
+      return false;
     }
 
     this.workout.set(workout);
@@ -130,22 +112,36 @@ export class SessionService {
       await this.exerciseRepository.getDetailedByWorkoutId(workoutId),
     );
     this.state.set('PREPARING');
+    return true;
   }
 
   /**
    * Start the workout execution.
-   * Creates the session record in DB.
+   * Creates the session record in DB, or adopts the existing active
+   * session for this workout (e.g. double tap / race with recovery).
    */
   public async startSession(): Promise<void> {
     const workout = this.workout();
     if (!workout) return;
 
     await this.dbService.initialize();
-    const sessionId = uuidv4();
-    const now = Date.now();
+    const db = this.dbService.db;
 
+    // Guard: never create a second active session for the same workout
+    const existing = await db.workout_sessions
+      .where('status')
+      .equals('IN_PROGRESS')
+      .toArray();
+    const current = existing.find((s) => s.workout_id === workout.id);
+    if (current) {
+      this.activeSession.set(current);
+      this.state.set('IN_PROGRESS');
+      return;
+    }
+
+    const now = Date.now();
     const newSession: WorkoutSession = {
-      id: sessionId,
+      id: uuidv4(),
       workout_id: workout.id,
       started_at: now,
       status: 'IN_PROGRESS',
@@ -153,7 +149,7 @@ export class SessionService {
       notes: '',
     };
 
-    await this.dbService.db.workout_sessions.add(newSession);
+    await db.workout_sessions.add(newSession);
     this.activeSession.set(newSession);
     this.state.set('IN_PROGRESS');
   }
@@ -161,13 +157,13 @@ export class SessionService {
   /**
    * Log a new set immediately to the DB.
    */
-  async logSet(data: {
+  public async logSet(data: {
     exercise_id: string;
     set_number: number;
     reps: number;
     weight: number;
     rpe?: number;
-  }) {
+  }): Promise<void> {
     const session = this.activeSession();
     if (!session) return;
 
@@ -187,16 +183,17 @@ export class SessionService {
     try {
       await this.dbService.db.set_logs.add(newLog);
       this.setLogs.update((logs) => [...logs, newLog]);
-      this.triggerHaptic('light');
+      this.haptics.light();
     } catch (error) {
       console.error('Failed to log set:', error);
+      throw error;
     }
   }
 
   /**
    * Update an existing set.
    */
-  async updateSet(log: SetLog) {
+  public async updateSet(log: SetLog): Promise<void> {
     try {
       await this.dbService.initialize();
       await this.dbService.db.set_logs.update(log.id, {
@@ -208,23 +205,25 @@ export class SessionService {
       this.setLogs.update((logs) =>
         logs.map((l) => (l.id === log.id ? log : l)),
       );
-      this.triggerHaptic('light');
+      this.haptics.light();
     } catch (error) {
       console.error('Failed to update set:', error);
+      throw error;
     }
   }
 
   /**
    * Delete a set log.
    */
-  async deleteSet(setId: string) {
+  public async deleteSet(setId: string): Promise<void> {
     try {
       await this.dbService.initialize();
       await this.dbService.db.set_logs.delete(setId);
       this.setLogs.update((logs) => logs.filter((l) => l.id !== setId));
-      this.triggerHaptic('medium');
+      this.haptics.medium();
     } catch (error) {
       console.error('Failed to delete set:', error);
+      throw error;
     }
   }
 
@@ -239,7 +238,7 @@ export class SessionService {
   /**
    * Finalize the session, save notes, and update finished_at.
    */
-  async finishSession(notes?: string) {
+  public async finishSession(notes?: string): Promise<void> {
     const session = this.activeSession();
     if (!session) return;
 
@@ -252,31 +251,36 @@ export class SessionService {
       });
       this.state.set('COMPLETED');
       this.activeSession.set(null);
-      this.triggerVibrate();
-      this.navCtrl.navigateBack('/tabs/workouts');
+      this.haptics.doubleTap();
     } catch (error) {
       console.error('Failed to finish session:', error);
+      throw error;
     }
   }
 
+  /**
+   * Cancel the session and discard its logs.
+   * State is always reset, even when the DB cleanup fails.
+   */
   public async cancelSession(): Promise<void> {
     const session = this.activeSession();
 
-    if (session) {
-      await this.dbService.initialize();
-      const db = this.dbService.db;
-      await db.transaction(
-        'rw',
-        [db.set_logs, db.workout_sessions],
-        async () => {
-          await db.set_logs.where('session_id').equals(session.id).delete();
-          await db.workout_sessions.delete(session.id);
-        },
-      );
+    try {
+      if (session) {
+        await this.dbService.initialize();
+        const db = this.dbService.db;
+        await db.transaction(
+          'rw',
+          [db.set_logs, db.workout_sessions],
+          async () => {
+            await db.set_logs.where('session_id').equals(session.id).delete();
+            await db.workout_sessions.delete(session.id);
+          },
+        );
+      }
+    } finally {
+      this.resetState();
     }
-
-    this.resetState();
-    this.navCtrl.navigateBack('/tabs/workouts');
   }
 
   private resetState(): void {

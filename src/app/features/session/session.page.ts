@@ -67,7 +67,10 @@ export class SessionPage {
 
     if (workoutId) {
       this.isDashboard.set(false);
-      await this.sessionService.initialize(workoutId);
+      const found = await this.sessionService.initialize(workoutId);
+      if (!found) {
+        this.navCtrl.navigateBack('/tabs/workouts');
+      }
     } else {
       this.isDashboard.set(true);
       // Check if there is ANY active session to resume
@@ -85,8 +88,7 @@ export class SessionPage {
             text: this.translate.instant('SESSION.EXIT.DISCARD'),
             role: 'destructive',
             handler: () => {
-              this.sessionService.cancelSession();
-              this.navCtrl.navigateBack('/tabs/workouts');
+              void this.cancelAndLeave();
             },
           },
           {
@@ -103,19 +105,22 @@ export class SessionPage {
       });
       await alert.present();
     } else {
-      this.sessionService.cancelSession();
-      this.navCtrl.navigateBack('/tabs/workouts');
+      await this.cancelAndLeave();
     }
   }
 
+  private async cancelAndLeave(): Promise<void> {
+    await this.sessionService.cancelSession();
+    this.navCtrl.navigateBack('/tabs/workouts');
+  }
+
   onStartSession() {
-    this.sessionService.startSession();
+    void this.sessionService.startSession();
   }
 
   onCancelSession() {
     // This is called from Preparing state, so we just cancel immediately
-    this.sessionService.cancelSession();
-    this.navCtrl.navigateBack('/tabs/workouts');
+    void this.cancelAndLeave();
   }
 
   onLogSet(data: {
@@ -147,10 +152,15 @@ export class SessionPage {
   }
 
   onSaveFinish(notes: string) {
-    this.sessionService.finishSession(notes);
+    void this.finishAndLeave(notes);
   }
 
   onUpdateSet(log: SetLog) {
     this.sessionService.updateSet(log);
+  }
+
+  private async finishAndLeave(notes: string): Promise<void> {
+    await this.sessionService.finishSession(notes);
+    this.navCtrl.navigateBack('/tabs/workouts');
   }
 }
