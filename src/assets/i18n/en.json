@@ -12,7 +12,8 @@
     "ERROR": "Error",
     "SUCCESS": "Success",
     "CREATE": "Create",
-    "CLEAR": "Clear"
+    "CLEAR": "Clear",
+    "UNEXPECTED_ERROR": "An unexpected error occurred. Please try again."
   },
   "NAV": {
     "HOME": "Home",
@@ -209,7 +210,12 @@
     "IMPORT_DESCRIPTION": "Import workouts from JSON. You can paste JSON or use the import from clipboard feature.",
     "HELP_PROMPT_TITLE": "Prompt to Create/Convert Workouts",
     "HELP_PROMPT_BUTTON": "How to Import?",
-    "HELP_PROMPT_COPIED": "Prompt copied!"
+    "HELP_PROMPT_COPIED": "Prompt copied!",
+    "ERROR_EXPORT": "Failed to export workouts",
+    "ERROR_COPY": "Failed to copy to clipboard",
+    "ERROR_PASTE": "Failed to read the clipboard",
+    "ERROR_PREVIEW": "Failed to generate the import preview",
+    "ERROR_IMPORT": "Failed to import workouts"
   },
   "IMPORT_PROMPT": {
     "TITLE": "Prompt to Create/Convert Workouts for EzGym",

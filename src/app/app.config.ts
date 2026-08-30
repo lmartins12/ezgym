@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  ErrorHandler,
   isDevMode,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -20,11 +21,13 @@ import {
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { EzGymErrorHandler } from '@core/services/app-error-handler.service';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
+    { provide: ErrorHandler, useClass: EzGymErrorHandler },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({
       animated: true,

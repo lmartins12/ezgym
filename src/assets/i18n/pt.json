@@ -12,7 +12,8 @@
     "ERROR": "Erro",
     "SUCCESS": "Sucesso",
     "CREATE": "Criar",
-    "CLEAR": "Limpar"
+    "CLEAR": "Limpar",
+    "UNEXPECTED_ERROR": "Ocorreu um erro inesperado. Tente novamente."
   },
   "NAV": {
     "HOME": "Início",
@@ -209,7 +210,12 @@
     "IMPORT_DESCRIPTION": "Importe treinos de JSON. Você pode colar JSON ou usar o recurso de importar da área de transferência.",
     "HELP_PROMPT_TITLE": "Prompt para Criar/Converter Treinos",
     "HELP_PROMPT_BUTTON": "Como Importar?",
-    "HELP_PROMPT_COPIED": "Prompt copiado!"
+    "HELP_PROMPT_COPIED": "Prompt copiado!",
+    "ERROR_EXPORT": "Falha ao exportar treinos",
+    "ERROR_COPY": "Falha ao copiar para a área de transferência",
+    "ERROR_PASTE": "Falha ao ler a área de transferência",
+    "ERROR_PREVIEW": "Falha ao gerar a prévia da importação",
+    "ERROR_IMPORT": "Falha ao importar treinos"
   },
   "IMPORT_PROMPT": {
     "TITLE": "Prompt para Criar/Converter Treinos para o EzGym",

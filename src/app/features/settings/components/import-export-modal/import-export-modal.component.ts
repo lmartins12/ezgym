@@ -15,8 +15,9 @@ import {
   IonTitle,
   IonToolbar,
   ModalController,
+  ToastController,
 } from '@ionic/angular';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AiPromptModalComponent } from '@shared/components/ai-prompt-modal/ai-prompt-modal.component';
 import { ImportPreviewComponent } from '@shared/components/import-preview/import-preview.component';
 import { ValidationListComponent } from '@shared/components/validation-list/validation-list.component';
@@ -32,6 +33,8 @@ import {
 } from 'ionicons/icons';
 
 export type ImportExportTab = 'export' | 'import';
+
+const TOAST_DURATION_MS = 3000;
 
 @Component({
   selector: 'app-import-export-modal',
@@ -54,6 +57,8 @@ export type ImportExportTab = 'export' | 'import';
 export class ImportExportModalComponent {
   private readonly modalCtrl = inject(ModalController);
   private readonly importExportService = inject(ImportExportService);
+  private readonly toastCtrl = inject(ToastController);
+  private readonly translate = inject(TranslateService);
 
   public readonly initialTab = input<ImportExportTab>('export');
 
@@ -108,6 +113,7 @@ export class ImportExportModalComponent {
       this.exportJson.set(json);
     } catch (error) {
       console.error('Export failed:', error);
+      await this.showErrorToast('IMPORT_EXPORT.ERROR_EXPORT');
     } finally {
       this.isLoading.set(false);
     }
@@ -115,8 +121,13 @@ export class ImportExportModalComponent {
 
   public async onCopyToClipboard(): Promise<void> {
     const json = this.exportJson();
-    if (json) {
+    if (!json) return;
+
+    try {
       await this.importExportService.copyToClipboard(json);
+    } catch (error) {
+      console.error('Copy failed:', error);
+      await this.showErrorToast('IMPORT_EXPORT.ERROR_COPY');
     }
   }
 
@@ -137,6 +148,7 @@ export class ImportExportModalComponent {
       }
     } catch (error) {
       console.error('Paste failed:', error);
+      await this.showErrorToast('IMPORT_EXPORT.ERROR_PASTE');
     } finally {
       this.isLoading.set(false);
     }
@@ -156,9 +168,12 @@ export class ImportExportModalComponent {
       if (preview) {
         this.importPreview.set(preview);
         this.showPreview.set(true);
+      } else {
+        await this.showErrorToast('IMPORT_EXPORT.ERROR_PREVIEW');
       }
     } catch (error) {
       console.error('Preview failed:', error);
+      await this.showErrorToast('IMPORT_EXPORT.ERROR_PREVIEW');
     } finally {
       this.isLoading.set(false);
     }
@@ -173,9 +188,13 @@ export class ImportExportModalComponent {
       const result = await this.importExportService.importWorkouts(json);
       if (result.success) {
         await this.modalCtrl.dismiss(result);
+      } else {
+        console.error('Import failed:', result.errors);
+        await this.showErrorToast('IMPORT_EXPORT.ERROR_IMPORT');
       }
     } catch (error) {
       console.error('Import failed:', error);
+      await this.showErrorToast('IMPORT_EXPORT.ERROR_IMPORT');
     } finally {
       this.isLoading.set(false);
     }
@@ -183,6 +202,17 @@ export class ImportExportModalComponent {
 
   public onClose(): void {
     this.modalCtrl.dismiss();
+  }
+
+  public async openAiPromptModal(): Promise<void> {
+    const modal = await this.modalCtrl.create({
+      component: AiPromptModalComponent,
+      componentProps: {
+        introMessage: '',
+        promptText: this.importExportService.getPromptText(),
+      },
+    });
+    await modal.present();
   }
 
   private async loadExportData(): Promise<void> {
@@ -226,14 +256,13 @@ export class ImportExportModalComponent {
     }
   }
 
-  public async openAiPromptModal(): Promise<void> {
-    const modal = await this.modalCtrl.create({
-      component: AiPromptModalComponent,
-      componentProps: {
-        introMessage: '',
-        promptText: this.importExportService.getPromptText(),
-      },
+  private async showErrorToast(messageKey: string): Promise<void> {
+    const toast = await this.toastCtrl.create({
+      message: this.translate.instant(messageKey),
+      duration: TOAST_DURATION_MS,
+      position: 'bottom',
+      color: 'danger',
     });
-    await modal.present();
+    await toast.present();
   }
 }
