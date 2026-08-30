@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  inject,
-  Input,
-  OnInit,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -25,7 +18,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, close, fitness } from 'ionicons/icons';
@@ -35,7 +28,6 @@ addIcons({ close, fitness, barbell });
 
 @Component({
   selector: 'app-session-detail-modal',
-  standalone: true,
   imports: [
     CommonModule,
     IonButton,
@@ -53,12 +45,11 @@ addIcons({ close, fitness, barbell });
     IonListHeader,
     IonTitle,
     IonToolbar,
-    TranslateModule,
+    TranslatePipe,
     MuscleIconComponent,
   ],
   templateUrl: './session-detail-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./session-detail-modal.component.scss'],
+  styleUrl: './session-detail-modal.component.scss',
 })
 export class SessionDetailModalComponent implements OnInit {
   private readonly modalController = inject(ModalController);

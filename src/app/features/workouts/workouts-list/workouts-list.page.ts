@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -21,7 +16,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   add,
@@ -39,10 +34,9 @@ import { WorkoutsService } from '../services/workouts.service';
 
 @Component({
   selector: 'app-workouts-list',
-  standalone: true,
   imports: [
     FormsModule,
-    TranslateModule,
+    TranslatePipe,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -57,8 +51,7 @@ import { WorkoutsService } from '../services/workouts.service';
     WorkoutCardComponent,
   ],
   templateUrl: './workouts-list.page.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./workouts-list.page.scss'],
+  styleUrl: './workouts-list.page.scss',
 })
 export class WorkoutsListPage {
   private readonly workoutsService = inject(WorkoutsService);

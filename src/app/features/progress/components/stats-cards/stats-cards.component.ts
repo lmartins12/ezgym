@@ -1,12 +1,7 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  computed,
-  input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   barbell,
@@ -21,11 +16,9 @@ addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
 
 @Component({
   selector: 'app-stats-cards',
-  standalone: true,
-  imports: [CommonModule, IonCard, IonCardContent, IonIcon, TranslateModule],
+  imports: [CommonModule, IonCard, IonCardContent, IonIcon, TranslatePipe],
   templateUrl: './stats-cards.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./stats-cards.component.scss'],
+  styleUrl: './stats-cards.component.scss',
 })
 export class StatsCardsComponent {
   public readonly stats = input<WorkoutStats | null>(null);

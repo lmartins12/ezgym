@@ -1,10 +1,5 @@
-import {
-  Component,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, inject, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   AlertController,
   IonButton,
@@ -21,7 +16,7 @@ import {
   IonToolbar,
   NavController,
 } from '@ionic/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { barbellOutline, closeOutline } from 'ionicons/icons';
 import { SessionFinishingComponent } from './components/session-finishing/session-finishing.component';
@@ -31,9 +26,8 @@ import { SessionService } from './services/session.service';
 
 @Component({
   selector: 'app-session',
-  standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -52,11 +46,10 @@ import { SessionService } from './services/session.service';
     RouterLink,
   ],
   templateUrl: './session.page.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./session.page.scss'],
+  styleUrl: './session.page.scss',
 })
 export class SessionPage {
-  private readonly route = inject(ActivatedRoute);
+  public readonly id = input<string>();
   public readonly sessionService = inject(SessionService);
 
   constructor() {
@@ -69,7 +62,7 @@ export class SessionPage {
   private readonly translate = inject(TranslateService);
 
   async ionViewWillEnter() {
-    const workoutId = this.route.snapshot.paramMap.get('id');
+    const workoutId = this.id();
 
     if (workoutId) {
       this.isDashboard.set(false);

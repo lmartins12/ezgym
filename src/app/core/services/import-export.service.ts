@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import type { Exercise, MuscleGroup, Workout } from '../models/app-models';
+import type { MuscleGroup, Workout } from '../models/app-models';
 import {
   EXPORT_VERSION,
   ValidationWarningType,

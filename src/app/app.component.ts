@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DatabaseService } from '@core/services/database.service';
 import { LanguageService } from '@core/services/language.service';
 import { ThemeService } from '@core/services/theme.service';
@@ -11,7 +11,6 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular';
       <ion-router-outlet></ion-router-outlet>
     </ion-app>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {

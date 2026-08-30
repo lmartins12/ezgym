@@ -1,12 +1,5 @@
 import { DatePipe } from '@angular/common';
-import {
-  Component,
-  computed,
-  EventEmitter,
-  input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import {
   IonButton,
   IonDatetime,
@@ -17,7 +10,7 @@ import {
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { calendarOutline, closeCircle } from 'ionicons/icons';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 addIcons({
   calendarOutline,
@@ -26,7 +19,6 @@ addIcons({
 
 @Component({
   selector: 'app-dashboard-date-filter',
-  standalone: true,
   imports: [
     DatePipe,
     IonButton,
@@ -35,26 +27,21 @@ addIcons({
     IonIcon,
     IonLabel,
     IonModal,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './dashboard-date-filter.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./dashboard-date-filter.component.scss'],
+  styleUrl: './dashboard-date-filter.component.scss',
 })
 export class DashboardDateFilterComponent {
   public readonly startDate = input<Date | null>(null);
   public readonly endDate = input<Date | null>(null);
   public readonly isActive = input(false);
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
-
-  @Output()
-  public readonly filterChanged = new EventEmitter<{
+  public readonly filterChanged = output<{
     start: Date | null;
     end: Date | null;
   }>();
-
-  @Output()
-  public readonly clearFilter = new EventEmitter<void>();
+  public readonly clearFilter = output<void>();
 
   protected readonly localeValue = computed(() => this.locale());
   protected readonly startDateISO = computed(

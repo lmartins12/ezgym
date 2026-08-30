@@ -1,10 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonContent,
@@ -14,7 +8,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ExercisePRsComponent } from './components/exercise-prs/exercise-prs.component';
 import { FrequentWorkoutsComponent } from './components/frequent-workouts/frequent-workouts.component';
 import { MuscleDistributionComponent } from './components/muscle-distribution/muscle-distribution.component';
@@ -24,7 +18,6 @@ import { ProgressService } from './services/progress.service';
 
 @Component({
   selector: 'app-progress',
-  standalone: true,
   imports: [
     IonHeader,
     IonToolbar,
@@ -32,15 +25,14 @@ import { ProgressService } from './services/progress.service';
     IonContent,
     IonSpinner,
     IonIcon,
-    TranslateModule,
+    TranslatePipe,
     StatsCardsComponent,
     FrequentWorkoutsComponent,
     ExercisePRsComponent,
     MuscleDistributionComponent,
   ],
   templateUrl: './progress.page.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./progress.page.scss'],
+  styleUrl: './progress.page.scss',
 })
 export class ProgressPage {
   private readonly progressService = inject(ProgressService);

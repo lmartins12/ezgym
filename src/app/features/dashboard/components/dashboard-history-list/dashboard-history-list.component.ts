@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import {
   InfiniteScrollCustomEvent,
   IonIcon,
@@ -13,7 +7,7 @@ import {
   IonList,
   IonSpinner,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { calendarOutline } from 'ionicons/icons';
 import type { DashboardEvent } from '../../models/dashboard.models';
@@ -25,7 +19,6 @@ addIcons({
 
 @Component({
   selector: 'app-dashboard-history-list',
-  standalone: true,
   imports: [
     DashboardEventCardComponent,
     IonIcon,
@@ -33,23 +26,18 @@ addIcons({
     IonInfiniteScrollContent,
     IonList,
     IonSpinner,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './dashboard-history-list.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./dashboard-history-list.component.scss'],
+  styleUrl: './dashboard-history-list.component.scss',
 })
 export class DashboardHistoryListComponent {
   public readonly events = input.required<DashboardEvent[]>();
   public readonly loading = input(false);
   public readonly loadingMore = input(false);
   public readonly hasMore = input(true);
-
-  @Output()
-  public readonly loadMore = new EventEmitter<void>();
-
-  @Output()
-  public readonly eventClick = new EventEmitter<DashboardEvent>();
+  public readonly loadMore = output<void>();
+  public readonly eventClick = output<DashboardEvent>();
 
   protected onLoadMore(event: InfiniteScrollCustomEvent): void {
     this.loadMore.emit();

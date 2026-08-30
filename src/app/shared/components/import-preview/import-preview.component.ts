@@ -1,12 +1,7 @@
-import {
-  Component,
-  computed,
-  input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import type { ImportPreview } from '@core/models/import-export.models';
 import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   arrowForwardOutline,
@@ -16,11 +11,9 @@ import {
 
 @Component({
   selector: 'app-import-preview',
-  standalone: true,
-  imports: [IonCard, IonCardContent, IonIcon, TranslateModule],
+  imports: [IonCard, IonCardContent, IonIcon, TranslatePipe],
   templateUrl: './import-preview.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./import-preview.component.scss'],
+  styleUrl: './import-preview.component.scss',
 })
 export class ImportPreviewComponent {
   public readonly preview = input.required<ImportPreview>();

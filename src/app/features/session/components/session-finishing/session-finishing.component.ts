@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  EventEmitter,
-  input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { SetLog, Workout, WorkoutSession } from '@core/models/app-models';
 import {
@@ -16,14 +9,13 @@ import {
   IonCardTitle,
   IonTextarea,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-session-finishing',
-  standalone: true,
   imports: [
     FormsModule,
-    TranslateModule,
+    TranslatePipe,
     IonCard,
     IonCardHeader,
     IonCardTitle,
@@ -32,16 +24,15 @@ import { TranslateModule } from '@ngx-translate/core';
     IonButton,
   ],
   templateUrl: './session-finishing.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./session-finishing.component.scss'],
+  styleUrl: './session-finishing.component.scss',
 })
 export class SessionFinishingComponent {
   public readonly session = input.required<WorkoutSession>();
   public readonly workout = input.required<Workout>();
   public readonly setLogs = input.required<SetLog[]>();
 
-  @Output() saveSession = new EventEmitter<string>(); // emits notes
-  @Output() resumeSession = new EventEmitter<void>();
+  saveSession = output<string>(); // emits notes
+  resumeSession = output<void>();
 
   notes = '';
 

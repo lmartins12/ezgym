@@ -1,26 +1,18 @@
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import type {
   ValidationError,
   ValidationWarning,
 } from '@core/models/import-export.models';
 import { IonCard, IonIcon, IonItem, IonLabel, IonList } from '@ionic/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { alertCircle, warningOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-validation-list',
-  standalone: true,
-  imports: [IonCard, IonIcon, IonItem, IonLabel, IonList, TranslateModule],
+  imports: [IonCard, IonIcon, IonItem, IonLabel, IonList, TranslatePipe],
   templateUrl: './validation-list.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./validation-list.component.scss'],
+  styleUrl: './validation-list.component.scss',
 })
 export class ValidationListComponent {
   // 1. Injeções
@@ -44,7 +36,7 @@ export class ValidationListComponent {
 
   // 8. Públicos
   public getErrorMessage(error: ValidationError): string {
-    let key = `IMPORT_EXPORT.${error.message}`;
+    const key = `IMPORT_EXPORT.${error.message}`;
     const params: Record<string, string | number> = {};
 
     if (error.value !== undefined) {

@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import type {
   ValidationErrorType,
   ValidationResult,
@@ -23,7 +16,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AiPromptModalComponent } from '@shared/components/ai-prompt-modal/ai-prompt-modal.component';
 import { ImportPreviewComponent } from '@shared/components/import-preview/import-preview.component';
 import { ValidationListComponent } from '@shared/components/validation-list/validation-list.component';
@@ -42,7 +35,6 @@ export type ImportExportTab = 'export' | 'import';
 
 @Component({
   selector: 'app-import-export-modal',
-  standalone: true,
   imports: [
     IonButton,
     IonButtons,
@@ -52,13 +44,12 @@ export type ImportExportTab = 'export' | 'import';
     IonTextarea,
     IonTitle,
     IonToolbar,
-    TranslateModule,
+    TranslatePipe,
     ImportPreviewComponent,
     ValidationListComponent,
   ],
   templateUrl: './import-export-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./import-export-modal.component.scss'],
+  styleUrl: './import-export-modal.component.scss',
 })
 export class ImportExportModalComponent {
   private readonly modalCtrl = inject(ModalController);

@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   IonIcon,
   IonLabel,
@@ -6,7 +6,7 @@ import {
   IonTabButton,
   IonTabs,
 } from '@ionic/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   barbell,
@@ -18,16 +18,7 @@ import {
 
 @Component({
   selector: 'app-tabs',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonLabel,
-  ],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [TranslatePipe, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
   templateUrl: './tabs.page.html',
 })
 export class TabsPage {

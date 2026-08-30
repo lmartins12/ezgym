@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  EventEmitter,
-  input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { IonDatetime } from '@ionic/angular';
 import { toIsoDateString } from '@shared/utils/date.utils';
 
@@ -18,11 +11,9 @@ interface HighlightedDate {
 
 @Component({
   selector: 'app-dashboard-calendar',
-  standalone: true,
   imports: [IonDatetime],
   templateUrl: './dashboard-calendar.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./dashboard-calendar.component.scss'],
+  styleUrl: './dashboard-calendar.component.scss',
 })
 export class DashboardCalendarComponent {
   public readonly currentMonth = input.required<Date>();
@@ -30,12 +21,8 @@ export class DashboardCalendarComponent {
   public readonly selectedDate = input<Date | null>(null);
   public readonly today = input<Date>(new Date());
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
-
-  @Output()
-  public readonly dateSelected = new EventEmitter<Date>();
-
-  @Output()
-  public readonly monthChanged = new EventEmitter<Date>();
+  public readonly dateSelected = output<Date>();
+  public readonly monthChanged = output<Date>();
 
   protected readonly localeValue = computed(() => this.locale());
   protected readonly currentMonthISO = computed(() =>

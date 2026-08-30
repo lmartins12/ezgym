@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonCard,
@@ -13,7 +8,7 @@ import {
   IonList,
   IonListHeader,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, time } from 'ionicons/icons';
@@ -24,7 +19,6 @@ addIcons({ barbell, time });
 
 @Component({
   selector: 'app-frequent-workouts',
-  standalone: true,
   imports: [
     IonCard,
     IonCardContent,
@@ -32,14 +26,13 @@ addIcons({ barbell, time });
     IonLabel,
     IonList,
     IonListHeader,
-    TranslateModule,
+    TranslatePipe,
     MuscleIconComponent,
   ],
   templateUrl: './frequent-workouts.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./frequent-workouts.component.scss'],
+  styleUrl: './frequent-workouts.component.scss',
 })
-export class FrequentWorkoutsComponent {
+export class FrequentWorkoutsComponent implements OnInit {
   private readonly progressService = inject(ProgressService);
   private readonly languageService = inject(LanguageService);
 

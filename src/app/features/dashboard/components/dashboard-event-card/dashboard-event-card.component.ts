@@ -1,15 +1,8 @@
 import { DatePipe } from '@angular/common';
-import {
-  Component,
-  computed,
-  EventEmitter,
-  input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon, IonItem, IonLabel } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, moon, nutritionOutline } from 'ionicons/icons';
@@ -27,25 +20,21 @@ addIcons({
 
 @Component({
   selector: 'app-dashboard-event-card',
-  standalone: true,
   imports: [
     DatePipe,
     IonIcon,
     IonItem,
     IonLabel,
-    TranslateModule,
+    TranslatePipe,
     MuscleIconComponent,
   ],
   templateUrl: './dashboard-event-card.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./dashboard-event-card.component.scss'],
+  styleUrl: './dashboard-event-card.component.scss',
 })
 export class DashboardEventCardComponent {
   public readonly event = input.required<DashboardEvent>();
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
-
-  @Output()
-  public readonly cardClick = new EventEmitter<DashboardEvent>();
+  public readonly cardClick = output<DashboardEvent>();
 
   protected readonly localeValue = computed(() => this.locale());
 

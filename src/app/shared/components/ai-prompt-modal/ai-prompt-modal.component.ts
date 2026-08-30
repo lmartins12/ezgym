@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  model,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, Input, output } from '@angular/core';
 import { ImportExportService } from '@core/services/import-export.service';
 import {
   IonButton,
@@ -19,7 +11,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   clipboardOutline,
@@ -29,7 +21,6 @@ import {
 
 @Component({
   selector: 'app-ai-prompt-modal',
-  standalone: true,
   imports: [
     IonTitle,
     IonButton,
@@ -39,11 +30,10 @@ import {
     IonHeader,
     IonIcon,
     IonToolbar,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './ai-prompt-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./ai-prompt-modal.component.scss'],
+  styleUrl: './ai-prompt-modal.component.scss',
 })
 export class AiPromptModalComponent {
   private readonly modalCtrl = inject(ModalController);
@@ -51,9 +41,7 @@ export class AiPromptModalComponent {
 
   @Input() public introMessage = '';
   @Input() public promptText = '';
-
-  @Output()
-  public readonly closed = new EventEmitter<void>();
+  public readonly closed = output<void>();
 
   constructor() {
     addIcons({

@@ -1,9 +1,4 @@
-import {
-  Component,
-  computed,
-  input,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -28,11 +23,9 @@ const MUSCLE_ICON_MAP: Record<MuscleGroup, string> = {
 
 @Component({
   selector: 'app-muscle-icon',
-  standalone: true,
   imports: [IonIcon],
   templateUrl: './muscle-icon.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./muscle-icon.component.scss'],
+  styleUrl: './muscle-icon.component.scss',
 })
 export class MuscleIconComponent {
   public readonly muscleGroup = input<MuscleGroup | undefined>(undefined);

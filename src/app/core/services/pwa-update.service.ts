@@ -22,7 +22,7 @@ export class PwaUpdateService {
   }
 
   private async promptUpdate(): Promise<void> {
-    const isPt = this.translate.currentLang === 'pt';
+    const isPt = this.translate.currentLang() === 'pt';
     const message = isPt
       ? 'Uma nova versão do EzGym está disponível!'
       : 'A new version of EzGym is available!';

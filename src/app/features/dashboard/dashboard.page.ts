@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  signal,
-  ViewChild,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, inject, signal, ViewChild } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonContent,
@@ -14,7 +7,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import {
   dateToUnixEndOfDay,
   dateToUnixStartOfDay,
@@ -35,7 +28,6 @@ const PAGE_SIZE = 20;
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
   imports: [
     DashboardBackToTopComponent,
     DashboardCalendarComponent,
@@ -45,11 +37,10 @@ const PAGE_SIZE = 20;
     IonToolbar,
     IonTitle,
     IonContent,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './dashboard.page.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./dashboard.page.scss'],
+  styleUrl: './dashboard.page.scss',
 })
 export class DashboardPage {
   private readonly dashboardService = inject(DashboardService);

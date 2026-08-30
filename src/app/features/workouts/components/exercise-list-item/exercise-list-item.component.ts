@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import type { WorkoutExercise } from '@core/models/app-models';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import {
@@ -21,7 +15,6 @@ import { createOutline, trashOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-exercise-list-item',
-  standalone: true,
   imports: [
     IonItem,
     IonItemOption,
@@ -33,17 +26,12 @@ import { createOutline, trashOutline } from 'ionicons/icons';
     MuscleIconComponent,
   ],
   templateUrl: './exercise-list-item.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./exercise-list-item.component.scss'],
+  styleUrl: './exercise-list-item.component.scss',
 })
 export class ExerciseListItemComponent {
   public readonly exercise = input.required<WorkoutExercise>();
-
-  @Output()
-  public readonly editExercise = new EventEmitter<WorkoutExercise>();
-
-  @Output()
-  public readonly deleteExercise = new EventEmitter<string>();
+  public readonly editExercise = output<WorkoutExercise>();
+  public readonly deleteExercise = output<string>();
 
   constructor() {
     addIcons({

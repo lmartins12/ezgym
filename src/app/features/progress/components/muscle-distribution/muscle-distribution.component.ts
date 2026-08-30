@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import {
   IonCard,
   IonCardContent,
@@ -11,26 +6,24 @@ import {
   IonList,
   IonListHeader,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import type { MuscleDistribution } from '../../models/progress.models';
 import { ProgressService } from '../../services/progress.service';
 
 @Component({
   selector: 'app-muscle-distribution',
-  standalone: true,
   imports: [
     IonCard,
     IonCardContent,
     IonLabel,
     IonList,
     IonListHeader,
-    TranslateModule,
+    TranslatePipe,
   ],
   templateUrl: './muscle-distribution.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./muscle-distribution.component.scss'],
+  styleUrl: './muscle-distribution.component.scss',
 })
-export class MuscleDistributionComponent {
+export class MuscleDistributionComponent implements OnInit {
   private readonly progressService = inject(ProgressService);
 
   protected readonly loading = signal(false);

@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import { PwaInstallService } from '@core/services/pwa-install.service';
 import { ThemeService } from '@core/services/theme.service';
@@ -16,7 +16,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   caretDownSharp,
@@ -28,9 +28,8 @@ import { ImportExportModalComponent } from './components/import-export-modal/imp
 
 @Component({
   selector: 'app-settings',
-  standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -44,8 +43,7 @@ import { ImportExportModalComponent } from './components/import-export-modal/imp
     IonIcon,
   ],
   templateUrl: './settings.page.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./settings.page.scss'],
+  styleUrl: './settings.page.scss',
 })
 export class SettingsPage {
   private readonly languageService = inject(LanguageService);

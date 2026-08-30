@@ -2,12 +2,10 @@ import {
   Component,
   computed,
   effect,
-  EventEmitter,
   inject,
   input,
-  Output,
+  output,
   signal,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type {
@@ -31,7 +29,7 @@ import {
   IonRange,
   IonRow,
 } from '@ionic/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import {
@@ -43,10 +41,9 @@ import {
 
 @Component({
   selector: 'app-session-in-progress',
-  standalone: true,
   imports: [
     FormsModule,
-    TranslateModule,
+    TranslatePipe,
     IonCard,
     IonCardContent,
     IonList,
@@ -63,15 +60,14 @@ import {
     MuscleIconComponent,
   ],
   templateUrl: './session-in-progress.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./session-in-progress.component.scss'],
+  styleUrl: './session-in-progress.component.scss',
 })
 export class SessionInProgressComponent {
   public readonly exercises = input.required<WorkoutExercise[]>();
   public readonly setLogs = input.required<SetLog[]>();
   public readonly session = input.required<WorkoutSession>();
 
-  @Output() logSet = new EventEmitter<{
+  logSet = output<{
     exerciseId: string;
     setNumber: number;
     reps: number;
@@ -79,9 +75,9 @@ export class SessionInProgressComponent {
     rpe?: number;
   }>();
 
-  @Output() deleteSet = new EventEmitter<string>();
-  @Output() finishSession = new EventEmitter<void>();
-  @Output() updateSet = new EventEmitter<SetLog>();
+  deleteSet = output<string>();
+  finishSession = output<void>();
+  updateSet = output<SetLog>();
 
   // Injections
   private readonly alertCtrl = inject(AlertController);

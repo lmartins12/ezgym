@@ -1,15 +1,5 @@
-import {
-  Component,
-  inject,
-  signal,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import type {
-  MuscleGroup,
-  Workout,
-  WorkoutExercise,
-} from '@core/models/app-models';
+import { Component, inject, input, signal } from '@angular/core';
+import type { Workout, WorkoutExercise } from '@core/models/app-models';
 import {
   AlertController,
   IonButton,
@@ -29,7 +19,7 @@ import {
   ModalController,
   NavController,
 } from '@ionic/angular';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   arrowBackOutline,
@@ -48,9 +38,8 @@ import { WorkoutsService } from '../services/workouts.service';
 
 @Component({
   selector: 'app-workout-detail',
-  standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -68,19 +57,17 @@ import { WorkoutsService } from '../services/workouts.service';
     IonIcon,
   ],
   templateUrl: './workout-detail.page.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./workout-detail.page.scss'],
+  styleUrl: './workout-detail.page.scss',
 })
 export class WorkoutDetailPage {
+  public readonly id = input.required<string>();
   private readonly translate = inject(TranslateService);
-  private readonly route = inject(ActivatedRoute);
   private readonly navCtrl = inject(NavController);
   private readonly workoutsService = inject(WorkoutsService);
   private readonly exercisesService = inject(WorkoutExercisesService);
   private readonly modalCtrl = inject(ModalController);
   private readonly alertCtrl = inject(AlertController);
 
-  public readonly workoutId = signal<string>('');
   public readonly workout = signal<Workout | null>(null);
   public readonly exercises = signal<WorkoutExercise[]>([]);
   public readonly loading = signal(false);
@@ -96,13 +83,12 @@ export class WorkoutDetailPage {
   }
 
   public async ionViewWillEnter(): Promise<void> {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.id();
     if (!id) {
       this.navigateWorkouts();
       return;
     }
 
-    this.workoutId.set(id);
     await Promise.all([this.loadWorkout(), this.loadExercises()]);
   }
 
@@ -111,7 +97,7 @@ export class WorkoutDetailPage {
   }
 
   private async loadWorkout(): Promise<void> {
-    const id = this.workoutId();
+    const id = this.id();
     if (!id) return;
 
     const data = await this.workoutsService.getById(id);
@@ -124,7 +110,7 @@ export class WorkoutDetailPage {
   }
 
   private async loadExercises(): Promise<void> {
-    const id = this.workoutId();
+    const id = this.id();
     if (!id) return;
 
     this.loading.set(true);
@@ -171,7 +157,7 @@ export class WorkoutDetailPage {
 
     if (data) {
       await this.exercisesService.addExercise({
-        workoutId: this.workoutId(),
+        workoutId: this.id(),
         name: data.name,
         muscleGroup: data.muscleGroup,
         equipment: data.equipment,
@@ -232,7 +218,7 @@ export class WorkoutDetailPage {
     const exerciseIds = event.detail.complete(
       this.exercises().map((e) => e.id),
     );
-    await this.exercisesService.reorderExercises(this.workoutId(), exerciseIds);
+    await this.exercisesService.reorderExercises(this.id(), exerciseIds);
     await this.loadExercises();
   }
 }

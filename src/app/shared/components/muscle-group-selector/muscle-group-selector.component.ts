@@ -1,20 +1,13 @@
-import {
-  Component,
-  inject,
-  model,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 import { MUSCLE_GROUPS, type MuscleGroup } from '@core/models/app-models';
 import { TranslateService } from '@ngx-translate/core';
 import { MuscleIconComponent } from '../muscle-icon/muscle-icon.component';
 
 @Component({
   selector: 'app-muscle-group-selector',
-  standalone: true,
   imports: [MuscleIconComponent],
   templateUrl: './muscle-group-selector.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./muscle-group-selector.component.scss'],
+  styleUrl: './muscle-group-selector.component.scss',
 })
 export class MuscleGroupSelectorComponent {
   public readonly muscleGroup = model<MuscleGroup | undefined>(undefined);

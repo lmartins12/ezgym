@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  Input,
-  model,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, computed, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, Workout } from '@core/models/app-models';
 import {
@@ -21,7 +14,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleGroupSelectorComponent } from '@shared/components/muscle-group-selector/muscle-group-selector.component';
 
 export interface WorkoutFormResult {
@@ -32,7 +25,6 @@ export interface WorkoutFormResult {
 
 @Component({
   selector: 'app-workout-form-modal',
-  standalone: true,
   imports: [
     FormsModule,
     IonHeader,
@@ -45,12 +37,11 @@ export interface WorkoutFormResult {
     IonInput,
     IonTextarea,
     IonFooter,
-    TranslateModule,
+    TranslatePipe,
     MuscleGroupSelectorComponent,
   ],
   templateUrl: './workout-form-modal.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./workout-form-modal.component.scss'],
+  styleUrl: './workout-form-modal.component.scss',
 })
 export class WorkoutFormModalComponent {
   @Input() public workout?: Workout;

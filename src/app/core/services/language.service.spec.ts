@@ -58,7 +58,7 @@ describe('LanguageService', () => {
 
     service.setLanguage('en');
 
-    expect(translate.currentLang).toBe('en');
+    expect(translate.currentLang()).toBe('en');
   });
 
   it('toggles between pt and en', () => {

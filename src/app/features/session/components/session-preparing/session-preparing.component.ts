@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  input,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import type { Workout, WorkoutExercise } from '@core/models/app-models';
 import {
   IonButton,
@@ -19,16 +13,15 @@ import {
   IonList,
   IonNote,
 } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { timeOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-session-preparing',
-  standalone: true,
   imports: [
-    TranslateModule,
+    TranslatePipe,
     IonCard,
     IonCardHeader,
     IonCardTitle,
@@ -43,14 +36,13 @@ import { timeOutline } from 'ionicons/icons';
     MuscleIconComponent,
   ],
   templateUrl: './session-preparing.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrls: ['./session-preparing.component.scss'],
+  styleUrl: './session-preparing.component.scss',
 })
 export class SessionPreparingComponent {
   public readonly workout = input.required<Workout>();
   public readonly exercises = input.required<WorkoutExercise[]>();
-  @Output() startSession = new EventEmitter<void>();
-  @Output() cancelSession = new EventEmitter<void>();
+  startSession = output<void>();
+  cancelSession = output<void>();
 
   constructor() {
     addIcons({ timeOutline });
