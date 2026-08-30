@@ -1,4 +1,10 @@
-import { Component, EventEmitter, input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { IonFab, IonFabButton, IonIcon } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { arrowUp } from 'ionicons/icons';
@@ -12,6 +18,7 @@ addIcons({
   standalone: true,
   imports: [IonFab, IonFabButton, IonIcon],
   templateUrl: './dashboard-back-to-top.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dashboard-back-to-top.component.scss'],
 })
 export class DashboardBackToTopComponent {

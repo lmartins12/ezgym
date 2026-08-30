@@ -1,4 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonContent,
@@ -33,6 +39,7 @@ import { ProgressService } from './services/progress.service';
     MuscleDistributionComponent,
   ],
   templateUrl: './progress.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./progress.page.scss'],
 })
 export class ProgressPage {

@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   AlertController,
@@ -47,6 +52,7 @@ import { SessionService } from './services/session.service';
     RouterLink,
   ],
   templateUrl: './session.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./session.page.scss'],
 })
 export class SessionPage {

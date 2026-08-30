@@ -5,6 +5,7 @@ import {
   EventEmitter,
   input,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   IonButton,
@@ -37,6 +38,7 @@ addIcons({
     TranslateModule,
   ],
   templateUrl: './dashboard-date-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dashboard-date-filter.component.scss'],
 })
 export class DashboardDateFilterComponent {

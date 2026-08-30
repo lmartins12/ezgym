@@ -5,6 +5,7 @@ import {
   EventEmitter,
   input,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon, IonItem, IonLabel } from '@ionic/angular';
@@ -36,6 +37,7 @@ addIcons({
     MuscleIconComponent,
   ],
   templateUrl: './dashboard-event-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dashboard-event-card.component.scss'],
 })
 export class DashboardEventCardComponent {

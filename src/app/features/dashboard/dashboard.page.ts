@@ -1,4 +1,11 @@
-import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonContent,
@@ -41,6 +48,7 @@ const PAGE_SIZE = 20;
     TranslateModule,
   ],
   templateUrl: './dashboard.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage {

@@ -1,4 +1,10 @@
-import { Component, inject, Input, model } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  model,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, WorkoutExercise } from '@core/models/app-models';
 import {
@@ -49,6 +55,7 @@ export interface ExerciseData {
     MuscleGroupSelectorComponent,
   ],
   templateUrl: './exercise-editor-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./exercise-editor-modal.component.scss'],
 })
 export class ExerciseEditorModalComponent {

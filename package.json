@@ -12,15 +12,15 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^21.2.22",
-    "@angular/common": "^21.2.22",
-    "@angular/compiler": "^21.2.22",
-    "@angular/core": "^21.2.22",
-    "@angular/forms": "^21.2.22",
-    "@angular/platform-browser": "^21.2.22",
-    "@angular/platform-browser-dynamic": "^21.2.22",
-    "@angular/router": "^21.2.22",
-    "@angular/service-worker": "^21.2.22",
+    "@angular/animations": "^22.1.4",
+    "@angular/common": "^22.1.4",
+    "@angular/compiler": "^22.1.4",
+    "@angular/core": "^22.1.4",
+    "@angular/forms": "^22.1.4",
+    "@angular/platform-browser": "^22.1.4",
+    "@angular/platform-browser-dynamic": "^22.1.4",
+    "@angular/router": "^22.1.4",
+    "@angular/service-worker": "^22.1.4",
     "@ionic/angular": "^9.0.0",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
@@ -29,8 +29,7 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "uuid": "^13.0.0",
-    "zod": "^4.3.6",
-    "zone.js": "~0.15.0"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@angular-eslint/builder": "^20.0.0",
@@ -38,10 +37,10 @@
     "@angular-eslint/eslint-plugin-template": "^20.0.0",
     "@angular-eslint/schematics": "^20.0.0",
     "@angular-eslint/template-parser": "^20.0.0",
-    "@angular/build": "^21.2.22",
-    "@angular/cli": "^21.2.22",
-    "@angular/compiler-cli": "^21.2.22",
-    "@angular/language-service": "^21.2.22",
+    "@angular/build": "^22.1.6",
+    "@angular/cli": "^22.1.6",
+    "@angular/compiler-cli": "^22.1.4",
+    "@angular/language-service": "^22.1.4",
     "@ionic/angular-toolkit": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
@@ -51,7 +50,7 @@
     "eslint-plugin-prefer-arrow": "1.2.2",
     "jsdom": "^30.0.1",
     "prettier": "^3.8.0",
-    "typescript": "~5.9.0",
+    "typescript": "~6.0.3",
     "vitest": "^4.1.11"
   }
 }

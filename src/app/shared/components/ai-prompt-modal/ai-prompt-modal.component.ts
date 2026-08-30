@@ -5,6 +5,7 @@ import {
   Input,
   Output,
   model,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ImportExportService } from '@core/services/import-export.service';
 import {
@@ -41,6 +42,7 @@ import {
     TranslateModule,
   ],
   templateUrl: './ai-prompt-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./ai-prompt-modal.component.scss'],
 })
 export class AiPromptModalComponent {

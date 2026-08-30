@@ -1,4 +1,9 @@
-import { Component, computed, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import type { ImportPreview } from '@core/models/import-export.models';
 import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,6 +19,7 @@ import {
   standalone: true,
   imports: [IonCard, IonCardContent, IonIcon, TranslateModule],
   templateUrl: './import-preview.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./import-preview.component.scss'],
 })
 export class ImportPreviewComponent {

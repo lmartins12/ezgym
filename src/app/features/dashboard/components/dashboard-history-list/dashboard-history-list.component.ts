@@ -1,4 +1,10 @@
-import { Component, EventEmitter, input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   InfiniteScrollCustomEvent,
   IonIcon,
@@ -30,6 +36,7 @@ addIcons({
     TranslateModule,
   ],
   templateUrl: './dashboard-history-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dashboard-history-list.component.scss'],
 })
 export class DashboardHistoryListComponent {

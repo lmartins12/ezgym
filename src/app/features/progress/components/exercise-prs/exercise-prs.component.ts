@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonCard,
@@ -31,6 +36,7 @@ addIcons({ barbell, calendar, trophy });
     MuscleIconComponent,
   ],
   templateUrl: './exercise-prs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./exercise-prs.component.scss'],
 })
 export class ExercisePRsComponent {

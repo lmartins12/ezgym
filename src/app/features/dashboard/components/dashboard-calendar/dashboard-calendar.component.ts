@@ -4,6 +4,7 @@ import {
   EventEmitter,
   input,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { IonDatetime } from '@ionic/angular';
 import { toIsoDateString } from '@shared/utils/date.utils';
@@ -20,6 +21,7 @@ interface HighlightedDate {
   standalone: true,
   imports: [IonDatetime],
   templateUrl: './dashboard-calendar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./dashboard-calendar.component.scss'],
 })
 export class DashboardCalendarComponent {

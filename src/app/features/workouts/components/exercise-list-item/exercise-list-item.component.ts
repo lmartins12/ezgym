@@ -1,4 +1,10 @@
-import { Component, EventEmitter, input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import type { WorkoutExercise } from '@core/models/app-models';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import {
@@ -27,6 +33,7 @@ import { createOutline, trashOutline } from 'ionicons/icons';
     MuscleIconComponent,
   ],
   templateUrl: './exercise-list-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./exercise-list-item.component.scss'],
 })
 export class ExerciseListItemComponent {

@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   IonCard,
   IonCardContent,
@@ -22,6 +27,7 @@ import { ProgressService } from '../../services/progress.service';
     TranslateModule,
   ],
   templateUrl: './muscle-distribution.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./muscle-distribution.component.scss'],
 })
 export class MuscleDistributionComponent {

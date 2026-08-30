@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import { PwaInstallService } from '@core/services/pwa-install.service';
 import { ThemeService } from '@core/services/theme.service';
@@ -44,6 +44,7 @@ import { ImportExportModalComponent } from './components/import-export-modal/imp
     IonIcon,
   ],
   templateUrl: './settings.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage {

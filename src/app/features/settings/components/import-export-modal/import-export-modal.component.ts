@@ -1,4 +1,11 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import type {
   ValidationErrorType,
   ValidationResult,
@@ -50,6 +57,7 @@ export type ImportExportTab = 'export' | 'import';
     ValidationListComponent,
   ],
   templateUrl: './import-export-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./import-export-modal.component.scss'],
 })
 export class ImportExportModalComponent {

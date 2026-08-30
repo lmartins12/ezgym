@@ -6,6 +6,7 @@ import {
   inject,
   input,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { LanguageService } from '@core/services/language.service';
@@ -40,6 +41,7 @@ import type { WorkoutDetail } from '../../models/workout-detail.model';
     MuscleIconComponent,
   ],
   templateUrl: './workout-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./workout-card.component.scss'],
 })
 export class WorkoutCardComponent {

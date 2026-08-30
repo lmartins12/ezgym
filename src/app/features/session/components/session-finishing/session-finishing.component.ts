@@ -4,6 +4,7 @@ import {
   EventEmitter,
   input,
   Output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { SetLog, Workout, WorkoutSession } from '@core/models/app-models';
@@ -31,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
     IonButton,
   ],
   templateUrl: './session-finishing.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./session-finishing.component.scss'],
 })
 export class SessionFinishingComponent {

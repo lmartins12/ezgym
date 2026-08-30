@@ -7,6 +7,7 @@ import {
   input,
   Output,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type {
@@ -62,6 +63,7 @@ import {
     MuscleIconComponent,
   ],
   templateUrl: './session-in-progress.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./session-in-progress.component.scss'],
 })
 export class SessionInProgressComponent {

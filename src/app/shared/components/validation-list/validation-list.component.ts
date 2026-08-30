@@ -1,4 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import type {
   ValidationError,
   ValidationWarning,
@@ -13,6 +19,7 @@ import { alertCircle, warningOutline } from 'ionicons/icons';
   standalone: true,
   imports: [IonCard, IonIcon, IonItem, IonLabel, IonList, TranslateModule],
   templateUrl: './validation-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./validation-list.component.scss'],
 })
 export class ValidationListComponent {

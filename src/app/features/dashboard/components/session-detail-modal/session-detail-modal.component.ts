@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -50,6 +57,7 @@ addIcons({ close, fitness, barbell });
     MuscleIconComponent,
   ],
   templateUrl: './session-detail-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./session-detail-modal.component.scss'],
 })
 export class SessionDetailModalComponent implements OnInit {

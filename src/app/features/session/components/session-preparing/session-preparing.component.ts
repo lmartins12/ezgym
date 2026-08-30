@@ -1,4 +1,10 @@
-import { Component, EventEmitter, input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import type { Workout, WorkoutExercise } from '@core/models/app-models';
 import {
   IonButton,
@@ -37,6 +43,7 @@ import { timeOutline } from 'ionicons/icons';
     MuscleIconComponent,
   ],
   templateUrl: './session-preparing.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./session-preparing.component.scss'],
 })
 export class SessionPreparingComponent {

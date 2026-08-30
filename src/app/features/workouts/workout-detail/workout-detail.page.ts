@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import type {
   MuscleGroup,
@@ -63,6 +68,7 @@ import { WorkoutsService } from '../services/workouts.service';
     IonIcon,
   ],
   templateUrl: './workout-detail.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./workout-detail.page.scss'],
 })
 export class WorkoutDetailPage {

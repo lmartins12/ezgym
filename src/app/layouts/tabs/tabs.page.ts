@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   IonIcon,
   IonLabel,
@@ -27,6 +27,7 @@ import {
     IonIcon,
     IonLabel,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './tabs.page.html',
 })
 export class TabsPage {

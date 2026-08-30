@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -52,6 +57,7 @@ import { WorkoutsService } from '../services/workouts.service';
     WorkoutCardComponent,
   ],
   templateUrl: './workouts-list.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./workouts-list.page.scss'],
 })
 export class WorkoutsListPage {

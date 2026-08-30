@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  input,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
@@ -19,6 +24,7 @@ addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
   standalone: true,
   imports: [CommonModule, IonCard, IonCardContent, IonIcon, TranslateModule],
   templateUrl: './stats-cards.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./stats-cards.component.scss'],
 })
 export class StatsCardsComponent {
