@@ -10,7 +10,11 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { SetLog, WorkoutExercise, WorkoutSession } from '@core';
+import type {
+  SetLog,
+  WorkoutExercise,
+  WorkoutSession,
+} from '@core/models/app-models';
 import {
   AlertController,
   IonButton,
@@ -28,7 +32,7 @@ import {
   IonRow,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MuscleIconComponent } from '@shared';
+import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import {
   checkmarkCircle,

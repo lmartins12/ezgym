@@ -1,6 +1,5 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Preferences } from '@capacitor/preferences';
 
 export type Language = 'pt' | 'en';
 
@@ -24,20 +23,19 @@ export class LanguageService {
     this.initLanguage();
   }
 
-  private async initLanguage(): Promise<void> {
-    const { value } = await Preferences.get({ key: LANGUAGE_KEY });
-    const lang = (value as Language) || 'pt';
-    this.setLanguage(lang);
+  private initLanguage(): void {
+    const savedLang = (localStorage.getItem(LANGUAGE_KEY) as Language) || 'pt';
+    this.setLanguage(savedLang);
   }
 
-  public async setLanguage(lang: Language): Promise<void> {
+  public setLanguage(lang: Language): void {
     this.currentLang.set(lang);
     this.translate.use(lang);
-    await Preferences.set({ key: LANGUAGE_KEY, value: lang });
+    localStorage.setItem(LANGUAGE_KEY, lang);
   }
 
-  public async toggleLanguage(): Promise<void> {
+  public toggleLanguage(): void {
     const newLang: Language = this.currentLang() === 'pt' ? 'en' : 'pt';
-    await this.setLanguage(newLang);
+    this.setLanguage(newLang);
   }
 }

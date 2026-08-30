@@ -10,7 +10,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { calendarOutline } from 'ionicons/icons';
-import type { DashboardEvent } from '../../models';
+import type { DashboardEvent } from '../../models/dashboard.models';
 import { DashboardEventCardComponent } from '../dashboard-event-card/dashboard-event-card.component';
 
 addIcons({

@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
-import { LanguageService } from '@core';
+import { LanguageService } from '@core/services/language.service';
 import {
   IonContent,
   IonHeader,
@@ -8,16 +8,18 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import { dateToUnixEndOfDay, dateToUnixStartOfDay, isSameDay } from '@shared';
 import {
-  DashboardBackToTopComponent,
-  DashboardCalendarComponent,
-  DashboardDateFilterComponent,
-  DashboardHistoryListComponent,
-  SessionDetailModalComponent,
-} from './components';
-import type { DashboardEvent, PaginationState } from './models';
-import { DashboardService } from './services';
+  dateToUnixEndOfDay,
+  dateToUnixStartOfDay,
+  isSameDay,
+} from '@shared/utils/date.utils';
+import { DashboardBackToTopComponent } from './components/dashboard-back-to-top/dashboard-back-to-top.component';
+import { DashboardCalendarComponent } from './components/dashboard-calendar/dashboard-calendar.component';
+import { DashboardDateFilterComponent } from './components/dashboard-date-filter/dashboard-date-filter.component';
+import { DashboardHistoryListComponent } from './components/dashboard-history-list/dashboard-history-list.component';
+import { SessionDetailModalComponent } from './components/session-detail-modal/session-detail-modal.component';
+import type { DashboardEvent, PaginationState } from './models/dashboard.models';
+import { DashboardService } from './services/dashboard.service';
 
 const PAGE_SIZE = 20;
 

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { MuscleGroup, Workout } from '@core';
+import type { MuscleGroup, Workout } from '@core/models/app-models';
 import {
   IonButton,
   IonButtons,
@@ -16,7 +16,7 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import { MuscleGroupSelectorComponent } from '@shared';
+import { MuscleGroupSelectorComponent } from '@shared/components/muscle-group-selector/muscle-group-selector.component';
 
 export interface WorkoutFormResult {
   name: string;

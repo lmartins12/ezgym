@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { SetLog, Workout, WorkoutSession } from '@core';
+import type { SetLog, Workout, WorkoutSession } from '@core/models/app-models';
 import {
   IonButton,
   IonCard,

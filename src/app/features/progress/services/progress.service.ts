@@ -1,67 +1,66 @@
-import { Injectable } from '@angular/core';
-import { DatabaseService } from '@core';
-import type { ExercisePR, FrequentWorkout, MuscleDistribution, WorkoutStats } from '../models';
+import { inject, Injectable } from '@angular/core';
+import { DatabaseService } from '@core/services/database.service';
+import type {
+  ExercisePR,
+  FrequentWorkout,
+  MuscleDistribution,
+  WorkoutStats,
+} from '../models/progress.models';
 
 @Injectable({ providedIn: 'root' })
 export class ProgressService {
-  constructor(private readonly db: DatabaseService) {}
+  private readonly dbService = inject(DatabaseService);
 
   async getWorkoutStats(): Promise<WorkoutStats> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    // Total workouts (completed)
-    const totalWorkoutsResult = await this.db.query<{ count: number }>(
-      `SELECT COUNT(*) as count FROM workout_sessions WHERE finished_at IS NOT NULL`,
-    );
-    const totalWorkouts = totalWorkoutsResult[0]?.count ?? 0;
+    const completedSessions = await db.workout_sessions
+      .filter((s) => s.finished_at != null)
+      .toArray();
 
-    // Total volume (sum of weight × reps for all completed sessions)
-    const totalVolumeResult = await this.db.query<{ volume: number }>(
-      `SELECT SUM(sl.weight * sl.reps) as volume
-       FROM set_logs sl
-       JOIN workout_sessions ws ON sl.session_id = ws.id
-       WHERE ws.finished_at IS NOT NULL AND sl.weight IS NOT NULL`,
-    );
-    const totalVolume = totalVolumeResult[0]?.volume ?? 0;
+    const totalWorkouts = completedSessions.length;
+
+    if (totalWorkouts === 0) {
+      return {
+        totalWorkouts: 0,
+        totalVolume: 0,
+        averageWeeklyFrequency: 0,
+        currentStreak: 0,
+        lastWorkoutDate: null,
+      };
+    }
+
+    const sessionIds = completedSessions.map((s) => s.id);
+    const setLogs = await db.set_logs
+      .where('session_id')
+      .anyOf(sessionIds)
+      .toArray();
+
+    // Total volume (sum of weight * reps)
+    const totalVolume = setLogs.reduce((sum, log) => {
+      if (log.weight != null && log.reps != null) {
+        return sum + log.weight * log.reps;
+      }
+      return sum;
+    }, 0);
 
     // Average weekly frequency
-    const frequencyResult = await this.db.query<{
-      weeks: number;
-      sessions: number;
-    }>(
-      `SELECT
-        CAST((julianday('now') - julianday(min_started_at)) / 7 AS INTEGER) as weeks,
-        COUNT(*) as sessions
-       FROM (
-         SELECT MIN(started_at) as min_started_at
-         FROM workout_sessions
-         WHERE finished_at IS NOT NULL
-       )`,
-    );
-    const weeks = frequencyResult[0]?.weeks ?? 1;
-    const sessions = frequencyResult[0]?.sessions ?? totalWorkouts;
-    const averageWeeklyFrequency =
-      weeks > 0 ? Math.round((sessions / weeks) * 10) / 10 : 0;
+    const minStartedAt = Math.min(...completedSessions.map((s) => s.started_at));
+    const now = Date.now();
+    const totalDays = Math.max(1, (now - minStartedAt) / (1000 * 60 * 60 * 24));
+    const weeks = Math.max(1, totalDays / 7);
+    const averageWeeklyFrequency = Math.round((totalWorkouts / weeks) * 10) / 10;
 
-    // Current streak (consecutive days with at least one workout)
-    const streakResult = await this.db.query<{ streak_date: number }>(
-      `SELECT DISTINCT started_at as streak_date
-       FROM workout_sessions
-       WHERE finished_at IS NOT NULL
-       ORDER BY started_at DESC`,
-    );
+    // Current streak (consecutive days)
+    const dates = completedSessions
+      .map((s) => s.started_at)
+      .sort((a, b) => b - a);
 
-    const currentStreak = this.calculateStreak(
-      streakResult.map((r) => r.streak_date),
-    );
+    const currentStreak = this.calculateStreak(dates);
 
     // Last workout date
-    const lastWorkoutResult = await this.db.query<{ last_date: number }>(
-      `SELECT MAX(started_at) as last_date
-       FROM workout_sessions
-       WHERE finished_at IS NOT NULL`,
-    );
-    const lastWorkoutDate = lastWorkoutResult[0]?.last_date ?? null;
+    const lastWorkoutDate = Math.max(...completedSessions.map((s) => s.started_at));
 
     return {
       totalWorkouts,
@@ -73,153 +72,194 @@ export class ProgressService {
   }
 
   async getFrequentWorkouts(limit: number = 5): Promise<FrequentWorkout[]> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    const result = await this.db.query<{
-      id: string;
-      name: string;
-      muscle_group: string | null;
-      count: number;
-      last_workout: number;
-    }>(
-      `SELECT
-        w.id,
-        w.name,
-        w.muscle_group,
-        COUNT(ws.id) as count,
-        MAX(ws.started_at) as last_workout
-       FROM workout_sessions ws
-       JOIN workouts w ON ws.workout_id = w.id
-       WHERE ws.finished_at IS NOT NULL
-       GROUP BY w.id
-       ORDER BY count DESC
-       LIMIT ?`,
-      [limit],
-    );
+    const completedSessions = await db.workout_sessions
+      .filter((s) => s.finished_at != null)
+      .toArray();
 
-    return result.map((row) => ({
-      id: row.id,
-      name: row.name,
-      muscleGroup: row.muscle_group as any,
-      count: row.count,
-      lastWorkout: row.last_workout,
-    }));
+    if (completedSessions.length === 0) return [];
+
+    // Group sessions by workout_id
+    const workoutStatsMap = new Map<
+      string,
+      { count: number; lastWorkout: number }
+    >();
+
+    for (const session of completedSessions) {
+      const existing = workoutStatsMap.get(session.workout_id) ?? {
+        count: 0,
+        lastWorkout: 0,
+      };
+      existing.count++;
+      if (session.started_at > existing.lastWorkout) {
+        existing.lastWorkout = session.started_at;
+      }
+      workoutStatsMap.set(session.workout_id, existing);
+    }
+
+    const workoutIds = Array.from(workoutStatsMap.keys());
+    const workouts = await db.workouts.where('id').anyOf(workoutIds).toArray();
+    const workoutMap = new Map(workouts.map((w) => [w.id, w]));
+
+    const result: FrequentWorkout[] = [];
+    for (const [workoutId, stats] of workoutStatsMap.entries()) {
+      const workout = workoutMap.get(workoutId);
+      if (!workout) continue;
+      result.push({
+        id: workout.id,
+        name: workout.name,
+        muscleGroup: workout.muscle_group as any,
+        count: stats.count,
+        lastWorkout: stats.lastWorkout,
+      });
+    }
+
+    return result
+      .sort((a, b) => b.count - a.count)
+      .slice(0, limit);
   }
 
   async getExercisePRs(): Promise<ExercisePR[]> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    const result = await this.db.query<{
-      exercise_id: string;
-      exercise_name: string;
-      muscle_group: string | null;
-      equipment: string | null;
-      pr_weight: number;
-      pr_date: number;
-    }>(
-      `SELECT
-        e.id as exercise_id,
-        e.name as exercise_name,
-        e.muscle_group,
-        e.equipment,
-        MAX(sl.weight) as pr_weight,
-        MAX(ws.started_at) as pr_date
-       FROM set_logs sl
-       JOIN exercises e ON sl.exercise_id = e.id
-       JOIN workout_sessions ws ON sl.session_id = ws.id
-       WHERE ws.finished_at IS NOT NULL AND sl.weight IS NOT NULL
-       GROUP BY e.id
-       ORDER BY pr_weight DESC`,
-    );
+    const completedSessions = await db.workout_sessions
+      .filter((s) => s.finished_at != null)
+      .toArray();
 
-    return result.map((row) => ({
-      exerciseId: row.exercise_id,
-      exerciseName: row.exercise_name,
-      muscleGroup: row.muscle_group as any,
-      equipment: row.equipment,
-      prWeight: row.pr_weight,
-      prDate: row.pr_date,
-    }));
+    if (completedSessions.length === 0) return [];
+
+    const sessionMap = new Map(completedSessions.map((s) => [s.id, s]));
+    const sessionIds = Array.from(sessionMap.keys());
+
+    const setLogs = await db.set_logs
+      .where('session_id')
+      .anyOf(sessionIds)
+      .toArray();
+
+    // Map highest PR per exercise
+    const prMap = new Map<string, { prWeight: number; prDate: number }>();
+
+    for (const log of setLogs) {
+      if (log.weight == null || log.weight <= 0) continue;
+      const session = sessionMap.get(log.session_id);
+      if (!session) continue;
+
+      const existing = prMap.get(log.exercise_id);
+      if (!existing || log.weight > existing.prWeight) {
+        prMap.set(log.exercise_id, {
+          prWeight: log.weight,
+          prDate: session.started_at,
+        });
+      }
+    }
+
+    const exerciseIds = Array.from(prMap.keys());
+    if (exerciseIds.length === 0) return [];
+
+    const exercises = await db.exercises.where('id').anyOf(exerciseIds).toArray();
+    const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
+
+    const results: ExercisePR[] = [];
+    for (const [exerciseId, pr] of prMap.entries()) {
+      const ex = exerciseMap.get(exerciseId);
+      if (!ex) continue;
+      results.push({
+        exerciseId,
+        exerciseName: ex.name,
+        muscleGroup: ex.muscle_group as any,
+        equipment: ex.equipment ?? null,
+        prWeight: pr.prWeight,
+        prDate: pr.prDate,
+      });
+    }
+
+    return results.sort((a, b) => b.prWeight - a.prWeight);
   }
 
   async getMuscleDistribution(): Promise<MuscleDistribution[]> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    const result = await this.db.query<{
-      muscle_group: string;
-      count: number;
-    }>(
-      `SELECT
-        w.muscle_group,
-        COUNT(*) as count
-       FROM workout_sessions ws
-       JOIN workouts w ON ws.workout_id = w.id
-       WHERE ws.finished_at IS NOT NULL AND w.muscle_group IS NOT NULL
-       GROUP BY w.muscle_group
-       ORDER BY count DESC`,
-    );
+    const completedSessions = await db.workout_sessions
+      .filter((s) => s.finished_at != null)
+      .toArray();
 
-    // Get total count for percentage calculation
-    const total = result.reduce((sum, row) => sum + row.count, 0);
+    if (completedSessions.length === 0) return [];
 
-    return result.map((row) => ({
-      muscleGroup: row.muscle_group as any,
-      count: row.count,
-      percentage: total > 0 ? Math.round((row.count / total) * 100) : 0,
-    }));
+    const workoutIds = Array.from(new Set(completedSessions.map((s) => s.workout_id)));
+    const workouts = await db.workouts.where('id').anyOf(workoutIds).toArray();
+    const workoutMap = new Map(workouts.map((w) => [w.id, w]));
+
+    const countMap = new Map<string, number>();
+    let total = 0;
+
+    for (const session of completedSessions) {
+      const workout = workoutMap.get(session.workout_id);
+      if (workout?.muscle_group) {
+        const current = countMap.get(workout.muscle_group) ?? 0;
+        countMap.set(workout.muscle_group, current + 1);
+        total++;
+      }
+    }
+
+    const results: MuscleDistribution[] = [];
+    for (const [muscleGroup, count] of countMap.entries()) {
+      results.push({
+        muscleGroup: muscleGroup as any,
+        count,
+        percentage: total > 0 ? Math.round((count / total) * 100) : 0,
+      });
+    }
+
+    return results.sort((a, b) => b.count - a.count);
   }
 
   private calculateStreak(dates: number[]): number {
     if (dates.length === 0) return 0;
 
-    const now = Date.now();
     const msPerDay = 24 * 60 * 60 * 1000;
 
-    // Convert Unix timestamps (seconds) to milliseconds and normalize to start of day
-    const normalizedDates = dates
-      .map((d) => {
-        const date = new Date(d * 1000);
-        return new Date(
-          date.getFullYear(),
-          date.getMonth(),
-          date.getDate(),
-        ).getTime();
-      })
-      .sort((a, b) => b - a); // Sort descending (newest first)
+    // Normalize dates to midnight local time
+    const normalizedDates = Array.from(
+      new Set(
+        dates.map((d) => {
+          const date = new Date(d);
+          return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+          ).getTime();
+        }),
+      ),
+    ).sort((a, b) => b - a);
 
-    let streak = 0;
-    const currentDate = new Date(now);
-    const currentTimestamp = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      currentDate.getDate(),
-    ).getTime();
+    if (normalizedDates.length === 0) return 0;
 
-    // Check if the most recent workout is within the last 2 days (today or yesterday)
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+    // Check if the most recent workout is today or yesterday
     const mostRecent = normalizedDates[0];
-    const daysSinceLastWorkout = Math.floor(
-      (currentTimestamp - mostRecent) / msPerDay,
-    );
+    const daysSinceLastWorkout = Math.floor((today - mostRecent) / msPerDay);
 
     if (daysSinceLastWorkout > 1) {
       return 0; // Streak broken
     }
 
-    streak = 1;
+    let streak = 1;
 
-    // Count consecutive days going backwards
     for (let i = 0; i < normalizedDates.length - 1; i++) {
       const current = normalizedDates[i];
       const next = normalizedDates[i + 1];
-      const dayDiff = Math.floor((current - next) / msPerDay);
+      const dayDiff = Math.round((current - next) / msPerDay);
 
       if (dayDiff === 1) {
         streak++;
-      } else if (dayDiff === 0) {
-        // Same day, multiple workouts - don't increment
-        continue;
       } else {
-        break; // Streak broken
+        break;
       }
     }
 

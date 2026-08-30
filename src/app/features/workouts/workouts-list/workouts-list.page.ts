@@ -25,13 +25,13 @@ import {
   barbellOutline,
   settingsOutline,
 } from 'ionicons/icons';
+import { WorkoutCardComponent } from '../components/workout-card/workout-card.component';
 import {
-  WorkoutCardComponent,
   WorkoutFormModalComponent,
   type WorkoutFormResult,
-} from '../components';
-import type { WorkoutDetail } from '../models';
-import { WorkoutsService } from '../services';
+} from '../components/workout-form-modal/workout-form-modal.component';
+import type { WorkoutDetail } from '../models/workout-detail.model';
+import { WorkoutsService } from '../services/workouts.service';
 
 @Component({
   selector: 'app-workouts-list',

@@ -1,7 +1,4 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { Preferences } from '@capacitor/preferences';
-import { StatusBar, Style } from '@capacitor/status-bar';
-import { NavigationBar, NavigationBarColor } from '@capgo/capacitor-navigation-bar';
 
 const THEME_KEY = 'app_theme';
 
@@ -20,13 +17,12 @@ export class ThemeService {
     this.initTheme();
   }
 
-  public async initTheme(): Promise<void> {
-    const { value } = await Preferences.get({ key: THEME_KEY });
-    const theme = (value as Theme) || 'dark';
-    this.setTheme(theme);
+  public initTheme(): void {
+    const savedTheme = (localStorage.getItem(THEME_KEY) as Theme) || 'dark';
+    this.setTheme(savedTheme);
   }
 
-  public async setTheme(theme: Theme): Promise<void> {
+  public setTheme(theme: Theme): void {
     this.currentTheme.set(theme);
 
     if (theme === 'dark') {
@@ -35,24 +31,25 @@ export class ThemeService {
       document.documentElement.classList.remove('ion-palette-dark');
     }
 
-    await this.updateSystemBars(theme);
-    Preferences.set({ key: THEME_KEY, value: theme });
+    this.updateThemeColorMeta(theme);
+    localStorage.setItem(THEME_KEY, theme);
   }
 
-  private async updateSystemBars(theme: Theme): Promise<void> {
+  private updateThemeColorMeta(theme: Theme): void {
     const isDark = theme === 'dark';
-    const color = isDark ? NavigationBarColor.BLACK : NavigationBarColor.WHITE;
-    const style = isDark ? Style.Dark : Style.Light;
+    const color = isDark ? '#000000' : '#ffffff';
 
-    await Promise.all([
-      StatusBar.setStyle({ style }),
-      StatusBar.setBackgroundColor({ color }),
-      NavigationBar.setNavigationBarColor({ color, darkButtons: !isDark }),
-    ]);
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'theme-color');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', color);
   }
 
-  public async toggleTheme(): Promise<void> {
+  public toggleTheme(): void {
     const newTheme: Theme = this.currentTheme() === 'dark' ? 'light' : 'dark';
-    await this.setTheme(newTheme);
+    this.setTheme(newTheme);
   }
 }

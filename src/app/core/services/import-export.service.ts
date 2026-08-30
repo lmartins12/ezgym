@@ -1,90 +1,76 @@
 import { inject, Injectable } from '@angular/core';
-import { Clipboard } from '@capacitor/clipboard';
-import { Share } from '@capacitor/share';
-import type {
-  ExportData,
-  ExportExercise,
-  ExportWorkout,
-  ImportPreview,
-  ImportResult,
-} from '@core';
+import type { Exercise, MuscleGroup, Workout } from '../models/app-models';
 import {
-  DatabaseService,
   EXPORT_VERSION,
   ValidationWarningType,
-  type Exercise,
-  type MuscleGroup,
-} from '@core';
+  type ExportData,
+  type ExportExercise,
+  type ExportWorkout,
+  type ImportPreview,
+  type ImportResult,
+  type ValidationWarning,
+} from '../models/import-export.models';
+import { DatabaseService } from './database.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({ providedIn: 'root' })
 export class ImportExportService {
-  private readonly db = inject(DatabaseService);
+  private readonly dbService = inject(DatabaseService);
 
   /**
    * Export all workouts as JSON string
    */
   public async exportWorkouts(): Promise<string> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    // Get all workouts with their exercises
-    const workouts = await this.db.query<{
-      id: string;
-      name: string;
-      description: string | null;
-      muscle_group: string | null;
-    }>(
-      `SELECT id, name, description, muscle_group
-       FROM workouts
-       ORDER BY order_index ASC, created_at ASC`,
-    );
+    const [workouts, workoutExercises, exercises] = await Promise.all([
+      db.workouts.toArray(),
+      db.workout_exercises.toArray(),
+      db.exercises.toArray(),
+    ]);
+
+    const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
+
+    // Group workout exercises by workout_id
+    const weByWorkout = new Map<string, typeof workoutExercises>();
+    for (const we of workoutExercises) {
+      const list = weByWorkout.get(we.workout_id) ?? [];
+      list.push(we);
+      weByWorkout.set(we.workout_id, list);
+    }
+
+    const sortedWorkouts = workouts.sort((a, b) => {
+      const orderA = a.order_index ?? 0;
+      const orderB = b.order_index ?? 0;
+      if (orderA !== orderB) return orderA - orderB;
+      return (a.created_at ?? 0) - (b.created_at ?? 0);
+    });
 
     const exportWorkouts: ExportWorkout[] = [];
 
-    for (const workout of workouts) {
-      const exercises = await this.db.query<{
-        exercise_name: string;
-        muscle_group: string;
-        equipment: string | null;
-        notes: string | null;
-        order_index: number;
-        sets: number;
-        reps: string;
-        rest_seconds: number;
-        target_weight: number | null;
-      }>(
-        `SELECT
-          e.name as exercise_name,
-          e.muscle_group,
-          e.equipment,
-          e.notes,
-          we.order_index,
-          we.sets,
-          we.reps,
-          we.rest_seconds,
-          we.target_weight
-        FROM workout_exercises we
-        JOIN exercises e ON we.exercise_id = e.id
-        WHERE we.workout_id = ?
-        ORDER BY we.order_index ASC`,
-        [workout.id],
-      );
+    for (const workout of sortedWorkouts) {
+      const weList = weByWorkout.get(workout.id) ?? [];
+      weList.sort((a, b) => a.order_index - b.order_index);
 
       exportWorkouts.push({
         name: workout.name,
-        description: workout.description ?? undefined,
-        muscle_group: (workout.muscle_group as MuscleGroup | null) ?? undefined,
-        exercises: exercises.map((e) => ({
-          exercise_name: e.exercise_name,
-          muscle_group: e.muscle_group as MuscleGroup,
-          equipment: e.equipment ?? undefined,
-          notes: e.notes ?? undefined,
-          order_index: e.order_index,
-          sets: e.sets,
-          reps: e.reps,
-          rest_seconds: e.rest_seconds,
-          target_weight: e.target_weight ?? undefined,
-        })),
+        description: workout.description || undefined,
+        muscle_group: workout.muscle_group || undefined,
+        exercises: weList.map((we) => {
+          const ex = exerciseMap.get(we.exercise_id);
+          return {
+            exercise_name: ex?.name ?? 'Unknown Exercise',
+            muscle_group: (ex?.muscle_group ?? 'other') as MuscleGroup,
+            equipment: ex?.equipment || undefined,
+            notes: ex?.notes || undefined,
+            order_index: we.order_index,
+            sets: we.sets,
+            reps: we.reps,
+            rest_seconds: we.rest_seconds,
+            target_weight: we.target_weight ?? undefined,
+          };
+        }),
       });
     }
 
@@ -99,29 +85,62 @@ export class ImportExportService {
   }
 
   /**
-   * Copy JSON to clipboard
+   * Copy JSON to clipboard (Web API)
    */
   public async copyToClipboard(json: string): Promise<void> {
-    await Clipboard.write({ string: json });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(json);
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = json;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
   }
 
   /**
-   * Share JSON using Capacitor Share API
+   * Share JSON using Web Share API or download fallback
    */
-  public async shareJson(json: string): Promise<void> {
-    await Share.share({
-      title: 'EzGym Workouts Export',
-      text: json,
-      dialogTitle: 'Share Workout Data',
-    });
+  public async shareJson(json: string, filename = 'ezgym-workouts.json'): Promise<void> {
+    if (navigator.share && navigator.canShare && navigator.canShare({ text: json })) {
+      try {
+        await navigator.share({
+          title: 'EzGym Workouts Export',
+          text: json,
+        });
+        return;
+      } catch (e: any) {
+        if (e.name === 'AbortError') return;
+      }
+    }
+
+    // Fallback: Download file
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   /**
-   * Get JSON from clipboard
+   * Get JSON from clipboard (Web API)
    */
   public async getFromClipboard(): Promise<{ value: string } | null> {
     try {
-      return await Clipboard.read();
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        const text = await navigator.clipboard.readText();
+        return { value: text };
+      }
+      return null;
     } catch {
       return null;
     }
@@ -131,94 +150,74 @@ export class ImportExportService {
    * Import workouts from JSON string
    */
   public async importWorkouts(json: string): Promise<ImportResult> {
-    await this.db.ready();
-
-    // Track created IDs for rollback
-    const createdWorkoutIds: string[] = [];
-    const createdExerciseIds: string[] = [];
-    const createdWorkoutExerciseIds: string[] = [];
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
     try {
       const data: ExportData = JSON.parse(json);
-
       let exercisesCreated = 0;
       let exercisesReused = 0;
+      let workoutsImported = 0;
 
-      // Import each workout
-      for (const workoutData of data.workouts) {
-        // Create workout
-        const workoutId = uuidv4();
-        const now = Date.now();
-
-        // Get current max order_index for workouts
-        const maxOrderResult = await this.db.query<{ max_order: number }>(
-          'SELECT COALESCE(MAX(order_index), -1) as max_order FROM workouts',
-        );
-        const nextOrderIndex = (maxOrderResult[0]?.max_order ?? -1) + 1;
-
-        await this.db.execute(
-          `INSERT INTO workouts (id, name, description, muscle_group, order_index, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?)`,
-          [
-            workoutId,
-            workoutData.name,
-            workoutData.description ?? null,
-            workoutData.muscle_group ?? null,
-            nextOrderIndex,
-            now,
-            now,
-          ],
-        );
-        createdWorkoutIds.push(workoutId);
-
-        // Import exercises for this workout
-        for (const exerciseData of workoutData.exercises) {
-          // Find or create exercise
-          const exerciseId = await this.findOrCreateExercise(
-            exerciseData,
-            createdExerciseIds,
+      await db.transaction(
+        'rw',
+        [db.workouts, db.exercises, db.workout_exercises],
+        async () => {
+          const existingWorkouts = await db.workouts.toArray();
+          let currentMaxOrder = existingWorkouts.reduce(
+            (max, w) => Math.max(max, w.order_index ?? 0),
+            -1,
           );
 
-          if (createdExerciseIds.includes(exerciseId)) {
-            exercisesCreated++;
-          } else {
-            exercisesReused++;
+          for (const workoutData of data.workouts) {
+            currentMaxOrder++;
+            const workoutId = uuidv4();
+            const now = Date.now();
+
+            const newWorkout: Workout = {
+              id: workoutId,
+              name: workoutData.name,
+              description: workoutData.description || undefined,
+              muscle_group: workoutData.muscle_group || undefined,
+              order_index: currentMaxOrder,
+              created_at: now,
+              updated_at: now,
+            };
+
+            await db.workouts.add(newWorkout);
+            workoutsImported++;
+
+            for (const exerciseData of workoutData.exercises) {
+              const { exerciseId, isNew } = await this.findOrCreateExercise(exerciseData);
+              if (isNew) {
+                exercisesCreated++;
+              } else {
+                exercisesReused++;
+              }
+
+              const workoutExerciseId = uuidv4();
+              await db.workout_exercises.add({
+                id: workoutExerciseId,
+                workout_id: workoutId,
+                exercise_id: exerciseId,
+                order_index: exerciseData.order_index,
+                sets: exerciseData.sets,
+                reps: exerciseData.reps,
+                rest_seconds: exerciseData.rest_seconds,
+                target_weight: exerciseData.target_weight ?? undefined,
+              });
+            }
           }
-
-          // Create workout_exercise entry
-          const workoutExerciseId = uuidv4();
-          await this.db.execute(
-            `INSERT INTO workout_exercises
-             (id, workout_id, exercise_id, order_index, sets, reps, rest_seconds, target_weight)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-              workoutExerciseId,
-              workoutId,
-              exerciseId,
-              exerciseData.order_index,
-              exerciseData.sets,
-              exerciseData.reps,
-              exerciseData.rest_seconds,
-              exerciseData.target_weight ?? null,
-            ],
-          );
-          createdWorkoutExerciseIds.push(workoutExerciseId);
-        }
-      }
+        },
+      );
 
       return {
         success: true,
-        workoutsImported: createdWorkoutIds.length,
+        workoutsImported,
         exercisesCreated,
         exercisesReused,
       };
     } catch (error) {
-      // Rollback: delete all created records
-      await this.rollbackImport(
-        createdWorkoutIds,
-        createdExerciseIds,
-        createdWorkoutExerciseIds,
-      );
       return {
         success: false,
         workoutsImported: 0,
@@ -235,12 +234,10 @@ export class ImportExportService {
   public async getImportPreview(json: string): Promise<ImportPreview | null> {
     try {
       const data: ExportData = JSON.parse(json);
-
-      // Get existing exercise names
       const existingExercises = await this.getExistingExerciseNames();
       const newExercisesSet = new Set<string>();
       const existingExercisesSet = new Set<string>();
-      const warnings: import('@core').ValidationWarning[] = [];
+      const warnings: ValidationWarning[] = [];
 
       for (const workout of data.workouts) {
         if (workout.exercises.length === 0) {
@@ -273,83 +270,41 @@ export class ImportExportService {
     }
   }
 
-  /**
-   * Find existing exercise by name or create new one
-   * Returns exercise ID and adds to createdExerciseIds if new
-   */
   private async findOrCreateExercise(
     exerciseData: ExportExercise,
-    createdExerciseIds: string[],
-  ): Promise<string> {
-    // Try to find existing exercise by name (case-insensitive)
-    const existing = await this.db.query<Exercise>(
-      'SELECT id FROM exercises WHERE LOWER(name) = LOWER(?)',
-      [exerciseData.exercise_name],
+  ): Promise<{ exerciseId: string; isNew: boolean }> {
+    const db = this.dbService.db;
+    const normalizedName = exerciseData.exercise_name.trim().toLowerCase();
+
+    const allExercises = await db.exercises.toArray();
+    const existing = allExercises.find(
+      (e) => e.name.trim().toLowerCase() === normalizedName,
     );
 
-    if (existing.length > 0) {
-      return existing[0].id;
+    if (existing) {
+      return { exerciseId: existing.id, isNew: false };
     }
 
-    // Create new exercise
     const id = uuidv4();
     const now = Date.now();
 
-    await this.db.execute(
-      'INSERT INTO exercises (id, name, muscle_group, equipment, notes, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [
-        id,
-        exerciseData.exercise_name,
-        exerciseData.muscle_group,
-        exerciseData.equipment ?? null,
-        exerciseData.notes ?? null,
-        now,
-        now,
-      ],
-    );
+    await db.exercises.add({
+      id,
+      name: exerciseData.exercise_name.trim(),
+      muscle_group: exerciseData.muscle_group,
+      equipment: exerciseData.equipment || undefined,
+      notes: exerciseData.notes || undefined,
+      created_at: now,
+      updated_at: now,
+    });
 
-    createdExerciseIds.push(id);
-    return id;
+    return { exerciseId: id, isNew: true };
   }
 
-  /**
-   * Get all existing exercise names (lowercase)
-   */
   private async getExistingExerciseNames(): Promise<Set<string>> {
-    const exercises = await this.db.query<{ name: string }>(
-      'SELECT LOWER(name) as name FROM exercises',
-    );
-    return new Set(exercises.map((e) => e.name));
-  }
-
-  /**
-   * Rollback import by deleting created records
-   */
-  private async rollbackImport(
-    workoutIds: string[],
-    exerciseIds: string[],
-    workoutExerciseIds: string[],
-  ): Promise<void> {
-    try {
-      // Delete workout_exercises first (foreign keys)
-      for (const id of workoutExerciseIds) {
-        await this.db.execute('DELETE FROM workout_exercises WHERE id = ?', [
-          id,
-        ]);
-      }
-
-      // Delete workouts
-      for (const id of workoutIds) {
-        await this.db.execute('DELETE FROM workouts WHERE id = ?', [id]);
-      }
-
-      // Delete exercises
-      for (const id of exerciseIds) {
-        await this.db.execute('DELETE FROM exercises WHERE id = ?', [id]);
-      }
-    } catch (error) {
-      console.error('Rollback failed:', error);
-    }
+    await this.dbService.initialize();
+    const exercises = await this.dbService.db.exercises.toArray();
+    return new Set(exercises.map((e) => e.name.toLowerCase()));
   }
 
   /**

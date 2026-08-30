@@ -1,8 +1,7 @@
 import { Component, inject, model } from '@angular/core';
-import type { MuscleGroup } from '@core';
-import { MUSCLE_GROUPS } from '@core';
+import { MUSCLE_GROUPS, type MuscleGroup } from '@core/models/app-models';
 import { TranslateService } from '@ngx-translate/core';
-import { MuscleIconComponent } from '@shared';
+import { MuscleIconComponent } from '../muscle-icon/muscle-icon.component';
 
 @Component({
   selector: 'app-muscle-group-selector',

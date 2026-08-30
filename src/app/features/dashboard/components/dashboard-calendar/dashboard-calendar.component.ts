@@ -6,7 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { IonDatetime } from '@ionic/angular/standalone';
-import { toIsoDateString } from '@shared';
+import { toIsoDateString } from '@shared/utils/date.utils';
 
 interface HighlightedDate {
   date: string;

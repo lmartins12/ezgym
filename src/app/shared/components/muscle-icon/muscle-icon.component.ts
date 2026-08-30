@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import type { MuscleGroup } from '@core';
+import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { barbellOutline } from 'ionicons/icons';

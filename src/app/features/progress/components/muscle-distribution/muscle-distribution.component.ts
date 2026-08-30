@@ -8,8 +8,8 @@ import {
   IonListHeader,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import type { MuscleDistribution } from '../../models';
-import { ProgressService } from '../../services';
+import type { MuscleDistribution } from '../../models/progress.models';
+import { ProgressService } from '../../services/progress.service';
 
 @Component({
   selector: 'app-muscle-distribution',

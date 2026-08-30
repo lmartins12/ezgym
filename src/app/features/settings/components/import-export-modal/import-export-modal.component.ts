@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
-import type { ValidationErrorType, ValidationResult } from '@core';
-import { ImportExportService } from '@core';
+import type {
+  ValidationErrorType,
+  ValidationResult,
+  ValidationWarning,
+} from '@core/models/import-export.models';
+import { ImportExportService } from '@core/services/import-export.service';
 import {
   IonButton,
   IonButtons,
@@ -14,12 +18,10 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-  AiPromptModalComponent,
-  ImportPreviewComponent,
-  ImportValidation,
-  ValidationListComponent,
-} from '@shared';
+import { AiPromptModalComponent } from '@shared/components/ai-prompt-modal/ai-prompt-modal.component';
+import { ImportPreviewComponent } from '@shared/components/import-preview/import-preview.component';
+import { ValidationListComponent } from '@shared/components/validation-list/validation-list.component';
+import { ImportValidation } from '@shared/utils/validation.utils';
 import { addIcons } from 'ionicons';
 import {
   clipboardOutline,
@@ -67,7 +69,7 @@ export class ImportExportModalComponent {
     workoutCount: number;
     newExercises: string[];
     existingExercises: string[];
-    warnings: import('@core').ValidationWarning[];
+    warnings: ValidationWarning[];
   } | null>(null);
   public readonly showPreview = signal(false);
 

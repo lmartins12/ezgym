@@ -1,4 +1,4 @@
-import type { MuscleGroup } from '@core';
+import type { MuscleGroup } from '@core/models/app-models';
 
 export interface WorkoutStats {
   totalWorkouts: number;

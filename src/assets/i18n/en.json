@@ -32,7 +32,8 @@
     "LANGUAGE": "Language",
     "LANGUAGE_PT": "Português-BR",
     "LANGUAGE_EN": "English-US",
-    "DARK_MODE": "Dark Mode"
+    "DARK_MODE": "Dark Mode",
+    "INSTALL_APP": "Install App"
   },
   "WORKOUTS": {
     "TITLE": "Workouts",

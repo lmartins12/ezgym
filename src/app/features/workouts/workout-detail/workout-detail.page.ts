@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import type { MuscleGroup, Workout, WorkoutExercise } from '@core';
+import type { MuscleGroup, Workout, WorkoutExercise } from '@core/models/app-models';
 import { NavController } from '@ionic/angular';
 import {
   AlertController,
@@ -30,13 +30,13 @@ import {
   fitnessOutline,
   playOutline,
 } from 'ionicons/icons';
-import type { ExerciseData, WorkoutFormResult } from '../components';
-import {
-  WorkoutFormModalComponent,
-  ExerciseEditorModalComponent,
-  ExerciseListItemComponent,
-} from '../components';
-import { WorkoutExercisesService, WorkoutsService } from '../services';
+import type { ExerciseData } from '../components/exercise-editor-modal/exercise-editor-modal.component';
+import { ExerciseEditorModalComponent } from '../components/exercise-editor-modal/exercise-editor-modal.component';
+import { ExerciseListItemComponent } from '../components/exercise-list-item/exercise-list-item.component';
+import type { WorkoutFormResult } from '../components/workout-form-modal/workout-form-modal.component';
+import { WorkoutFormModalComponent } from '../components/workout-form-modal/workout-form-modal.component';
+import { WorkoutExercisesService } from '../services/workout-exercises.service';
+import { WorkoutsService } from '../services/workouts.service';
 
 @Component({
   selector: 'app-workout-detail',

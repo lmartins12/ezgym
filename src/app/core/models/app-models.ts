@@ -46,6 +46,7 @@ export interface Workout {
   name: string;
   description?: string;
   muscle_group?: MuscleGroup;
+  order_index?: number;
   created_at: number;
   updated_at: number;
 }
@@ -61,15 +62,18 @@ export interface WorkoutExercise {
   target_weight?: number;
   exercise_name?: string;
   muscle_group?: MuscleGroup;
+  equipment?: string;
 }
 
 export interface WorkoutSession {
   id: string;
   workout_id: string;
   started_at: number;
+  status?: 'IN_PROGRESS' | 'COMPLETED';
   finished_at?: number;
   notes?: string;
   workout_name?: string;
+  muscle_group?: MuscleGroup;
 }
 
 export interface SetLog {

@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import type { MuscleGroup } from '@core';
-import { DatabaseService } from '@core';
-import type { SessionDetail, WorkoutEvent } from '../models';
-import { formatDuration } from '@shared';
+import { DatabaseService } from '@core/services/database.service';
+import type { MuscleGroup } from '@core/models/app-models';
+import { formatDuration } from '@shared/utils/date.utils';
+import type { SessionDetail, WorkoutEvent } from '../models/dashboard.models';
 
 /**
  * Result of workout session query with joined workout data.
@@ -17,23 +17,9 @@ interface WorkoutSessionQueryResult {
   muscle_group: string | null;
 }
 
-/**
- * Result of set logs query with exercise data.
- */
-interface SetLogQueryResult {
-  exercise_id: string;
-  exercise_name: string;
-  muscle_group: string | null;
-  equipment: string | null;
-  set_number: number;
-  reps: number;
-  weight: number | null;
-  rpe: number | null;
-}
-
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
-  private readonly db = inject(DatabaseService);
+  private readonly dbService = inject(DatabaseService);
 
   /**
    * Fetch workout sessions with pagination.
@@ -48,42 +34,43 @@ export class DashboardService {
     offset: number,
     limit: number,
   ): Promise<WorkoutSessionQueryResult[]> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    let sql = `
-      SELECT
-        ws.id,
-        ws.workout_id,
-        ws.started_at,
-        ws.finished_at,
-        ws.notes,
-        w.name as workout_name,
-        w.muscle_group
-      FROM workout_sessions ws
-      JOIN workouts w ON ws.workout_id = w.id
-    `;
+    let sessions = await db.workout_sessions.toArray();
 
-    const conditions: string[] = [];
-    const params: (number | string)[] = [];
-
+    // Filter by date range
     if (startDate !== null) {
-      conditions.push('ws.started_at >= ?');
-      params.push(startDate);
+      sessions = sessions.filter((s) => s.started_at >= startDate);
     }
-
     if (endDate !== null) {
-      conditions.push('ws.started_at <= ?');
-      params.push(endDate);
+      sessions = sessions.filter((s) => s.started_at <= endDate);
     }
 
-    if (conditions.length > 0) {
-      sql += ' WHERE ' + conditions.join(' AND ');
-    }
+    // Sort descending by started_at
+    sessions.sort((a, b) => b.started_at - a.started_at);
 
-    sql += ' ORDER BY ws.started_at DESC LIMIT ? OFFSET ?';
-    params.push(limit, offset);
+    // Apply pagination
+    const paginatedSessions = sessions.slice(offset, offset + limit);
 
-    return this.db.query<WorkoutSessionQueryResult>(sql, params);
+    if (paginatedSessions.length === 0) return [];
+
+    const workoutIds = paginatedSessions.map((s) => s.workout_id);
+    const workouts = await db.workouts.where('id').anyOf(workoutIds).toArray();
+    const workoutMap = new Map(workouts.map((w) => [w.id, w]));
+
+    return paginatedSessions.map((s) => {
+      const workout = workoutMap.get(s.workout_id);
+      return {
+        id: s.id,
+        workout_id: s.workout_id,
+        started_at: s.started_at,
+        finished_at: s.finished_at ?? null,
+        notes: s.notes ?? null,
+        workout_name: workout?.name ?? null,
+        muscle_group: workout?.muscle_group ?? null,
+      };
+    });
   }
 
   /**
@@ -93,28 +80,19 @@ export class DashboardService {
     startDate: number | null,
     endDate: number | null,
   ): Promise<number> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    let sql = 'SELECT COUNT(*) as count FROM workout_sessions ws';
-    const conditions: string[] = [];
-    const params: (number | string)[] = [];
+    let sessions = await db.workout_sessions.toArray();
 
     if (startDate !== null) {
-      conditions.push('ws.started_at >= ?');
-      params.push(startDate);
+      sessions = sessions.filter((s) => s.started_at >= startDate);
     }
-
     if (endDate !== null) {
-      conditions.push('ws.started_at <= ?');
-      params.push(endDate);
+      sessions = sessions.filter((s) => s.started_at <= endDate);
     }
 
-    if (conditions.length > 0) {
-      sql += ' WHERE ' + conditions.join(' AND ');
-    }
-
-    const result = await this.db.query<{ count: number }>(sql, params);
-    return result[0]?.count ?? 0;
+    return sessions.length;
   }
 
   /**
@@ -126,21 +104,14 @@ export class DashboardService {
     startDate: number,
     endDate: number,
   ): Promise<number[]> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const sessions = await this.dbService.db.workout_sessions.toArray();
 
-    const sql = `
-      SELECT DISTINCT started_at
-      FROM workout_sessions
-      WHERE started_at >= ? AND started_at <= ?
-      ORDER BY started_at DESC
-    `;
+    const filtered = sessions
+      .filter((s) => s.started_at >= startDate && s.started_at <= endDate)
+      .map((s) => s.started_at);
 
-    const results = await this.db.query<{ started_at: number }>(sql, [
-      startDate,
-      endDate,
-    ]);
-
-    return results.map((r) => r.started_at);
+    return Array.from(new Set(filtered)).sort((a, b) => b - a);
   }
 
   /**
@@ -148,17 +119,10 @@ export class DashboardService {
    * Used for calendar highlighting across all months.
    */
   async getAllDatesWithEvents(): Promise<number[]> {
-    await this.db.ready();
-
-    const sql = `
-      SELECT DISTINCT started_at
-      FROM workout_sessions
-      ORDER BY started_at DESC
-    `;
-
-    const results = await this.db.query<{ started_at: number }>(sql);
-
-    return results.map((r) => r.started_at);
+    await this.dbService.initialize();
+    const sessions = await this.dbService.db.workout_sessions.toArray();
+    const dates = sessions.map((s) => s.started_at);
+    return Array.from(new Set(dates)).sort((a, b) => b - a);
   }
 
   /**
@@ -166,81 +130,61 @@ export class DashboardService {
    * Returns a Promise with complete session data.
    */
   async getSessionDetail(sessionId: string): Promise<SessionDetail> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    // Get session data
-    const sessionSql = `
-      SELECT
-        ws.id,
-        ws.workout_id,
-        ws.started_at,
-        ws.finished_at,
-        ws.notes,
-        w.name as workout_name,
-        w.muscle_group
-      FROM workout_sessions ws
-      JOIN workouts w ON ws.workout_id = w.id
-      WHERE ws.id = ?
-    `;
-
-    const sessionResult = await this.db.query<WorkoutSessionQueryResult>(sessionSql, [
-      sessionId,
-    ]);
-
-    if (sessionResult.length === 0) {
+    const session = await db.workout_sessions.get(sessionId);
+    if (!session) {
       throw new Error(`Session ${sessionId} not found`);
     }
 
-    const session = sessionResult[0];
+    const workout = await db.workouts.get(session.workout_id);
 
-    // Get set logs with exercise data
-    const setsSql = `
-      SELECT
-        e.id as exercise_id,
-        e.name as exercise_name,
-        e.muscle_group,
-        e.equipment,
-        sl.set_number,
-        sl.reps,
-        sl.weight,
-        sl.rpe
-      FROM set_logs sl
-      JOIN exercises e ON sl.exercise_id = e.id
-      WHERE sl.session_id = ?
-      ORDER BY e.name, sl.set_number
-    `;
+    // Get set logs
+    const setLogs = await db.set_logs
+      .where('session_id')
+      .equals(sessionId)
+      .toArray();
 
-    const setsResult = await this.db.query<SetLogQueryResult>(setsSql, [sessionId]);
+    const exerciseIds = Array.from(new Set(setLogs.map((l) => l.exercise_id)));
+    const exercises = exerciseIds.length > 0
+      ? await db.exercises.where('id').anyOf(exerciseIds).toArray()
+      : [];
+    const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
 
     // Group sets by exercise
     const exercisesMap = new Map<string, SessionDetail['exercises'][0]>();
 
-    for (const set of setsResult) {
-      if (!exercisesMap.has(set.exercise_id)) {
-        exercisesMap.set(set.exercise_id, {
-          id: set.exercise_id,
-          name: set.exercise_name,
-          muscleGroup: set.muscle_group as MuscleGroup | null,
-          equipment: set.equipment,
+    // Sort set logs by set_number
+    setLogs.sort((a, b) => a.set_number - b.set_number);
+
+    for (const log of setLogs) {
+      const ex = exerciseMap.get(log.exercise_id);
+      if (!exercisesMap.has(log.exercise_id)) {
+        exercisesMap.set(log.exercise_id, {
+          id: log.exercise_id,
+          name: ex?.name ?? 'Unknown Exercise',
+          muscleGroup: (ex?.muscle_group as MuscleGroup | null) ?? null,
+          equipment: ex?.equipment ?? null,
           sets: [],
         });
       }
 
-      exercisesMap.get(set.exercise_id)!.sets.push({
-        setNumber: set.set_number,
-        reps: set.reps,
-        weight: set.weight,
-        rpe: set.rpe,
+      exercisesMap.get(log.exercise_id)!.sets.push({
+        setNumber: log.set_number,
+        reps: log.reps,
+        weight: log.weight ?? null,
+        rpe: log.rpe ?? null,
       });
     }
 
     return {
       sessionId: session.id,
-      workoutName: session.workout_name ?? 'Workout',
-      muscleGroup: session.muscle_group as MuscleGroup | null,
+      workoutName: workout?.name ?? 'Workout',
+      muscleGroup: (workout?.muscle_group as MuscleGroup | null) ?? null,
       startedAt: session.started_at,
-      finishedAt: session.finished_at,
-      notes: session.notes,
+      finishedAt: session.finished_at ?? null,
+      notes: session.notes ?? null,
       exercises: Array.from(exercisesMap.values()),
     };
   }

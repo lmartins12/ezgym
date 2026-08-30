@@ -1,15 +1,15 @@
-import { inject } from '@angular/core';
-import type {
-  ExportData,
-  ExportExercise,
-  ExportWorkout,
-  ValidationError,
-  ValidationErrorType,
-  ValidationResult,
-  ValidationWarning,
-  ValidationWarningType,
-} from '@core';
-import { DatabaseService, EXPORT_VERSION } from '@core';
+import { db } from '@core/services/app-db';
+import {
+  EXPORT_VERSION,
+  type ExportData,
+  type ExportExercise,
+  type ExportWorkout,
+  type ValidationError,
+  type ValidationErrorType,
+  type ValidationResult,
+  type ValidationWarning,
+  type ValidationWarningType,
+} from '@core/models/import-export.models';
 import { z } from 'zod';
 
 /**
@@ -79,18 +79,6 @@ const exportDataSchema: z.ZodType<ExportData> = z.object({
  * Validation utility class for import/export operations
  */
 export class ImportValidation {
-  private static db: DatabaseService | null = null;
-
-  /**
-   * Initialize database connection for validation
-   */
-  private static async initDb(): Promise<void> {
-    if (!this.db) {
-      this.db = inject(DatabaseService);
-      await this.db.ready();
-    }
-  }
-
   /**
    * Validate JSON string for import
    */
@@ -99,13 +87,6 @@ export class ImportValidation {
     const warnings: ValidationWarning[] = [];
     let workoutCount = 0;
     let exerciseCount = 0;
-
-    // Initialize DB for checking existing exercises
-    try {
-      this.initDb();
-    } catch {
-      // DB not available, continue without checking existing exercises
-    }
 
     // 1. Parse JSON
     let data: unknown;
@@ -275,12 +256,7 @@ export class ImportValidation {
    */
   static async getExistingExerciseNames(): Promise<Set<string>> {
     try {
-      await this.initDb();
-      if (!this.db) return new Set();
-
-      const exercises = await this.db!.query<{ name: string }>(
-        'SELECT LOWER(name) as name FROM exercises',
-      );
+      const exercises = await db.exercises.toArray();
       return new Set(exercises.map((e) => e.name.toLowerCase()));
     } catch {
       return new Set();

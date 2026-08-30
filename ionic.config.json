@@ -1,7 +1,5 @@
 {
   "name": "ezgym",
-  "integrations": {
-    "capacitor": {}
-  },
+  "integrations": {},
   "type": "angular-standalone"
 }

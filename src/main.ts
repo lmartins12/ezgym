@@ -1,6 +1,7 @@
 import { registerLocaleData } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import ptBr from '@angular/common/locales/pt';
+import { isDevMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   PreloadAllModules,
@@ -8,8 +9,10 @@ import {
   RouteReuseStrategy,
   withPreloading,
 } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 import {
   IonicRouteStrategy,
+  iosTransitionAnimation,
   provideIonicAngular,
 } from '@ionic/angular/standalone';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
@@ -18,7 +21,6 @@ import {
   TranslateHttpLoader,
 } from '@ngx-translate/http-loader';
 
-import { iosTransitionAnimation } from '@ionic/angular/standalone';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
@@ -43,6 +45,10 @@ bootstrapApplication(AppComponent, {
     provideTranslateHttpLoader({
       prefix: './assets/i18n/',
       suffix: '.json',
+    }),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
 });

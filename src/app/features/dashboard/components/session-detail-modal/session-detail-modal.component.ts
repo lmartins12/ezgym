@@ -18,10 +18,10 @@ import {
   IonToolbar, ModalController
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import { MuscleIconComponent } from "@shared";
+import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, close, fitness } from 'ionicons/icons';
-import type { SessionDetail } from '../../models';
+import type { SessionDetail } from '../../models/dashboard.models';
 
 addIcons({ close, fitness, barbell });
 

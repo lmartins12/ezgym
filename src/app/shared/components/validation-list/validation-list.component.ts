@@ -1,5 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
-import type { ValidationError, ValidationWarning } from '@core';
+import type {
+  ValidationError,
+  ValidationWarning,
+} from '@core/models/import-export.models';
 import {
   IonCard,
   IonIcon,

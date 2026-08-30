@@ -6,17 +6,17 @@ import {
   input,
   Output,
 } from '@angular/core';
-import type { MuscleGroup } from '@core';
+import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon, IonItem, IonLabel } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import { MuscleIconComponent } from '@shared';
+import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, moon, nutritionOutline } from 'ionicons/icons';
 import type {
   DashboardEvent,
   DashboardEventType,
   WorkoutEvent,
-} from '../../models';
+} from '../../models/dashboard.models';
 
 addIcons({
   barbell,

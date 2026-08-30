@@ -32,7 +32,8 @@
     "LANGUAGE": "Idioma",
     "LANGUAGE_PT": "Português-BR",
     "LANGUAGE_EN": "English-US",
-    "DARK_MODE": "Modo Escuro"
+    "DARK_MODE": "Modo Escuro",
+    "INSTALL_APP": "Instalar Aplicativo"
   },
   "WORKOUTS": {
     "TITLE": "Treinos",

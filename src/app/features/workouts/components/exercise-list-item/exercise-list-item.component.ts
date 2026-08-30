@@ -1,6 +1,6 @@
 import { Component, EventEmitter, input, Output } from '@angular/core';
-import type { WorkoutExercise } from '@core';
-import { MuscleIconComponent } from '@shared';
+import type { WorkoutExercise } from '@core/models/app-models';
+import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import {
   IonIcon,
   IonItem,

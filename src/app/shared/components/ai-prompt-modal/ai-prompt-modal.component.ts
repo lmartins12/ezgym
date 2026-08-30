@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, model } from '@angular/core';
-import { ImportExportService } from '@core';
+import { ImportExportService } from '@core/services/import-export.service';
 import {
   IonButton,
   IonButtons,

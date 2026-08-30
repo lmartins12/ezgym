@@ -10,7 +10,7 @@ import {
   time,
   trendingUp,
 } from 'ionicons/icons';
-import type { WorkoutStats } from '../../models';
+import type { WorkoutStats } from '../../models/progress.models';
 
 addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
 

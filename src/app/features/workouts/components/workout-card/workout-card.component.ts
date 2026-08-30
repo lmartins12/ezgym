@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { LanguageService } from '@core';
+import { LanguageService } from '@core/services/language.service';
 import {
   IonIcon,
   IonItem,
@@ -19,10 +19,10 @@ import {
   IonReorder,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import { MuscleIconComponent } from '@shared';
+import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { listOutline, playOutline, trashOutline } from 'ionicons/icons';
-import type { WorkoutDetail } from '../../models';
+import type { WorkoutDetail } from '../../models/workout-detail.model';
 
 @Component({
   selector: 'app-workout-card',

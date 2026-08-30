@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { LanguageService } from '@core';
+import { LanguageService } from '@core/services/language.service';
 import {
   IonContent,
   IonHeader,
@@ -9,14 +9,12 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-  ExercisePRsComponent,
-  FrequentWorkoutsComponent,
-  MuscleDistributionComponent,
-  StatsCardsComponent,
-} from './components';
-import type { WorkoutStats } from './models';
-import { ProgressService } from './services';
+import { ExercisePRsComponent } from './components/exercise-prs/exercise-prs.component';
+import { FrequentWorkoutsComponent } from './components/frequent-workouts/frequent-workouts.component';
+import { MuscleDistributionComponent } from './components/muscle-distribution/muscle-distribution.component';
+import { StatsCardsComponent } from './components/stats-cards/stats-cards.component';
+import type { WorkoutStats } from './models/progress.models';
+import { ProgressService } from './services/progress.service';
 
 @Component({
   selector: 'app-progress',

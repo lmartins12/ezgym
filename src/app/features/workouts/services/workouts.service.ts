@@ -1,40 +1,61 @@
 import { inject, Injectable } from '@angular/core';
-import type { MuscleGroup, Workout } from '@core';
-import { DatabaseService } from '@core';
+import type { MuscleGroup, Workout } from '@core/models/app-models';
+import { DatabaseService } from '@core/services/database.service';
 import { v4 as uuidv4 } from 'uuid';
-import type { WorkoutDetail } from '../models';
+import type { WorkoutDetail } from '../models/workout-detail.model';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutsService {
-  private readonly db = inject(DatabaseService);
+  private readonly dbService = inject(DatabaseService);
 
   public async getAll(): Promise<WorkoutDetail[]> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    const sql = `
-      SELECT
-        w.*,
-        COUNT(DISTINCT we.id) as exercise_count,
-        MAX(ws.started_at) as last_trained
-      FROM workouts w
-      LEFT JOIN workout_exercises we ON w.id = we.workout_id
-      LEFT JOIN workout_sessions ws ON w.id = ws.workout_id
-      GROUP BY w.id
-      ORDER BY w.order_index ASC, w.updated_at DESC
-    `;
+    const [workouts, workoutExercises, sessions] = await Promise.all([
+      db.workouts.toArray(),
+      db.workout_exercises.toArray(),
+      db.workout_sessions.toArray(),
+    ]);
 
-    return this.db.query<WorkoutDetail>(sql);
+    // Map exercise counts per workout
+    const exerciseCountMap = new Map<string, number>();
+    for (const we of workoutExercises) {
+      exerciseCountMap.set(
+        we.workout_id,
+        (exerciseCountMap.get(we.workout_id) ?? 0) + 1,
+      );
+    }
+
+    // Map last trained per workout
+    const lastTrainedMap = new Map<string, number>();
+    for (const s of sessions) {
+      const current = lastTrainedMap.get(s.workout_id);
+      if (!current || s.started_at > current) {
+        lastTrainedMap.set(s.workout_id, s.started_at);
+      }
+    }
+
+    const details: WorkoutDetail[] = workouts.map((w) => ({
+      ...w,
+      order_index: w.order_index ?? 0,
+      exercise_count: exerciseCountMap.get(w.id) ?? 0,
+      last_trained: lastTrainedMap.get(w.id) ?? undefined,
+    }));
+
+    // Sort by order_index ASC, updated_at DESC
+    return details.sort((a, b) => {
+      const orderA = a.order_index ?? 0;
+      const orderB = b.order_index ?? 0;
+      if (orderA !== orderB) return orderA - orderB;
+      return (b.updated_at ?? 0) - (a.updated_at ?? 0);
+    });
   }
 
   public async getById(id: string): Promise<Workout | null> {
-    await this.db.ready();
-
-    const result = await this.db.query<Workout>(
-      'SELECT * FROM workouts WHERE id = ?',
-      [id],
-    );
-
-    return result[0] ?? null;
+    await this.dbService.initialize();
+    const workout = await this.dbService.db.workouts.get(id);
+    return workout ?? null;
   }
 
   public async create(
@@ -42,16 +63,28 @@ export class WorkoutsService {
     description?: string,
     muscleGroup?: MuscleGroup,
   ): Promise<string> {
-    await this.db.ready();
-
+    await this.dbService.initialize();
     const id = uuidv4();
     const now = Date.now();
 
-    await this.db.execute(
-      'INSERT INTO workouts (id, name, description, muscle_group, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
-      [id, name, description ?? null, muscleGroup ?? null, now, now],
+    // Get max order index
+    const workouts = await this.dbService.db.workouts.toArray();
+    const maxOrder = workouts.reduce(
+      (max, w) => Math.max(max, w.order_index ?? 0),
+      -1,
     );
 
+    const newWorkout: Workout = {
+      id,
+      name,
+      description: description || undefined,
+      muscle_group: muscleGroup || undefined,
+      order_index: maxOrder + 1,
+      created_at: now,
+      updated_at: now,
+    };
+
+    await this.dbService.db.workouts.add(newWorkout);
     return id;
   }
 
@@ -61,24 +94,44 @@ export class WorkoutsService {
     description?: string,
     muscleGroup?: MuscleGroup,
   ): Promise<void> {
-    await this.db.ready();
-
+    await this.dbService.initialize();
     const now = Date.now();
 
-    await this.db.execute(
-      'UPDATE workouts SET name = ?, description = ?, muscle_group = ?, updated_at = ? WHERE id = ?',
-      [name, description ?? null, muscleGroup ?? null, now, id],
-    );
+    await this.dbService.db.workouts.update(id, {
+      name,
+      description: description || undefined,
+      muscle_group: muscleGroup || undefined,
+      updated_at: now,
+    });
   }
 
   public async delete(id: string): Promise<void> {
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    await this.db.execute('DELETE FROM workouts WHERE id = ?', [id]);
+    await db.transaction(
+      'rw',
+      [db.workouts, db.workout_exercises, db.workout_sessions, db.set_logs],
+      async () => {
+        // Find associated sessions to delete their set_logs
+        const sessions = await db.workout_sessions
+          .where('workout_id')
+          .equals(id)
+          .toArray();
+        const sessionIds = sessions.map((s) => s.id);
+
+        if (sessionIds.length > 0) {
+          await db.set_logs.where('session_id').anyOf(sessionIds).delete();
+          await db.workout_sessions.where('workout_id').equals(id).delete();
+        }
+
+        await db.workout_exercises.where('workout_id').equals(id).delete();
+        await db.workouts.delete(id);
+      },
+    );
   }
 
   public async updateOrderIndex(workoutId: string, orderIndex: number): Promise<void> {
-    await this.db.ready();
-    await this.db.updateWorkoutOrder(workoutId, orderIndex);
+    await this.dbService.updateWorkoutOrder(workoutId, orderIndex);
   }
 }

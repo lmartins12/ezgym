@@ -1,12 +1,11 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import {
-  DatabaseService,
-  type SetLog,
-  type Workout,
-  type WorkoutExercise,
-  type WorkoutSession,
-} from '@core';
+import { DatabaseService } from '@core/services/database.service';
+import type {
+  SetLog,
+  Workout,
+  WorkoutExercise,
+  WorkoutSession,
+} from '@core/models/app-models';
 import { NavController } from '@ionic/angular/standalone';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,7 +19,7 @@ export type SessionState =
   providedIn: 'root',
 })
 export class SessionService {
-  private readonly db = inject(DatabaseService);
+  private readonly dbService = inject(DatabaseService);
   private readonly navCtrl = inject(NavController);
 
   // State Signals
@@ -36,28 +35,45 @@ export class SessionService {
   );
 
   /**
+   * Helper for vibration feedback (Web Vibration API)
+   */
+  private triggerHaptic(intensity: 'light' | 'medium' = 'light'): void {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      try {
+        navigator.vibrate(intensity === 'medium' ? 60 : 35);
+      } catch {
+        // Ignore if blocked by browser policy
+      }
+    }
+  }
+
+  private triggerVibrate(): void {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      try {
+        navigator.vibrate([100, 50, 100]);
+      } catch {
+        // Ignore
+      }
+    }
+  }
+
+  /**
    * Initialize for Dashboard: Check for ANY active session.
    */
   public async checkActiveSession(): Promise<void> {
     this.resetState();
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
-    const activeSessions = await this.db.query<WorkoutSession>(
-      `SELECT * FROM workout_sessions WHERE status = 'IN_PROGRESS'`,
-    );
+    const activeSessions = await db.workout_sessions
+      .where('status')
+      .equals('IN_PROGRESS')
+      .toArray();
 
     if (activeSessions.length > 0) {
       const existingSession = activeSessions[0];
-      // Load workout definition for the active session so we can display its name
-      const workouts = await this.db.query<Workout>(
-        'SELECT * FROM workouts WHERE id = ?',
-        [existingSession.workout_id],
-      );
-      this.workout.set(workouts[0]);
-
-      // We don't necessarily load exercises/logs yet unless the user clicks Resume
-      // But for simple "Resume" logic, we might as well load them if we want to seamlessly transition.
-      // For now, just setting the active session allows the UI to show "Resume [Workout Name]"
+      const workout = await db.workouts.get(existingSession.workout_id);
+      this.workout.set(workout ?? null);
       this.activeSession.set(existingSession);
     }
   }
@@ -68,62 +84,56 @@ export class SessionService {
    */
   public async initialize(workoutId: string): Promise<void> {
     this.resetState();
-    await this.db.ready();
+    await this.dbService.initialize();
+    const db = this.dbService.db;
 
     // 0. Check for Abandoned Session (Recovery)
-    const activeSessions = await this.db.query<WorkoutSession>(
-      `SELECT * FROM workout_sessions WHERE status = 'IN_PROGRESS'`,
-    );
+    const activeSessions = await db.workout_sessions
+      .where('status')
+      .equals('IN_PROGRESS')
+      .toArray();
 
     if (activeSessions.length > 0) {
       const existingSession = activeSessions[0];
-      // If the active session matches the requested workout, RESUME IT
       if (existingSession.workout_id === workoutId) {
-        // Load workout details (needed for display)
-        const workouts = await this.db.query<Workout>(
-          'SELECT * FROM workouts WHERE id = ?',
-          [workoutId],
-        );
-        this.workout.set(workouts[0]);
+        const workout = await db.workouts.get(workoutId);
+        this.workout.set(workout ?? null);
 
-        // Load Exercises
-        const exercises = await this.db.query<WorkoutExercise>(
-          `SELECT we.*, e.name as exercise_name, e.muscle_group 
-           FROM workout_exercises we
-           JOIN exercises e ON we.exercise_id = e.id
-           WHERE we.workout_id = ?
-           ORDER BY we.order_index ASC`,
-          [workoutId],
-        );
-        this.exercises.set(exercises);
+        // Load Exercises with joined info
+        const workoutExercises = await db.workout_exercises
+          .where('workout_id')
+          .equals(workoutId)
+          .toArray();
+
+        const exerciseIds = workoutExercises.map((we) => we.exercise_id);
+        const exercises = await db.exercises.where('id').anyOf(exerciseIds).toArray();
+        const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
+
+        const detailedExercises: WorkoutExercise[] = workoutExercises
+          .map((we) => ({
+            ...we,
+            exercise_name: exerciseMap.get(we.exercise_id)?.name,
+            muscle_group: exerciseMap.get(we.exercise_id)?.muscle_group,
+          }))
+          .sort((a, b) => a.order_index - b.order_index);
+
+        this.exercises.set(detailedExercises);
 
         // Load Logs for this session
-        const logs = await this.db.query<SetLog>(
-          'SELECT * FROM set_logs WHERE session_id = ?',
-          [existingSession.id],
-        );
-        this.setLogs.set(logs);
+        const logs = await db.set_logs
+          .where('session_id')
+          .equals(existingSession.id)
+          .toArray();
 
-        // Set state to IN_PROGRESS
+        this.setLogs.set(logs.sort((a, b) => a.set_number - b.set_number));
         this.activeSession.set(existingSession);
         this.state.set('IN_PROGRESS');
         return;
-      } else {
-        // If there's an active session for ANOTHER workout, we currently ignore it
-        // and let the user start this new one. (Future: Prompt to discard/resume)
-        console.warn(
-          'Found active session for another workout:',
-          existingSession.workout_id,
-        );
       }
     }
 
     // 1. Load Workout Details (Normal Flow)
-    const workouts = await this.db.query<Workout>(
-      'SELECT * FROM workouts WHERE id = ?',
-      [workoutId],
-    );
-    const workout = workouts[0];
+    const workout = await db.workouts.get(workoutId);
 
     if (!workout) {
       console.error('Workout not found');
@@ -134,16 +144,24 @@ export class SessionService {
     this.workout.set(workout);
 
     // 2. Load Exercises
-    const exercises = await this.db.query<WorkoutExercise>(
-      `SELECT we.*, e.name as exercise_name, e.muscle_group 
-       FROM workout_exercises we
-       JOIN exercises e ON we.exercise_id = e.id
-       WHERE we.workout_id = ?
-       ORDER BY we.order_index ASC`,
-      [workoutId],
-    );
+    const workoutExercises = await db.workout_exercises
+      .where('workout_id')
+      .equals(workoutId)
+      .toArray();
 
-    this.exercises.set(exercises);
+    const exerciseIds = workoutExercises.map((we) => we.exercise_id);
+    const exercises = await db.exercises.where('id').anyOf(exerciseIds).toArray();
+    const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
+
+    const detailedExercises: WorkoutExercise[] = workoutExercises
+      .map((we) => ({
+        ...we,
+        exercise_name: exerciseMap.get(we.exercise_id)?.name,
+        muscle_group: exerciseMap.get(we.exercise_id)?.muscle_group,
+      }))
+      .sort((a, b) => a.order_index - b.order_index);
+
+    this.exercises.set(detailedExercises);
     this.state.set('PREPARING');
   }
 
@@ -155,6 +173,7 @@ export class SessionService {
     const workout = this.workout();
     if (!workout) return;
 
+    await this.dbService.initialize();
     const sessionId = uuidv4();
     const now = Date.now();
 
@@ -162,16 +181,12 @@ export class SessionService {
       id: sessionId,
       workout_id: workout.id,
       started_at: now,
+      status: 'IN_PROGRESS',
       finished_at: undefined,
       notes: '',
     };
 
-    // Persist to DB
-    await this.db.execute(
-      `INSERT INTO workout_sessions (id, workout_id, started_at) VALUES (?, ?, ?)`,
-      [newSession.id, newSession.workout_id, newSession.started_at],
-    );
-
+    await this.dbService.db.workout_sessions.add(newSession);
     this.activeSession.set(newSession);
     this.state.set('IN_PROGRESS');
   }
@@ -189,78 +204,67 @@ export class SessionService {
     const session = this.activeSession();
     if (!session) return;
 
+    await this.dbService.initialize();
+
     const newLog: SetLog = {
       id: uuidv4(),
-      session_id: session.id, // Changed from workout_session_id to session_id to match type
+      session_id: session.id,
       exercise_id: data.exercise_id,
       set_number: data.set_number,
       reps: data.reps,
       weight: data.weight,
-      rpe: data.rpe,
+      rpe: data.rpe ?? undefined,
       completed_at: Date.now(),
     };
 
     try {
-      await this.db.execute(
-        `INSERT INTO set_logs (id, session_id, exercise_id, set_number, reps, weight, rpe, completed_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          newLog.id,
-          newLog.session_id,
-          newLog.exercise_id,
-          newLog.set_number,
-          newLog.reps,
-          newLog.weight,
-          newLog.rpe ?? null,
-          newLog.completed_at,
-        ],
-      );
+      await this.dbService.db.set_logs.add(newLog);
       this.setLogs.update((logs) => [...logs, newLog]);
-      Haptics.impact({ style: ImpactStyle.Light });
+      this.triggerHaptic('light');
     } catch (error) {
       console.error('Failed to log set:', error);
     }
   }
 
   /**
-   * Delete a set log.
+   * Update an existing set.
    */
   async updateSet(log: SetLog) {
     try {
-      await this.db.execute(
-        `UPDATE set_logs SET reps = ?, weight = ?, rpe = ? WHERE id = ?`,
-        [log.reps, log.weight, log.rpe ?? null, log.id],
-      );
+      await this.dbService.initialize();
+      await this.dbService.db.set_logs.update(log.id, {
+        reps: log.reps,
+        weight: log.weight,
+        rpe: log.rpe ?? undefined,
+      });
 
       this.setLogs.update((logs) =>
         logs.map((l) => (l.id === log.id ? log : l)),
       );
-      Haptics.impact({ style: ImpactStyle.Light });
+      this.triggerHaptic('light');
     } catch (error) {
       console.error('Failed to update set:', error);
     }
   }
 
+  /**
+   * Delete a set log.
+   */
   async deleteSet(setId: string) {
     try {
-      await this.db.execute('DELETE FROM set_logs WHERE id = ?', [setId]);
+      await this.dbService.initialize();
+      await this.dbService.db.set_logs.delete(setId);
       this.setLogs.update((logs) => logs.filter((l) => l.id !== setId));
-      Haptics.impact({ style: ImpactStyle.Medium });
+      this.triggerHaptic('medium');
     } catch (error) {
       console.error('Failed to delete set:', error);
     }
   }
 
-  /**
-   * Transition to FINISHING state (User wants to end).
-   */
   public requestFinish(): void {
     this.state.set('FINISHING');
   }
 
-  /**
-   * Go back to IN_PROGRESS from FINISHING.
-   */
   public resumeSession(): void {
     this.state.set('IN_PROGRESS');
   }
@@ -273,35 +277,35 @@ export class SessionService {
     if (!session) return;
 
     try {
-      await this.db.execute(
-        'UPDATE workout_sessions SET finished_at = ?, status = ?, notes = ? WHERE id = ?',
-        [Date.now(), 'COMPLETED', notes ?? null, session.id],
-      );
+      await this.dbService.initialize();
+      await this.dbService.db.workout_sessions.update(session.id, {
+        finished_at: Date.now(),
+        status: 'COMPLETED',
+        notes: notes || undefined,
+      });
       this.state.set('COMPLETED');
       this.activeSession.set(null);
-      Haptics.vibrate();
+      this.triggerVibrate();
       this.navCtrl.navigateBack('/tabs/workouts');
     } catch (error) {
       console.error('Failed to finish session:', error);
     }
   }
 
-  /**
-   * Cancel the session (from PREPARING or IN_PROGRESS).
-   * If IN_PROGRESS, might need to delete the session or mark as abandoned?
-   * For MVP: if PREPARING, just go back. If IN_PROGRESS, allow discard.
-   */
   public async cancelSession(): Promise<void> {
     const session = this.activeSession();
 
     if (session) {
-      // If we want to fully delete the session on cancel:
-      await this.db.execute('DELETE FROM set_logs WHERE session_id = ?', [
-        session.id,
-      ]);
-      await this.db.execute('DELETE FROM workout_sessions WHERE id = ?', [
-        session.id,
-      ]);
+      await this.dbService.initialize();
+      const db = this.dbService.db;
+      await db.transaction(
+        'rw',
+        [db.set_logs, db.workout_sessions],
+        async () => {
+          await db.set_logs.where('session_id').equals(session.id).delete();
+          await db.workout_sessions.delete(session.id);
+        },
+      );
     }
 
     this.resetState();

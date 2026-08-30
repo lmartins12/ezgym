@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { LanguageService } from '@core';
+import { LanguageService } from '@core/services/language.service';
 import {
   IonCard,
   IonCardContent,
@@ -10,11 +10,11 @@ import {
   IonListHeader,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
-import { MuscleIconComponent } from '@shared';
+import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, time } from 'ionicons/icons';
-import type { FrequentWorkout } from '../../models';
-import { ProgressService } from '../../services';
+import type { FrequentWorkout } from '../../models/progress.models';
+import { ProgressService } from '../../services/progress.service';
 
 addIcons({ barbell, time });
 

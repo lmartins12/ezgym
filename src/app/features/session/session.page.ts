@@ -19,12 +19,10 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { barbellOutline, closeOutline } from 'ionicons/icons';
-import {
-  SessionFinishingComponent,
-  SessionInProgressComponent,
-  SessionPreparingComponent,
-} from './components';
-import { SessionService } from './services';
+import { SessionFinishingComponent } from './components/session-finishing/session-finishing.component';
+import { SessionInProgressComponent } from './components/session-in-progress/session-in-progress.component';
+import { SessionPreparingComponent } from './components/session-preparing/session-preparing.component';
+import { SessionService } from './services/session.service';
 
 @Component({
   selector: 'app-session',

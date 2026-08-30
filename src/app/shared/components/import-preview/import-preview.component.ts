@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import type { ImportPreview } from '@core';
+import type { ImportPreview } from '@core/models/import-export.models';
 import { IonCard, IonCardContent, IonIcon } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';

@@ -32,6 +32,15 @@
     </ion-item>
   </ion-list>
 
+  @if (canInstall()) {
+    <ion-list lines="none" inset>
+      <ion-item button="true" (click)="installApp()" detail="true">
+        <ion-icon name="download-outline" slot="start" color="primary"></ion-icon>
+        <ion-label color="primary">{{ 'SETTINGS.INSTALL_APP' | translate }}</ion-label>
+      </ion-item>
+    </ion-list>
+  }
+
   <ion-list lines="none" inset>
     <ion-item button="true" (click)="openImportExport()">
       <ion-icon name="settings-outline" slot="start"></ion-icon>

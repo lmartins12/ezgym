@@ -1,4 +1,4 @@
-import type { MuscleGroup, Workout } from '@core';
+import type { MuscleGroup, Workout } from '@core/models/app-models';
 
 export interface WorkoutDetail extends Workout {
   exercise_count: number;
