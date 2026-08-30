@@ -1,5 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import type { Exercise, WorkoutExercise } from '@core/models/app-models';
+import type { WorkoutExercise } from '@core/models/app-models';
+import {
+  ExerciseRepository,
+  type ExerciseSeedData,
+} from '@core/services/exercise-repository.service';
 import { DatabaseService } from '@core/services/database.service';
 import { v4 as uuidv4 } from 'uuid';
 import type {
@@ -10,44 +14,26 @@ import type {
 @Injectable({ providedIn: 'root' })
 export class WorkoutExercisesService {
   private readonly dbService = inject(DatabaseService);
+  private readonly exerciseRepository = inject(ExerciseRepository);
 
-  public async getByWorkoutId(workoutId: string): Promise<WorkoutExercise[]> {
-    await this.dbService.initialize();
-    const db = this.dbService.db;
-
-    const workoutExercises = await db.workout_exercises
-      .where('workout_id')
-      .equals(workoutId)
-      .toArray();
-
-    if (workoutExercises.length === 0) return [];
-
-    const exerciseIds = workoutExercises.map((we) => we.exercise_id);
-    const exercises = await db.exercises
-      .where('id')
-      .anyOf(exerciseIds)
-      .toArray();
-    const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
-
-    const result: WorkoutExercise[] = workoutExercises.map((we) => {
-      const ex = exerciseMap.get(we.exercise_id);
-      return {
-        ...we,
-        exercise_name: ex?.name,
-        muscle_group: ex?.muscle_group,
-        equipment: ex?.equipment,
-      };
-    });
-
-    return result.sort((a, b) => a.order_index - b.order_index);
+  public getByWorkoutId(workoutId: string): Promise<WorkoutExercise[]> {
+    return this.exerciseRepository.getDetailedByWorkoutId(workoutId);
   }
 
   public async addExercise(data: AddExerciseData): Promise<string> {
     await this.dbService.initialize();
     const db = this.dbService.db;
 
-    // Create-or-find exercise by name
-    const exerciseId = await this.findOrCreateExercise(data);
+    // Create-or-find exercise by name; manual edits update metadata
+    const seed: ExerciseSeedData = {
+      name: data.name,
+      muscleGroup: data.muscleGroup,
+      equipment: data.equipment,
+      notes: data.notes,
+    };
+    const { exerciseId } = await this.exerciseRepository.findOrCreate(seed, {
+      overwriteMetadata: true,
+    });
 
     // Get next order index
     const maxOrder = await this.getMaxOrderIndex(data.workoutId);
@@ -96,43 +82,6 @@ export class WorkoutExercisesService {
         await db.workout_exercises.update(exerciseIds[i], { order_index: i });
       }
     });
-  }
-
-  private async findOrCreateExercise(data: AddExerciseData): Promise<string> {
-    const db = this.dbService.db;
-    const normalizedName = data.name.trim().toLowerCase();
-
-    // Find existing exercise by case-insensitive name
-    const allExercises = await db.exercises.toArray();
-    const existing = allExercises.find(
-      (e) => e.name.trim().toLowerCase() === normalizedName,
-    );
-
-    const now = Date.now();
-
-    if (existing) {
-      await db.exercises.update(existing.id, {
-        muscle_group: data.muscleGroup,
-        equipment: data.equipment || undefined,
-        notes: data.notes || undefined,
-        updated_at: now,
-      });
-      return existing.id;
-    }
-
-    const id = uuidv4();
-    const newExercise: Exercise = {
-      id,
-      name: data.name.trim(),
-      muscle_group: data.muscleGroup,
-      equipment: data.equipment || undefined,
-      notes: data.notes || undefined,
-      created_at: now,
-      updated_at: now,
-    };
-
-    await db.exercises.add(newExercise);
-    return id;
   }
 
   private async getMaxOrderIndex(workoutId: string): Promise<number> {

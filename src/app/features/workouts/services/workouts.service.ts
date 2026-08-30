@@ -12,29 +12,11 @@ export class WorkoutsService {
     await this.dbService.initialize();
     const db = this.dbService.db;
 
-    const [workouts, workoutExercises, sessions] = await Promise.all([
-      db.workouts.toArray(),
-      db.workout_exercises.toArray(),
-      db.workout_sessions.toArray(),
+    const [workouts, exerciseCountMap, lastTrainedMap] = await Promise.all([
+      db.workouts.orderBy('order_index').toArray(),
+      this.buildExerciseCountMap(),
+      this.buildLastTrainedMap(),
     ]);
-
-    // Map exercise counts per workout
-    const exerciseCountMap = new Map<string, number>();
-    for (const we of workoutExercises) {
-      exerciseCountMap.set(
-        we.workout_id,
-        (exerciseCountMap.get(we.workout_id) ?? 0) + 1,
-      );
-    }
-
-    // Map last trained per workout
-    const lastTrainedMap = new Map<string, number>();
-    for (const s of sessions) {
-      const current = lastTrainedMap.get(s.workout_id);
-      if (!current || s.started_at > current) {
-        lastTrainedMap.set(s.workout_id, s.started_at);
-      }
-    }
 
     const details: WorkoutDetail[] = workouts.map((w) => ({
       ...w,
@@ -50,6 +32,31 @@ export class WorkoutsService {
       if (orderA !== orderB) return orderA - orderB;
       return (b.updated_at ?? 0) - (a.updated_at ?? 0);
     });
+  }
+
+  /**
+   * Exercise count per workout via cursor — no materialization.
+   */
+  private async buildExerciseCountMap(): Promise<Map<string, number>> {
+    const map = new Map<string, number>();
+    await this.dbService.db.workout_exercises.each((we) => {
+      map.set(we.workout_id, (map.get(we.workout_id) ?? 0) + 1);
+    });
+    return map;
+  }
+
+  /**
+   * Last trained timestamp per workout via cursor — no materialization.
+   */
+  private async buildLastTrainedMap(): Promise<Map<string, number>> {
+    const map = new Map<string, number>();
+    await this.dbService.db.workout_sessions.each((session) => {
+      const current = map.get(session.workout_id);
+      if (!current || session.started_at > current) {
+        map.set(session.workout_id, session.started_at);
+      }
+    });
+    return map;
   }
 
   public async getById(id: string): Promise<Workout | null> {

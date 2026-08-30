@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from '@core/services/database.service';
 import type { MuscleGroup } from '@core/models/app-models';
+import { Dexie } from 'dexie';
 import { formatDuration } from '@shared/utils/date.utils';
 import type { SessionDetail, WorkoutEvent } from '../models/dashboard.models';
 
@@ -22,7 +23,7 @@ export class DashboardService {
   private readonly dbService = inject(DatabaseService);
 
   /**
-   * Fetch workout sessions with pagination.
+   * Fetch workout sessions with pagination (index-backed).
    * @param startDate Unix timestamp (ms) or null for no start limit
    * @param endDate Unix timestamp (ms) or null for no end limit
    * @param offset Number of records to skip
@@ -37,29 +38,21 @@ export class DashboardService {
     await this.dbService.initialize();
     const db = this.dbService.db;
 
-    let sessions = await db.workout_sessions.toArray();
+    const sessions = await db.workout_sessions
+      .where('started_at')
+      .between(startDate ?? Dexie.minKey, endDate ?? Dexie.maxKey, true, true)
+      .reverse()
+      .offset(offset)
+      .limit(limit)
+      .toArray();
 
-    // Filter by date range
-    if (startDate !== null) {
-      sessions = sessions.filter((s) => s.started_at >= startDate);
-    }
-    if (endDate !== null) {
-      sessions = sessions.filter((s) => s.started_at <= endDate);
-    }
+    if (sessions.length === 0) return [];
 
-    // Sort descending by started_at
-    sessions.sort((a, b) => b.started_at - a.started_at);
-
-    // Apply pagination
-    const paginatedSessions = sessions.slice(offset, offset + limit);
-
-    if (paginatedSessions.length === 0) return [];
-
-    const workoutIds = paginatedSessions.map((s) => s.workout_id);
+    const workoutIds = sessions.map((s) => s.workout_id);
     const workouts = await db.workouts.where('id').anyOf(workoutIds).toArray();
     const workoutMap = new Map(workouts.map((w) => [w.id, w]));
 
-    return paginatedSessions.map((s) => {
+    return sessions.map((s) => {
       const workout = workoutMap.get(s.workout_id);
       return {
         id: s.id,
@@ -74,7 +67,7 @@ export class DashboardService {
   }
 
   /**
-   * Get count of workout sessions for pagination.
+   * Get count of workout sessions for pagination (index-backed).
    */
   async getWorkoutSessionsCount(
     startDate: number | null,
@@ -83,16 +76,10 @@ export class DashboardService {
     await this.dbService.initialize();
     const db = this.dbService.db;
 
-    let sessions = await db.workout_sessions.toArray();
-
-    if (startDate !== null) {
-      sessions = sessions.filter((s) => s.started_at >= startDate);
-    }
-    if (endDate !== null) {
-      sessions = sessions.filter((s) => s.started_at <= endDate);
-    }
-
-    return sessions.length;
+    return db.workout_sessions
+      .where('started_at')
+      .between(startDate ?? Dexie.minKey, endDate ?? Dexie.maxKey, true, true)
+      .count();
   }
 
   /**
@@ -105,13 +92,15 @@ export class DashboardService {
     endDate: number,
   ): Promise<number[]> {
     await this.dbService.initialize();
-    const sessions = await this.dbService.db.workout_sessions.toArray();
+    const keys = await this.dbService.db.workout_sessions
+      .where('started_at')
+      .between(startDate, endDate, true, true)
+      .keys();
 
-    const filtered = sessions
-      .filter((s) => s.started_at >= startDate && s.started_at <= endDate)
-      .map((s) => s.started_at);
-
-    return Array.from(new Set(filtered)).sort((a, b) => b - a);
+    const dates = Array.from(
+      new Set(keys.filter((k): k is number => typeof k === 'number')),
+    );
+    return dates.sort((a, b) => b - a);
   }
 
   /**
@@ -120,9 +109,14 @@ export class DashboardService {
    */
   async getAllDatesWithEvents(): Promise<number[]> {
     await this.dbService.initialize();
-    const sessions = await this.dbService.db.workout_sessions.toArray();
-    const dates = sessions.map((s) => s.started_at);
-    return Array.from(new Set(dates)).sort((a, b) => b - a);
+    const keys = await this.dbService.db.workout_sessions
+      .orderBy('started_at')
+      .keys();
+
+    const dates = Array.from(
+      new Set(keys.filter((k): k is number => typeof k === 'number')),
+    );
+    return dates.sort((a, b) => b - a);
   }
 
   /**

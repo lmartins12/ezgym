@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from '@core/services/database.service';
+import type { MuscleGroup, WorkoutSession } from '@core/models/app-models';
 import type {
   ExercisePR,
   FrequentWorkout,
@@ -11,13 +12,19 @@ import type {
 export class ProgressService {
   private readonly dbService = inject(DatabaseService);
 
-  async getWorkoutStats(): Promise<WorkoutStats> {
+  /**
+   * Completed sessions via the indexed `status` field.
+   */
+  private async getCompletedSessions(): Promise<WorkoutSession[]> {
     await this.dbService.initialize();
-    const db = this.dbService.db;
-
-    const completedSessions = await db.workout_sessions
-      .filter((s) => s.finished_at != null)
+    return this.dbService.db.workout_sessions
+      .where('status')
+      .equals('COMPLETED')
       .toArray();
+  }
+
+  async getWorkoutStats(): Promise<WorkoutStats> {
+    const completedSessions = await this.getCompletedSessions();
 
     const totalWorkouts = completedSessions.length;
 
@@ -31,19 +38,17 @@ export class ProgressService {
       };
     }
 
+    // Total volume via cursor — avoids materializing every set log
     const sessionIds = completedSessions.map((s) => s.id);
-    const setLogs = await db.set_logs
+    let totalVolume = 0;
+    await this.dbService.db.set_logs
       .where('session_id')
       .anyOf(sessionIds)
-      .toArray();
-
-    // Total volume (sum of weight * reps)
-    const totalVolume = setLogs.reduce((sum, log) => {
-      if (log.weight != null && log.reps != null) {
-        return sum + log.weight * log.reps;
-      }
-      return sum;
-    }, 0);
+      .each((log) => {
+        if (log.weight != null && log.reps != null) {
+          totalVolume += log.weight * log.reps;
+        }
+      });
 
     // Average weekly frequency
     const minStartedAt = Math.min(
@@ -77,12 +82,7 @@ export class ProgressService {
   }
 
   async getFrequentWorkouts(limit: number = 5): Promise<FrequentWorkout[]> {
-    await this.dbService.initialize();
-    const db = this.dbService.db;
-
-    const completedSessions = await db.workout_sessions
-      .filter((s) => s.finished_at != null)
-      .toArray();
+    const completedSessions = await this.getCompletedSessions();
 
     if (completedSessions.length === 0) return [];
 
@@ -105,7 +105,10 @@ export class ProgressService {
     }
 
     const workoutIds = Array.from(workoutStatsMap.keys());
-    const workouts = await db.workouts.where('id').anyOf(workoutIds).toArray();
+    const workouts = await this.dbService.db.workouts
+      .where('id')
+      .anyOf(workoutIds)
+      .toArray();
     const workoutMap = new Map(workouts.map((w) => [w.id, w]));
 
     const result: FrequentWorkout[] = [];
@@ -115,7 +118,7 @@ export class ProgressService {
       result.push({
         id: workout.id,
         name: workout.name,
-        muscleGroup: workout.muscle_group as any,
+        muscleGroup: workout.muscle_group ?? null,
         count: stats.count,
         lastWorkout: stats.lastWorkout,
       });
@@ -125,44 +128,37 @@ export class ProgressService {
   }
 
   async getExercisePRs(): Promise<ExercisePR[]> {
-    await this.dbService.initialize();
-    const db = this.dbService.db;
-
-    const completedSessions = await db.workout_sessions
-      .filter((s) => s.finished_at != null)
-      .toArray();
+    const completedSessions = await this.getCompletedSessions();
 
     if (completedSessions.length === 0) return [];
 
     const sessionMap = new Map(completedSessions.map((s) => [s.id, s]));
     const sessionIds = Array.from(sessionMap.keys());
 
-    const setLogs = await db.set_logs
-      .where('session_id')
-      .anyOf(sessionIds)
-      .toArray();
-
-    // Map highest PR per exercise
+    // Map highest PR per exercise via cursor — avoids materializing logs
     const prMap = new Map<string, { prWeight: number; prDate: number }>();
 
-    for (const log of setLogs) {
-      if (log.weight == null || log.weight <= 0) continue;
-      const session = sessionMap.get(log.session_id);
-      if (!session) continue;
+    await this.dbService.db.set_logs
+      .where('session_id')
+      .anyOf(sessionIds)
+      .each((log) => {
+        if (log.weight == null || log.weight <= 0) return;
+        const session = sessionMap.get(log.session_id);
+        if (!session) return;
 
-      const existing = prMap.get(log.exercise_id);
-      if (!existing || log.weight > existing.prWeight) {
-        prMap.set(log.exercise_id, {
-          prWeight: log.weight,
-          prDate: session.started_at,
-        });
-      }
-    }
+        const existing = prMap.get(log.exercise_id);
+        if (!existing || log.weight > existing.prWeight) {
+          prMap.set(log.exercise_id, {
+            prWeight: log.weight,
+            prDate: session.started_at,
+          });
+        }
+      });
 
     const exerciseIds = Array.from(prMap.keys());
     if (exerciseIds.length === 0) return [];
 
-    const exercises = await db.exercises
+    const exercises = await this.dbService.db.exercises
       .where('id')
       .anyOf(exerciseIds)
       .toArray();
@@ -175,7 +171,7 @@ export class ProgressService {
       results.push({
         exerciseId,
         exerciseName: ex.name,
-        muscleGroup: ex.muscle_group as any,
+        muscleGroup: ex.muscle_group,
         equipment: ex.equipment ?? null,
         prWeight: pr.prWeight,
         prDate: pr.prDate,
@@ -186,22 +182,20 @@ export class ProgressService {
   }
 
   async getMuscleDistribution(): Promise<MuscleDistribution[]> {
-    await this.dbService.initialize();
-    const db = this.dbService.db;
-
-    const completedSessions = await db.workout_sessions
-      .filter((s) => s.finished_at != null)
-      .toArray();
+    const completedSessions = await this.getCompletedSessions();
 
     if (completedSessions.length === 0) return [];
 
     const workoutIds = Array.from(
       new Set(completedSessions.map((s) => s.workout_id)),
     );
-    const workouts = await db.workouts.where('id').anyOf(workoutIds).toArray();
+    const workouts = await this.dbService.db.workouts
+      .where('id')
+      .anyOf(workoutIds)
+      .toArray();
     const workoutMap = new Map(workouts.map((w) => [w.id, w]));
 
-    const countMap = new Map<string, number>();
+    const countMap = new Map<MuscleGroup, number>();
     let total = 0;
 
     for (const session of completedSessions) {
@@ -216,7 +210,7 @@ export class ProgressService {
     const results: MuscleDistribution[] = [];
     for (const [muscleGroup, count] of countMap.entries()) {
       results.push({
-        muscleGroup: muscleGroup as any,
+        muscleGroup,
         count,
         percentage: total > 0 ? Math.round((count / total) * 100) : 0,
       });

@@ -5,18 +5,22 @@ import {
   EXPORT_VERSION,
   ValidationWarningType,
   type ExportData,
-  type ExportExercise,
   type ExportWorkout,
   type ImportPreview,
   type ImportResult,
   type ValidationWarning,
 } from '../models/import-export.models';
 import { DatabaseService } from './database.service';
+import {
+  ExerciseRepository,
+  type ExerciseSeedData,
+} from './exercise-repository.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({ providedIn: 'root' })
 export class ImportExportService {
   private readonly dbService = inject(DatabaseService);
+  private readonly exerciseRepository = inject(ExerciseRepository);
 
   /**
    * Export all workouts as JSON string
@@ -167,6 +171,9 @@ export class ImportExportService {
       let exercisesReused = 0;
       let workoutsImported = 0;
 
+      // Preload the exercise name map once so lookups are O(1) per exercise
+      const knownExercises = await this.exerciseRepository.getExerciseNameMap();
+
       await db.transaction(
         'rw',
         [db.workouts, db.exercises, db.workout_exercises],
@@ -196,8 +203,16 @@ export class ImportExportService {
             workoutsImported++;
 
             for (const exerciseData of workoutData.exercises) {
+              const seed: ExerciseSeedData = {
+                name: exerciseData.exercise_name,
+                muscleGroup: exerciseData.muscle_group,
+                equipment: exerciseData.equipment,
+                notes: exerciseData.notes,
+              };
               const { exerciseId, isNew } =
-                await this.findOrCreateExercise(exerciseData);
+                await this.exerciseRepository.findOrCreate(seed, {
+                  knownExercises,
+                });
               if (isNew) {
                 exercisesCreated++;
               } else {
@@ -243,7 +258,8 @@ export class ImportExportService {
   public async getImportPreview(json: string): Promise<ImportPreview | null> {
     try {
       const data: ExportData = JSON.parse(json);
-      const existingExercises = await this.getExistingExerciseNames();
+      const existingExercises =
+        await this.exerciseRepository.getExistingNames();
       const newExercisesSet = new Set<string>();
       const existingExercisesSet = new Set<string>();
       const warnings: ValidationWarning[] = [];
@@ -274,46 +290,10 @@ export class ImportExportService {
         existingExercises: Array.from(existingExercisesSet),
         warnings,
       };
-    } catch {
+    } catch (error) {
+      console.error('Failed to build import preview:', error);
       return null;
     }
-  }
-
-  private async findOrCreateExercise(
-    exerciseData: ExportExercise,
-  ): Promise<{ exerciseId: string; isNew: boolean }> {
-    const db = this.dbService.db;
-    const normalizedName = exerciseData.exercise_name.trim().toLowerCase();
-
-    const allExercises = await db.exercises.toArray();
-    const existing = allExercises.find(
-      (e) => e.name.trim().toLowerCase() === normalizedName,
-    );
-
-    if (existing) {
-      return { exerciseId: existing.id, isNew: false };
-    }
-
-    const id = uuidv4();
-    const now = Date.now();
-
-    await db.exercises.add({
-      id,
-      name: exerciseData.exercise_name.trim(),
-      muscle_group: exerciseData.muscle_group,
-      equipment: exerciseData.equipment || undefined,
-      notes: exerciseData.notes || undefined,
-      created_at: now,
-      updated_at: now,
-    });
-
-    return { exerciseId: id, isNew: true };
-  }
-
-  private async getExistingExerciseNames(): Promise<Set<string>> {
-    await this.dbService.initialize();
-    const exercises = await this.dbService.db.exercises.toArray();
-    return new Set(exercises.map((e) => e.name.toLowerCase()));
   }
 
   /**

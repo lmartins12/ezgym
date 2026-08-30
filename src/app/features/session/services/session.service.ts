@@ -1,5 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { DatabaseService } from '@core/services/database.service';
+import { ExerciseRepository } from '@core/services/exercise-repository.service';
 import type {
   SetLog,
   Workout,
@@ -17,6 +18,7 @@ export type SessionState =
 })
 export class SessionService {
   private readonly dbService = inject(DatabaseService);
+  private readonly exerciseRepository = inject(ExerciseRepository);
   private readonly navCtrl = inject(NavController);
 
   // State Signals
@@ -95,29 +97,9 @@ export class SessionService {
       if (existingSession.workout_id === workoutId) {
         const workout = await db.workouts.get(workoutId);
         this.workout.set(workout ?? null);
-
-        // Load Exercises with joined info
-        const workoutExercises = await db.workout_exercises
-          .where('workout_id')
-          .equals(workoutId)
-          .toArray();
-
-        const exerciseIds = workoutExercises.map((we) => we.exercise_id);
-        const exercises = await db.exercises
-          .where('id')
-          .anyOf(exerciseIds)
-          .toArray();
-        const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
-
-        const detailedExercises: WorkoutExercise[] = workoutExercises
-          .map((we) => ({
-            ...we,
-            exercise_name: exerciseMap.get(we.exercise_id)?.name,
-            muscle_group: exerciseMap.get(we.exercise_id)?.muscle_group,
-          }))
-          .sort((a, b) => a.order_index - b.order_index);
-
-        this.exercises.set(detailedExercises);
+        this.exercises.set(
+          await this.exerciseRepository.getDetailedByWorkoutId(workoutId),
+        );
 
         // Load Logs for this session
         const logs = await db.set_logs
@@ -144,27 +126,9 @@ export class SessionService {
     this.workout.set(workout);
 
     // 2. Load Exercises
-    const workoutExercises = await db.workout_exercises
-      .where('workout_id')
-      .equals(workoutId)
-      .toArray();
-
-    const exerciseIds = workoutExercises.map((we) => we.exercise_id);
-    const exercises = await db.exercises
-      .where('id')
-      .anyOf(exerciseIds)
-      .toArray();
-    const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
-
-    const detailedExercises: WorkoutExercise[] = workoutExercises
-      .map((we) => ({
-        ...we,
-        exercise_name: exerciseMap.get(we.exercise_id)?.name,
-        muscle_group: exerciseMap.get(we.exercise_id)?.muscle_group,
-      }))
-      .sort((a, b) => a.order_index - b.order_index);
-
-    this.exercises.set(detailedExercises);
+    this.exercises.set(
+      await this.exerciseRepository.getDetailedByWorkoutId(workoutId),
+    );
     this.state.set('PREPARING');
   }
 
