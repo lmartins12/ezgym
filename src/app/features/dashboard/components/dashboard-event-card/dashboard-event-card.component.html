@@ -17,7 +17,7 @@
     </p>
   </ion-label>
 
-  @if (muscleGroup) {
-    <app-muscle-icon [muscleGroup]="muscleGroup" size="sm" slot="end" />
+  @if (muscleGroup()) {
+    <app-muscle-icon [muscleGroup]="muscleGroup()" size="sm" slot="end" />
   }
 </ion-item>

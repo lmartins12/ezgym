@@ -218,7 +218,7 @@ export class WorkoutDetailPage {
     const exerciseIds = event.detail.complete(
       this.exercises().map((e) => e.id),
     );
-    await this.exercisesService.reorderExercises(this.id(), exerciseIds);
+    await this.exercisesService.reorderExercises(exerciseIds);
     await this.loadExercises();
   }
 }

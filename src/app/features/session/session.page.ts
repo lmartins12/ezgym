@@ -1,5 +1,6 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import type { SetLog } from '@core/models/app-models';
 import {
   AlertController,
   IonButton,
@@ -149,7 +150,7 @@ export class SessionPage {
     this.sessionService.finishSession(notes);
   }
 
-  onUpdateSet(log: any) {
+  onUpdateSet(log: SetLog) {
     this.sessionService.updateSet(log);
   }
 }

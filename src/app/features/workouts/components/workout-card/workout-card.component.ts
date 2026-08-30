@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { LanguageService } from '@core/services/language.service';
@@ -20,7 +20,7 @@ import type { WorkoutDetail } from '../../models/workout-detail.model';
 @Component({
   selector: 'app-workout-card',
   imports: [
-    CommonModule,
+    DatePipe,
     TranslatePipe,
     IonItem,
     IonItemSliding,

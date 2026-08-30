@@ -87,10 +87,7 @@ export class WorkoutExercisesService {
     await this.dbService.db.workout_exercises.delete(id);
   }
 
-  public async reorderExercises(
-    _workoutId: string,
-    exerciseIds: string[],
-  ): Promise<void> {
+  public async reorderExercises(exerciseIds: string[]): Promise<void> {
     await this.dbService.initialize();
     const db = this.dbService.db;
 

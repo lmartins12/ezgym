@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   IonIcon,
   IonLabel,
@@ -6,7 +6,7 @@ import {
   IonTabButton,
   IonTabs,
 } from '@ionic/angular';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   barbell,
@@ -23,7 +23,6 @@ import {
 })
 export class TabsPage {
   private activeTab?: HTMLElement;
-  protected readonly translate = inject(TranslateService);
 
   constructor() {
     addIcons({

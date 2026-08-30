@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, computed, inject, Input, signal } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -29,7 +29,7 @@ addIcons({ close, fitness, barbell });
 @Component({
   selector: 'app-session-detail-modal',
   imports: [
-    CommonModule,
+    DatePipe,
     IonButton,
     IonButtons,
     IonCard,
@@ -60,11 +60,7 @@ export class SessionDetailModalComponent implements OnInit {
   // Internal signal for reactivity in template
   protected readonly detail = signal<SessionDetail | null>(null);
 
-  ngOnInit(): void {
-    this.detail.set(this.sessionDetail);
-  }
-
-  protected get totalVolume(): number {
+  protected readonly totalVolume = computed(() => {
     const detail = this.detail();
     if (!detail) return 0;
 
@@ -73,13 +69,17 @@ export class SessionDetailModalComponent implements OnInit {
         sum + ex.sets.reduce((s, set) => s + (set.weight ?? 0) * set.reps, 0),
       0,
     );
-  }
+  });
 
-  protected get totalSets(): number {
+  protected readonly totalSets = computed(() => {
     const detail = this.detail();
     if (!detail) return 0;
 
     return detail.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
+  });
+
+  ngOnInit(): void {
+    this.detail.set(this.sessionDetail);
   }
 
   protected closeModal(): void {

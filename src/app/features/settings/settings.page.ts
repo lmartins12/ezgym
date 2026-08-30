@@ -16,7 +16,7 @@ import {
   IonToolbar,
   ModalController,
 } from '@ionic/angular';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   caretDownSharp,
@@ -50,8 +50,6 @@ export class SettingsPage {
   private readonly themeService = inject(ThemeService);
   private readonly pwaInstallService = inject(PwaInstallService);
   private readonly modalCtrl = inject(ModalController);
-
-  protected readonly translate = inject(TranslateService);
 
   public readonly currentLang = this.languageService.language;
   public readonly isPortuguese = this.languageService.isPortuguese;

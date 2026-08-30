@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -16,7 +16,14 @@ addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
 
 @Component({
   selector: 'app-stats-cards',
-  imports: [CommonModule, IonCard, IonCardContent, IonIcon, TranslatePipe],
+  imports: [
+    DatePipe,
+    DecimalPipe,
+    IonCard,
+    IonCardContent,
+    IonIcon,
+    TranslatePipe,
+  ],
   templateUrl: './stats-cards.component.html',
   styleUrl: './stats-cards.component.scss',
 })

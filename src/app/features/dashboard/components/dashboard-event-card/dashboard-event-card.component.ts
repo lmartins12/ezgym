@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, input, output } from '@angular/core';
-import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon, IonItem, IonLabel } from '@ionic/angular';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
@@ -44,13 +43,10 @@ export class DashboardEventCardComponent {
     return iconMap[type];
   }
 
-  protected get muscleGroup(): MuscleGroup | undefined {
+  protected readonly muscleGroup = computed(() => {
     const evt = this.event();
-    if (this.isWorkoutEvent(evt)) {
-      return evt.muscle_group;
-    }
-    return undefined;
-  }
+    return this.isWorkoutEvent(evt) ? evt.muscle_group : undefined;
+  });
 
   protected onClick(): void {
     this.cardClick.emit(this.event());
