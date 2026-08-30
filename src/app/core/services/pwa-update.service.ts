@@ -1,4 +1,5 @@
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { ToastController } from '@ionic/angular/standalone';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,17 +10,15 @@ export class PwaUpdateService {
   private readonly swUpdate = inject(SwUpdate);
   private readonly toastCtrl = inject(ToastController);
   private readonly translate = inject(TranslateService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  public initialize(): void {
-    if (!this.swUpdate.isEnabled) return;
-
+  constructor() {
     this.swUpdate.versionUpdates
       .pipe(
         filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
+        takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => {
-        this.promptUpdate();
-      });
+      .subscribe(() => this.promptUpdate());
   }
 
   private async promptUpdate(): Promise<void> {

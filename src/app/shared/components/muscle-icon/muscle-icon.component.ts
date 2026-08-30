@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -40,11 +40,9 @@ export class MuscleIconComponent {
     });
   }
 
-  protected get hasSvg(): boolean {
-    return this.iconMap[this.muscleGroup() ?? 'other'] !== '';
-  }
+  protected readonly hasSvg = computed(
+    () => this.iconMap[this.muscleGroup() ?? 'other'] !== '',
+  );
 
-  protected get iconPath(): string {
-    return this.iconMap[this.muscleGroup() ?? 'other'];
-  }
+  protected readonly iconPath = computed(() => this.iconMap[this.muscleGroup() ?? 'other']);
 }

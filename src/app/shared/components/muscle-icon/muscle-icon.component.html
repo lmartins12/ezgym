@@ -1,6 +1,6 @@
-@if (hasSvg) {
+@if (hasSvg()) {
   <img
-    [src]="iconPath"
+    [src]="iconPath()"
     [attr.alt]="muscleGroup()"
     class="muscle-icon muscle-icon--{{ size() }}"
   />

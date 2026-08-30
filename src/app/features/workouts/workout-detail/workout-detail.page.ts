@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import type { MuscleGroup, Workout, WorkoutExercise } from '@core/models/app-models';
-import { NavController } from '@ionic/angular';
 import {
   AlertController,
   IonButton,
@@ -20,6 +19,7 @@ import {
   IonTitle,
   IonToolbar,
   ModalController,
+  NavController,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
