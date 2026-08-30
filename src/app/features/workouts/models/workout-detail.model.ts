@@ -18,6 +18,10 @@ export interface AddExerciseData {
 }
 
 export interface UpdateExerciseData {
+  name: string;
+  muscleGroup: MuscleGroup;
+  equipment?: string;
+  notes?: string;
   sets: number;
   reps: string;
   targetWeight?: number;

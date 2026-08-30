@@ -25,6 +25,20 @@
   }
 }
 
+.reorder-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-2);
+  color: var(--ion-color-medium);
+  font-size: 12px;
+
+  ion-icon {
+    font-size: 16px;
+  }
+}
+
 ion-footer {
   ion-toolbar {
     --padding-start: var(--space-4);

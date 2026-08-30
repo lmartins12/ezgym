@@ -60,12 +60,35 @@ export class WorkoutExercisesService {
     data: UpdateExerciseData,
   ): Promise<void> {
     await this.dbService.initialize();
-    await this.dbService.db.workout_exercises.update(id, {
-      sets: data.sets,
-      reps: data.reps,
-      rest_seconds: data.restSeconds,
-      target_weight: data.targetWeight ?? undefined,
-    });
+    const db = this.dbService.db;
+
+    await db.transaction(
+      'rw',
+      [db.workout_exercises, db.exercises],
+      async () => {
+        const row = await db.workout_exercises.get(id);
+        if (!row) return;
+
+        await db.workout_exercises.update(id, {
+          sets: data.sets,
+          reps: data.reps,
+          rest_seconds: data.restSeconds,
+          target_weight: data.targetWeight ?? undefined,
+        });
+
+        // Manual edits keep the canonical catalog entry in sync — same
+        // metadata semantics as addExercise (overwriteMetadata). Updated
+        // by id (not name) so partial edits never create duplicates; the
+        // metadata is shared by every workout referencing the exercise.
+        await db.exercises.update(row.exercise_id, {
+          name: data.name.trim(),
+          muscle_group: data.muscleGroup,
+          equipment: data.equipment || undefined,
+          notes: data.notes || undefined,
+          updated_at: Date.now(),
+        });
+      },
+    );
   }
 
   public async removeExercise(id: string): Promise<void> {

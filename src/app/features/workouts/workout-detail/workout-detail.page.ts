@@ -7,6 +7,7 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonFooter,
   IonHeader,
   IonIcon,
   IonLabel,
@@ -27,6 +28,7 @@ import {
   createOutline,
   fitnessOutline,
   playOutline,
+  reorderTwoOutline,
 } from 'ionicons/icons';
 import type { ExerciseData } from '../components/exercise-editor-modal/exercise-editor-modal.component';
 import { ExerciseEditorModalComponent } from '../components/exercise-editor-modal/exercise-editor-modal.component';
@@ -46,6 +48,7 @@ import { WorkoutsService } from '../services/workouts.service';
     IonButton,
     IonButtons,
     IonContent,
+    IonFooter,
     IonCard,
     IonCardContent,
     IonList,
@@ -79,6 +82,7 @@ export class WorkoutDetailPage {
       fitnessOutline,
       barbellOutline,
       arrowBackOutline,
+      reorderTwoOutline,
     });
   }
 
@@ -94,6 +98,17 @@ export class WorkoutDetailPage {
 
   public navigateWorkouts(): void {
     this.navCtrl.navigateBack('/tabs/workouts');
+  }
+
+  /**
+   * Mirrors the workouts-list slider: start = navigate to the session
+   * route; SessionPage owns initializing/creating the session.
+   */
+  public startWorkout(): void {
+    const id = this.id();
+    if (!id || this.exercises().length === 0) return;
+
+    this.navCtrl.navigateForward(['/session', id]);
   }
 
   private async loadWorkout(): Promise<void> {
@@ -183,6 +198,10 @@ export class WorkoutDetailPage {
 
     if (data) {
       await this.exercisesService.updateExercise(exercise.id, {
+        name: data.name,
+        muscleGroup: data.muscleGroup,
+        equipment: data.equipment,
+        notes: data.notes,
         sets: data.sets,
         reps: data.reps,
         targetWeight: data.targetWeight,

@@ -50,15 +50,25 @@
   border-radius: 16px;
 }
 
-.input-item {
-  --background: var(--ion-color-light);
+.input-block {
+  background: var(--ion-color-light);
   border-radius: 8px;
+  padding: 10px 12px;
+  width: 100%;
+  overflow: hidden;
+
+  .input-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ion-text-color-step-400, var(--ion-color-medium));
+  }
 
   ion-input {
+    min-height: 2rem;
     font-size: 24px;
     font-weight: 700;
-    --padding-top: 8px;
-    --padding-bottom: 8px;
   }
 }
 
@@ -197,7 +207,7 @@
   }
 }
 
-.exercise-name {
+.exercise-item .exercise-name {
   color: var(--ion-text-color);
   font-size: 11px;
   text-align: center;

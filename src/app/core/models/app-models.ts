@@ -63,6 +63,7 @@ export interface WorkoutExercise {
   exercise_name?: string;
   muscle_group?: MuscleGroup;
   equipment?: string;
+  notes?: string;
 }
 
 export interface WorkoutSession {

@@ -66,9 +66,11 @@ export class ExerciseEditorModalComponent {
 
   public ionViewDidEnter(): void {
     if (this.exercise) {
-      // Edit mode - populate with existing data
       const ex = this.exercise;
       this.name.set(ex.exercise_name ?? '');
+      this.muscleGroup.set(ex.muscle_group ?? 'upper');
+      this.equipment.set(ex.equipment ?? '');
+      this.notes.set(ex.notes ?? '');
       this.sets.set(ex.sets);
       this.reps.set(ex.reps);
       this.targetWeight.set(ex.target_weight);

@@ -65,6 +65,7 @@ export class ExerciseRepository {
           exercise_name: ex?.name,
           muscle_group: ex?.muscle_group,
           equipment: ex?.equipment,
+          notes: ex?.notes,
         };
       })
       .sort((a, b) => a.order_index - b.order_index);

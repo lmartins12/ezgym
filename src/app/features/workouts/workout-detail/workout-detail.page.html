@@ -48,8 +48,15 @@
     <p>{{ 'WORKOUT_DETAIL.NO_EXERCISES' | translate }}</p>
   </div>
   } @else {
+  <p class="reorder-hint">
+    <ion-icon name="reorder-two-outline" aria-hidden="true"></ion-icon>
+    {{ 'WORKOUT_DETAIL.REORDER_HINT' | translate }}
+  </p>
   <ion-list lines="full">
-    <ion-reorder-group (ionItemReorder)="reorderExercises($event)">
+    <ion-reorder-group
+      disabled="false"
+      (ionReorderEnd)="reorderExercises($event)"
+    >
       @for (exercise of exercises(); track exercise.id) {
       <app-exercise-list-item
         [exercise]="exercise"
@@ -61,3 +68,17 @@
   </ion-list>
   }
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button
+      expand="block"
+      color="primary"
+      [disabled]="exercises().length === 0"
+      (click)="startWorkout()"
+    >
+      <ion-icon slot="start" name="play-outline"></ion-icon>
+      {{ 'WORKOUT_DETAIL.START_WORKOUT' | translate }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
