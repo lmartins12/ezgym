@@ -4,13 +4,13 @@ import type {
   ValidationWarning,
 } from '@core/models/import-export.models';
 import { IonCard, IonIcon, IonItem, IonLabel, IonList } from '@ionic/angular';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { alertCircle, warningOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-validation-list',
-  imports: [IonCard, IonIcon, IonItem, IonLabel, IonList, TranslatePipe],
+  imports: [IonCard, IonIcon, IonItem, IonLabel, IonList],
   templateUrl: './validation-list.component.html',
   styleUrl: './validation-list.component.scss',
 })

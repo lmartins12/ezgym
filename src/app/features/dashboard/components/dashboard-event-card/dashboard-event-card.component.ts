@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, input, output } from '@angular/core';
 import type { MuscleGroup } from '@core/models/app-models';
 import { IonIcon, IonItem, IonLabel } from '@ionic/angular';
-import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, moon, nutritionOutline } from 'ionicons/icons';
@@ -20,14 +19,7 @@ addIcons({
 
 @Component({
   selector: 'app-dashboard-event-card',
-  imports: [
-    DatePipe,
-    IonIcon,
-    IonItem,
-    IonLabel,
-    TranslatePipe,
-    MuscleIconComponent,
-  ],
+  imports: [DatePipe, IonIcon, IonItem, IonLabel, MuscleIconComponent],
   templateUrl: './dashboard-event-card.component.html',
   styleUrl: './dashboard-event-card.component.scss',
 })
