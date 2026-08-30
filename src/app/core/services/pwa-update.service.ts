@@ -1,4 +1,4 @@
-import { DestroyRef, inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { ToastController } from '@ionic/angular';
@@ -22,19 +22,13 @@ export class PwaUpdateService {
   }
 
   private async promptUpdate(): Promise<void> {
-    const isPt = this.translate.currentLang() === 'pt';
-    const message = isPt
-      ? 'Uma nova versão do EzGym está disponível!'
-      : 'A new version of EzGym is available!';
-    const actionText = isPt ? 'Atualizar' : 'Update';
-
     const toast = await this.toastCtrl.create({
-      message,
+      message: this.translate.instant('PWA.UPDATE_AVAILABLE'),
       duration: 0,
       position: 'bottom',
       buttons: [
         {
-          text: actionText,
+          text: this.translate.instant('PWA.UPDATE_ACTION'),
           role: 'action',
           handler: () => {
             this.swUpdate.activateUpdate().then(() => {

@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonCard,
@@ -8,7 +8,7 @@ import {
   IonList,
   IonListHeader,
 } from '@ionic/angular';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { barbell, time } from 'ionicons/icons';
@@ -35,13 +35,14 @@ addIcons({ barbell, time });
 export class FrequentWorkoutsComponent implements OnInit {
   private readonly progressService = inject(ProgressService);
   private readonly languageService = inject(LanguageService);
+  private readonly translate = inject(TranslateService);
 
   protected readonly loading = signal(false);
   protected readonly workouts = signal<FrequentWorkout[]>([]);
 
-  protected readonly currentLocale = this.languageService.isPortuguese()
-    ? 'pt-BR'
-    : 'en-US';
+  protected readonly currentLocale = computed(() =>
+    this.languageService.isPortuguese() ? 'pt-BR' : 'en-US',
+  );
 
   async ngOnInit(): Promise<void> {
     await this.loadWorkouts();
@@ -58,24 +59,18 @@ export class FrequentWorkoutsComponent implements OnInit {
   }
 
   protected getRelativeTime(timestamp: number): string {
-    const now = Date.now();
-    const diff = now - timestamp;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const days = Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24));
 
-    if (days === 0) return this.currentLocale === 'pt-BR' ? 'Hoje' : 'Today';
-    if (days === 1)
-      return this.currentLocale === 'pt-BR' ? 'Ontem' : 'Yesterday';
+    if (days === 0) return this.translate.instant('PROGRESS.TIME_TODAY');
+    if (days === 1) return this.translate.instant('PROGRESS.TIME_YESTERDAY');
     if (days < 7)
-      return this.currentLocale === 'pt-BR'
-        ? `${days} dias atrás`
-        : `${days} days ago`;
+      return this.translate.instant('PROGRESS.TIME_DAYS_AGO', { count: days });
     if (days < 30)
-      return this.currentLocale === 'pt-BR'
-        ? `${Math.floor(days / 7)} semanas atrás`
-        : `${Math.floor(days / 7)} weeks ago`;
-
-    return this.currentLocale === 'pt-BR'
-      ? `${Math.floor(days / 30)} meses atrás`
-      : `${Math.floor(days / 30)} months ago`;
+      return this.translate.instant('PROGRESS.TIME_WEEKS_AGO', {
+        count: Math.floor(days / 7),
+      });
+    return this.translate.instant('PROGRESS.TIME_MONTHS_AGO', {
+      count: Math.floor(days / 30),
+    });
   }
 }

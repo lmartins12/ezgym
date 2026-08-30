@@ -143,8 +143,8 @@ export class WorkoutsListPage {
   }
 
   private async updateWorkoutsOrder(workouts: WorkoutDetail[]): Promise<void> {
-    for (let i = 0; i < workouts.length; i++) {
-      await this.workoutsService.updateOrderIndex(workouts[i].id, i);
-    }
+    await this.workoutsService.reorderWorkouts(
+      workouts.map((workout) => workout.id),
+    );
   }
 }

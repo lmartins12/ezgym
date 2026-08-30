@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonCard,
@@ -39,9 +39,9 @@ export class ExercisePRsComponent implements OnInit {
   protected readonly loading = signal(false);
   protected readonly prs = signal<ExercisePR[]>([]);
 
-  protected readonly currentLocale = this.languageService.isPortuguese()
-    ? 'pt-BR'
-    : 'en-US';
+  protected readonly currentLocale = computed(() =>
+    this.languageService.isPortuguese() ? 'pt-BR' : 'en-US',
+  );
 
   async ngOnInit(): Promise<void> {
     await this.loadPRs();
@@ -59,7 +59,7 @@ export class ExercisePRsComponent implements OnInit {
 
   protected formatPRDate(timestamp: number): string {
     const date = new Date(timestamp);
-    return date.toLocaleDateString(this.currentLocale, {
+    return date.toLocaleDateString(this.currentLocale(), {
       day: 'numeric',
       month: 'short',
       year: 'numeric',

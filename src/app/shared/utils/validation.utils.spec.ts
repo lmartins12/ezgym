@@ -1,5 +1,3 @@
-vi.mock('@core/services/app-db', () => ({ db: {} }));
-
 import { EXPORT_VERSION } from '@core/models/import-export.models';
 import { ImportValidation } from './validation.utils';
 

@@ -60,9 +60,12 @@
     "REORDER_HINT": "Arraste para reordenar exercícios",
     "DELETE_EXERCISE_CONFIRM": "Remover este exercício do treino?"
   },
+  "PWA": {
+    "UPDATE_AVAILABLE": "Uma nova versão do EzGym está disponível!",
+    "UPDATE_ACTION": "Atualizar"
+  },
   "SESSION": {
-    "TITLE": "Sessão de Treino",
-    "PREPARING": {
+    "TITLE": "Sessão de Treino",    "PREPARING": {
       "START": "Iniciar Treino",
       "SUBTITLE": "Pronto para começar?",
       "EXERCISES_LIST": "Exercícios de hoje"
@@ -135,7 +138,12 @@
     "EXERCISE_PRS": "Recordes Pessoais",
     "NO_PRS": "Nenhum recorde registrado",
     "MUSCLE_DISTRIBUTION": "Distribuição Muscular",
-    "NO_DISTRIBUTION": "Nenhum dado de distribuição"
+    "NO_DISTRIBUTION": "Nenhum dado de distribuição",
+    "TIME_TODAY": "Hoje",
+    "TIME_YESTERDAY": "Ontem",
+    "TIME_DAYS_AGO": "{count} dias atrás",
+    "TIME_WEEKS_AGO": "{count} semanas atrás",
+    "TIME_MONTHS_AGO": "{count} meses atrás"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Adicionar Exercício",

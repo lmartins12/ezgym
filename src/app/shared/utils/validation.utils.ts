@@ -1,4 +1,3 @@
-import { db } from '@core/services/app-db';
 import {
   EXPORT_VERSION,
   type ExportData,
@@ -10,29 +9,19 @@ import {
   type ValidationWarning,
   type ValidationWarningType,
 } from '@core/models/import-export.models';
+import { MUSCLE_GROUPS, type MuscleGroup } from '@core/models/app-models';
 import { z } from 'zod';
+
+const muscleGroupSchema: z.ZodType<MuscleGroup> = z.enum(
+  MUSCLE_GROUPS as [MuscleGroup, ...MuscleGroup[]],
+);
 
 /**
  * Zod schema for validating export data structure
  */
 const exportExerciseSchema: z.ZodType<ExportExercise> = z.object({
   exercise_name: z.string().min(1, 'Exercise name is required'),
-  muscle_group: z.enum([
-    'upper',
-    'lower',
-    'chest',
-    'triceps',
-    'back',
-    'biceps',
-    'shoulders',
-    'quadriceps',
-    'hamstrings',
-    'calves',
-    'forearms',
-    'abs',
-    'cardio',
-    'other',
-  ]),
+  muscle_group: muscleGroupSchema,
   equipment: z.string().optional(),
   notes: z.string().optional(),
   order_index: z.number().int().min(0),
@@ -45,24 +34,7 @@ const exportExerciseSchema: z.ZodType<ExportExercise> = z.object({
 const exportWorkoutSchema: z.ZodType<ExportWorkout> = z.object({
   name: z.string().min(1, 'Workout name is required'),
   description: z.string().optional(),
-  muscle_group: z
-    .enum([
-      'upper',
-      'lower',
-      'chest',
-      'triceps',
-      'back',
-      'biceps',
-      'shoulders',
-      'quadriceps',
-      'hamstrings',
-      'calves',
-      'forearms',
-      'abs',
-      'cardio',
-      'other',
-    ])
-    .optional(),
+  muscle_group: muscleGroupSchema.optional(),
   exercises: z.array(exportExerciseSchema),
 });
 
@@ -247,45 +219,6 @@ export class ImportValidation {
       default:
         return 'INVALID_JSON' as ValidationErrorType;
     }
-  }
-
-  /**
-   * Get existing exercise names from database
-   */
-  static async getExistingExerciseNames(): Promise<Set<string>> {
-    try {
-      const exercises = await db.exercises.toArray();
-      return new Set(exercises.map((e) => e.name.toLowerCase()));
-    } catch {
-      return new Set();
-    }
-  }
-
-  /**
-   * Identify new vs existing exercises
-   */
-  static async categorizeExercises(
-    workouts: ExportWorkout[],
-  ): Promise<{ newExercises: string[]; existingExercises: string[] }> {
-    const existingNames = await this.getExistingExerciseNames();
-    const newExercises = new Set<string>();
-    const existingExercises = new Set<string>();
-
-    for (const workout of workouts) {
-      for (const exercise of workout.exercises) {
-        const normalizedName = exercise.exercise_name.toLowerCase();
-        if (existingNames.has(normalizedName)) {
-          existingExercises.add(exercise.exercise_name);
-        } else {
-          newExercises.add(exercise.exercise_name);
-        }
-      }
-    }
-
-    return {
-      newExercises: Array.from(newExercises),
-      existingExercises: Array.from(existingExercises),
-    };
   }
 }
 

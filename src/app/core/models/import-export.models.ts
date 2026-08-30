@@ -6,6 +6,12 @@ import type { MuscleGroup } from './app-models';
 export const EXPORT_VERSION = '1.0';
 
 /**
+ * Current app version embedded in exports.
+ * Keep in sync with the "version" field in package.json.
+ */
+export const APP_VERSION = '2.0.0';
+
+/**
  * Exercise data in export format (no ID, referenced by name)
  */
 export interface ExportExercise {

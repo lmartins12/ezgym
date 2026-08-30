@@ -60,6 +60,10 @@
     "REORDER_HINT": "Drag to reorder exercises",
     "DELETE_EXERCISE_CONFIRM": "Remove this exercise from the workout?"
   },
+  "PWA": {
+    "UPDATE_AVAILABLE": "A new version of EzGym is available!",
+    "UPDATE_ACTION": "Update"
+  },
   "SESSION": {
     "TITLE": "Workout Session",
     "PREPARING": {
@@ -135,7 +139,12 @@
     "EXERCISE_PRS": "Personal Records",
     "NO_PRS": "No records yet",
     "MUSCLE_DISTRIBUTION": "Muscle Distribution",
-    "NO_DISTRIBUTION": "No distribution data"
+    "NO_DISTRIBUTION": "No distribution data",
+    "TIME_TODAY": "Today",
+    "TIME_YESTERDAY": "Yesterday",
+    "TIME_DAYS_AGO": "{count} days ago",
+    "TIME_WEEKS_AGO": "{count} weeks ago",
+    "TIME_MONTHS_AGO": "{count} months ago"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Add Exercise",

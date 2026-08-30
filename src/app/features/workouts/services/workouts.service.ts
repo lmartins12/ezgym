@@ -131,10 +131,21 @@ export class WorkoutsService {
     );
   }
 
-  public async updateOrderIndex(
-    workoutId: string,
-    orderIndex: number,
-  ): Promise<void> {
-    await this.dbService.updateWorkoutOrder(workoutId, orderIndex);
+  /**
+   * Persist a new workout order atomically.
+   */
+  public async reorderWorkouts(workoutIds: string[]): Promise<void> {
+    await this.dbService.initialize();
+    const db = this.dbService.db;
+
+    await db.transaction('rw', db.workouts, async () => {
+      const now = Date.now();
+      for (let i = 0; i < workoutIds.length; i++) {
+        await db.workouts.update(workoutIds[i], {
+          order_index: i,
+          updated_at: now,
+        });
+      }
+    });
   }
 }

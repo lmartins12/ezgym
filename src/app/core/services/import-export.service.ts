@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import type { MuscleGroup, Workout } from '../models/app-models';
 import {
+  APP_VERSION,
   EXPORT_VERSION,
   ValidationWarningType,
   type ExportData,
@@ -77,7 +78,7 @@ export class ImportExportService {
     const exportData: ExportData = {
       version: EXPORT_VERSION,
       exported_at: Date.now(),
-      app_version: '1.0.0',
+      app_version: APP_VERSION,
       workouts: exportWorkouts,
     };
 
