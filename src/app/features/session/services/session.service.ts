@@ -46,13 +46,9 @@ export class SessionService {
     await this.dbService.initialize();
     const db = this.dbService.db;
 
-    const activeSessions = await db.workout_sessions
-      .where('status')
-      .equals('IN_PROGRESS')
-      .toArray();
+    const existingSession = await this.getMostRecentActiveSession();
 
-    if (activeSessions.length > 0) {
-      const existingSession = activeSessions[0];
+    if (existingSession) {
       const workout = await db.workouts.get(existingSession.workout_id);
       this.workout.set(workout ?? null);
       this.activeSession.set(existingSession);
@@ -71,31 +67,25 @@ export class SessionService {
     const db = this.dbService.db;
 
     // 0. Check for Abandoned Session (Recovery)
-    const activeSessions = await db.workout_sessions
-      .where('status')
-      .equals('IN_PROGRESS')
-      .toArray();
+    const existingSession = await this.getMostRecentActiveSession();
 
-    if (activeSessions.length > 0) {
-      const existingSession = activeSessions[0];
-      if (existingSession.workout_id === workoutId) {
-        const workout = await db.workouts.get(workoutId);
-        this.workout.set(workout ?? null);
-        this.exercises.set(
-          await this.exerciseRepository.getDetailedByWorkoutId(workoutId),
-        );
+    if (existingSession && existingSession.workout_id === workoutId) {
+      const workout = await db.workouts.get(workoutId);
+      this.workout.set(workout ?? null);
+      this.exercises.set(
+        await this.exerciseRepository.getDetailedByWorkoutId(workoutId),
+      );
 
-        // Load Logs for this session
-        const logs = await db.set_logs
-          .where('session_id')
-          .equals(existingSession.id)
-          .toArray();
+      // Load Logs for this session
+      const logs = await db.set_logs
+        .where('session_id')
+        .equals(existingSession.id)
+        .toArray();
 
-        this.setLogs.set(logs.sort((a, b) => a.set_number - b.set_number));
-        this.activeSession.set(existingSession);
-        this.state.set('IN_PROGRESS');
-        return true;
-      }
+      this.setLogs.set(logs.sort((a, b) => a.set_number - b.set_number));
+      this.activeSession.set(existingSession);
+      this.state.set('IN_PROGRESS');
+      return true;
     }
 
     // 1. Load Workout Details (Normal Flow)
@@ -113,6 +103,28 @@ export class SessionService {
     );
     this.state.set('PREPARING');
     return true;
+  }
+
+  /**
+   * The active session is always the most recent one (started_at desc).
+   * Legacy data may hold more than one IN_PROGRESS session (e.g. created
+   * before the duplicate-start guard existed); the older ones stay orphaned
+   * unless a user finalizes them, so we flag it for maintenance.
+   */
+  private async getMostRecentActiveSession(): Promise<WorkoutSession | null> {
+    const activeSessions = await this.dbService.db.workout_sessions
+      .where('status')
+      .equals('IN_PROGRESS')
+      .toArray();
+
+    if (activeSessions.length > 1) {
+      console.warn(
+        `[SessionService] Found ${activeSessions.length} active sessions; adopting the most recent one.`,
+      );
+    }
+
+    activeSessions.sort((a, b) => b.started_at - a.started_at);
+    return activeSessions[0] ?? null;
   }
 
   /**

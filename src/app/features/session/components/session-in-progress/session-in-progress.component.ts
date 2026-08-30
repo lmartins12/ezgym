@@ -2,10 +2,12 @@ import {
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
   input,
   output,
   signal,
+  viewChildren,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type {
@@ -38,6 +40,9 @@ import {
   informationCircleOutline,
   trashOutline,
 } from 'ionicons/icons';
+
+/** Default RPE for a new set, kept consistent between field and resetForm. */
+const DEFAULT_RPE = 7;
 
 @Component({
   selector: 'app-session-in-progress',
@@ -83,6 +88,10 @@ export class SessionInProgressComponent {
   private readonly alertCtrl = inject(AlertController);
   private readonly translate = inject(TranslateService);
 
+  // View references
+  private readonly exerciseItems =
+    viewChildren<ElementRef<HTMLButtonElement>>('exerciseItem');
+
   // Local state
   public readonly currentExerciseIndex = signal(0);
   public readonly editingSetId = signal<string | null>(null);
@@ -90,16 +99,26 @@ export class SessionInProgressComponent {
   // Form state
   public reps: number | null = null;
   public weight: number | null = null;
-  public rpe = 5; // Default RPE
+  public rpe: number = DEFAULT_RPE;
 
-  public readonly currentExercise = computed(() => {
-    return this.exercises()[this.currentExerciseIndex()];
+  /**
+   * Guarded against out-of-bounds indexes (e.g. exercises removed during
+   * the session): yields undefined instead of crashing the template.
+   */
+  public readonly currentExercise = computed<WorkoutExercise | undefined>(() => {
+    const exercises = this.exercises();
+    const index = this.currentExerciseIndex();
+    return index >= 0 && index < exercises.length
+      ? exercises[index]
+      : undefined;
   });
 
   public readonly currentLogs = computed(() => {
-    const exId = this.currentExercise().exercise_id;
+    const exercise = this.currentExercise();
+    if (!exercise) return [];
+
     return this.setLogs()
-      .filter((l) => l.exercise_id === exId)
+      .filter((l) => l.exercise_id === exercise.exercise_id)
       .sort((a, b) => a.set_number - b.set_number);
   });
 
@@ -133,6 +152,7 @@ export class SessionInProgressComponent {
       if (exercises.length > 0) {
         this.resetForm();
       }
+      this.exerciseItems();
       this.scrollToActiveExercise();
     });
   }
@@ -140,11 +160,13 @@ export class SessionInProgressComponent {
   resetForm() {
     this.editingSetId.set(null);
     const ex = this.currentExercise();
+    if (!ex) return;
+
     const targetReps = parseInt(ex.reps) || 12;
 
     this.reps = targetReps;
     this.weight = ex.target_weight ?? 0;
-    this.rpe = 7;
+    this.rpe = DEFAULT_RPE;
   }
 
   editSet(log: SetLog) {
@@ -159,7 +181,8 @@ export class SessionInProgressComponent {
   }
 
   onLogSet() {
-    if (this.reps === null || this.weight === null) return;
+    const exercise = this.currentExercise();
+    if (!exercise || this.reps === null || this.weight === null) return;
 
     if (this.editingSetId()) {
       const log = this.setLogs().find((l) => l.id === this.editingSetId());
@@ -174,7 +197,7 @@ export class SessionInProgressComponent {
       this.resetForm();
     } else {
       this.logSet.emit({
-        exerciseId: this.currentExercise().exercise_id,
+        exerciseId: exercise.exercise_id,
         setNumber: this.nextSetNumber(),
         reps: this.reps,
         weight: this.weight,
@@ -210,6 +233,8 @@ export class SessionInProgressComponent {
 
   private isExerciseComplete(exerciseIndex: number): boolean {
     const exercise = this.exercises()[exerciseIndex];
+    if (!exercise) return false;
+
     const exerciseLogs = this.setLogs().filter(
       (log) => log.exercise_id === exercise.exercise_id,
     );
@@ -219,6 +244,7 @@ export class SessionInProgressComponent {
   private checkAndAdvanceToNextExercise(newSetAdded: boolean = false): void {
     const currentIndex = this.currentExerciseIndex();
     const currentExercise = this.exercises()[currentIndex];
+    if (!currentExercise) return;
 
     const exerciseLogs = this.setLogs().filter(
       (log) => log.exercise_id === currentExercise.exercise_id,
@@ -242,9 +268,9 @@ export class SessionInProgressComponent {
 
   private scrollToActiveExercise(): void {
     requestAnimationFrame(() => {
-      const activeElement = document.querySelector('.exercise-item.active');
-      if (activeElement) {
-        activeElement.scrollIntoView({
+      const activeItem = this.exerciseItems()[this.currentExerciseIndex()];
+      if (activeItem) {
+        activeItem.nativeElement.scrollIntoView({
           behavior: 'smooth',
           block: 'nearest',
           inline: 'center',

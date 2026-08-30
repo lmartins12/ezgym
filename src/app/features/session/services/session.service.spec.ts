@@ -171,5 +171,28 @@ describe('SessionService', () => {
       expect(service.activeSession()?.id).toBe(abandoned.id);
       expect(service.workout()?.id).toBe(workout.id);
     });
+
+    it('adopts the most recent session when legacy data has multiple actives', async () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const workout = buildWorkout();
+      await db.workouts.add(workout);
+      const older = buildSession({
+        workout_id: workout.id,
+        status: 'IN_PROGRESS',
+        started_at: 1000,
+      });
+      const newer = buildSession({
+        workout_id: workout.id,
+        status: 'IN_PROGRESS',
+        started_at: 2000,
+      });
+      await db.workout_sessions.bulkAdd([older, newer]);
+
+      await service.checkActiveSession();
+
+      expect(service.activeSession()?.id).toBe(newer.id);
+      expect(warnSpy).toHaveBeenCalled();
+      warnSpy.mockRestore();
+    });
   });
 });

@@ -30,3 +30,13 @@ export interface MuscleDistribution {
   count: number;
   percentage: number;
 }
+
+/**
+ * All Progress tab sections resolved from a single completed-sessions read.
+ */
+export interface ProgressSnapshot {
+  stats: WorkoutStats;
+  frequentWorkouts: FrequentWorkout[];
+  exercisePRs: ExercisePR[];
+  muscleDistribution: MuscleDistribution[];
+}

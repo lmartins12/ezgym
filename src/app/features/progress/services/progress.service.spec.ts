@@ -158,4 +158,44 @@ describe('ProgressService', () => {
       });
     });
   });
+
+  describe('getProgressSnapshot', () => {
+    it('resolves every section from a single snapshot', async () => {
+      const workout = buildWorkout({ muscle_group: 'chest' });
+      const exercise = buildExercise();
+      const session = buildSession({ workout_id: workout.id });
+      await db.workouts.add(workout);
+      await db.exercises.add(exercise);
+      await db.workout_sessions.add(session);
+      await db.set_logs.add(
+        buildSetLog({
+          session_id: session.id,
+          exercise_id: exercise.id,
+          reps: 10,
+          weight: 50,
+        }),
+      );
+
+      const snapshot = await service.getProgressSnapshot();
+
+      expect(snapshot.stats.totalWorkouts).toBe(1);
+      expect(snapshot.stats.totalVolume).toBe(50 * 10);
+      expect(snapshot.frequentWorkouts).toHaveLength(1);
+      expect(snapshot.frequentWorkouts[0].id).toBe(workout.id);
+      expect(snapshot.exercisePRs).toHaveLength(1);
+      expect(snapshot.exercisePRs[0].exerciseId).toBe(exercise.id);
+      expect(snapshot.muscleDistribution).toEqual([
+        { muscleGroup: 'chest', count: 1, percentage: 100 },
+      ]);
+    });
+
+    it('returns empty sections when there are no completed sessions', async () => {
+      const snapshot = await service.getProgressSnapshot();
+
+      expect(snapshot.stats.totalWorkouts).toBe(0);
+      expect(snapshot.frequentWorkouts).toEqual([]);
+      expect(snapshot.exercisePRs).toEqual([]);
+      expect(snapshot.muscleDistribution).toEqual([]);
+    });
+  });
 });

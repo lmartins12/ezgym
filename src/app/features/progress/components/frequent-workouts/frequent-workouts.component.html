@@ -5,9 +5,7 @@
         <ion-label>{{ "PROGRESS.FREQUENT_WORKOUTS" | translate }}</ion-label>
       </ion-list-header>
 
-      @if (loading()) {
-        <div class="loading-placeholder"></div>
-      } @else if (workouts().length === 0) {
+      @if (workouts().length === 0) {
         <div class="empty-state">
           <p>{{ "PROGRESS.NO_WORKOUTS" | translate }}</p>
         </div>

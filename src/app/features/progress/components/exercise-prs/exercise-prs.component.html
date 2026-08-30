@@ -8,14 +8,12 @@
         </div>
       </ion-list-header>
 
-      @if (loading()) {
-        <div class="loading-placeholder"></div>
-      } @else if (prs().length === 0) {
+      @if (topPrs().length === 0) {
         <div class="empty-state">
           <p>{{ "PROGRESS.NO_PRS" | translate }}</p>
         </div>
       } @else {
-        @for (pr of prs(); track pr.exerciseId) {
+        @for (pr of topPrs(); track pr.exerciseId) {
           <div class="pr-item">
             <div class="pr-main">
               <div class="pr-icon">

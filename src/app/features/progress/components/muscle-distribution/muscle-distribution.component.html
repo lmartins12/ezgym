@@ -5,9 +5,7 @@
         <ion-label>{{ "PROGRESS.MUSCLE_DISTRIBUTION" | translate }}</ion-label>
       </ion-list-header>
 
-      @if (loading()) {
-        <div class="loading-placeholder"></div>
-      } @else if (distribution().length === 0) {
+      @if (distribution().length === 0) {
         <div class="empty-state">
           <p>{{ "PROGRESS.NO_DISTRIBUTION" | translate }}</p>
         </div>

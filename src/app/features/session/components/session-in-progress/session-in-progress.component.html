@@ -6,6 +6,7 @@
         <button
           type="button"
           class="exercise-item"
+          #exerciseItem
           [class.active]="state.isActive"
           [class.complete]="state.isComplete"
           (click)="selectExercise(state.index)"
@@ -25,26 +26,28 @@
     </div>
   </div>
   <!-- Exercise Info Header -->
-  <div class="exercise-header">
-    <div class="exercise-info">
-      <app-muscle-icon
-        [muscleGroup]="currentExercise().muscle_group"
-      ></app-muscle-icon>
-      <div class="exercise-name">
-        <h2>{{ currentExercise().exercise_name }}</h2>
-        <p>
-          {{ "SESSION.IN_PROGRESS.TARGET" | translate }}:
-          {{ currentExercise().sets }} x {{ currentExercise().reps }}
-          @if (currentExercise().target_weight) {
-            <span>@ {{ currentExercise().target_weight }}kg</span>
-          }
-        </p>
+  @if (currentExercise(); as exercise) {
+    <div class="exercise-header">
+      <div class="exercise-info">
+        <app-muscle-icon
+          [muscleGroup]="exercise.muscle_group"
+        ></app-muscle-icon>
+        <div class="exercise-name">
+          <h2>{{ exercise.exercise_name }}</h2>
+          <p>
+            {{ "SESSION.IN_PROGRESS.TARGET" | translate }}:
+            {{ exercise.sets }} x {{ exercise.reps }}
+            @if (exercise.target_weight) {
+              <span>@ {{ exercise.target_weight }}kg</span>
+            }
+          </p>
+        </div>
+      </div>
+      <div class="set-counter">
+        {{ nextSetNumber() }} / {{ exercise.sets }}
       </div>
     </div>
-    <div class="set-counter">
-      {{ nextSetNumber() }} / {{ currentExercise().sets }}
-    </div>
-  </div>
+  }
 
   <!-- Input Card -->
   <ion-card class="input-card">

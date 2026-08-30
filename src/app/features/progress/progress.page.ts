@@ -13,7 +13,7 @@ import { ExercisePRsComponent } from './components/exercise-prs/exercise-prs.com
 import { FrequentWorkoutsComponent } from './components/frequent-workouts/frequent-workouts.component';
 import { MuscleDistributionComponent } from './components/muscle-distribution/muscle-distribution.component';
 import { StatsCardsComponent } from './components/stats-cards/stats-cards.component';
-import type { WorkoutStats } from './models/progress.models';
+import type { ProgressSnapshot } from './models/progress.models';
 import { ProgressService } from './services/progress.service';
 
 @Component({
@@ -39,21 +39,21 @@ export class ProgressPage {
   private readonly languageService = inject(LanguageService);
 
   public readonly loading = signal(false);
-  public readonly stats = signal<WorkoutStats | null>(null);
+  public readonly snapshot = signal<ProgressSnapshot | null>(null);
 
   public readonly currentLocale = computed(() =>
     this.languageService.isPortuguese() ? 'pt-BR' : 'en-US',
   );
 
   public async ionViewWillEnter(): Promise<void> {
-    await this.loadStats();
+    await this.loadSnapshot();
   }
 
-  private async loadStats(): Promise<void> {
+  private async loadSnapshot(): Promise<void> {
     this.loading.set(true);
     try {
-      const data = await this.progressService.getWorkoutStats();
-      this.stats.set(data);
+      const data = await this.progressService.getProgressSnapshot();
+      this.snapshot.set(data);
     } finally {
       this.loading.set(false);
     }

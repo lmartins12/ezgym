@@ -1,5 +1,4 @@
-import { Component, computed, inject, signal, OnInit } from '@angular/core';
-import { LanguageService } from '@core/services/language.service';
+import { Component, inject, input } from '@angular/core';
 import {
   IonCard,
   IonCardContent,
@@ -13,7 +12,6 @@ import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.
 import { addIcons } from 'ionicons';
 import { barbell, time } from 'ionicons/icons';
 import type { FrequentWorkout } from '../../models/progress.models';
-import { ProgressService } from '../../services/progress.service';
 
 addIcons({ barbell, time });
 
@@ -32,31 +30,10 @@ addIcons({ barbell, time });
   templateUrl: './frequent-workouts.component.html',
   styleUrl: './frequent-workouts.component.scss',
 })
-export class FrequentWorkoutsComponent implements OnInit {
-  private readonly progressService = inject(ProgressService);
-  private readonly languageService = inject(LanguageService);
+export class FrequentWorkoutsComponent {
   private readonly translate = inject(TranslateService);
 
-  protected readonly loading = signal(false);
-  protected readonly workouts = signal<FrequentWorkout[]>([]);
-
-  protected readonly currentLocale = computed(() =>
-    this.languageService.isPortuguese() ? 'pt-BR' : 'en-US',
-  );
-
-  async ngOnInit(): Promise<void> {
-    await this.loadWorkouts();
-  }
-
-  private async loadWorkouts(): Promise<void> {
-    this.loading.set(true);
-    try {
-      const data = await this.progressService.getFrequentWorkouts(5);
-      this.workouts.set(data);
-    } finally {
-      this.loading.set(false);
-    }
-  }
+  public readonly workouts = input.required<FrequentWorkout[]>();
 
   protected getRelativeTime(timestamp: number): string {
     const days = Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24));

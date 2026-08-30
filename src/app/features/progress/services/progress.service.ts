@@ -5,6 +5,7 @@ import type {
   ExercisePR,
   FrequentWorkout,
   MuscleDistribution,
+  ProgressSnapshot,
   WorkoutStats,
 } from '../models/progress.models';
 
@@ -23,9 +24,43 @@ export class ProgressService {
       .toArray();
   }
 
-  async getWorkoutStats(): Promise<WorkoutStats> {
+  /**
+   * Resolves every Progress tab section from a single completed-sessions
+   * read: the four builders run in parallel over the same snapshot.
+   */
+  async getProgressSnapshot(): Promise<ProgressSnapshot> {
     const completedSessions = await this.getCompletedSessions();
 
+    const [stats, frequentWorkouts, exercisePRs, muscleDistribution] =
+      await Promise.all([
+        this.buildWorkoutStats(completedSessions),
+        this.buildFrequentWorkouts(completedSessions),
+        this.buildExercisePRs(completedSessions),
+        this.buildMuscleDistribution(completedSessions),
+      ]);
+
+    return { stats, frequentWorkouts, exercisePRs, muscleDistribution };
+  }
+
+  async getWorkoutStats(): Promise<WorkoutStats> {
+    return this.buildWorkoutStats(await this.getCompletedSessions());
+  }
+
+  async getFrequentWorkouts(limit: number = 5): Promise<FrequentWorkout[]> {
+    return this.buildFrequentWorkouts(await this.getCompletedSessions(), limit);
+  }
+
+  async getExercisePRs(): Promise<ExercisePR[]> {
+    return this.buildExercisePRs(await this.getCompletedSessions());
+  }
+
+  async getMuscleDistribution(): Promise<MuscleDistribution[]> {
+    return this.buildMuscleDistribution(await this.getCompletedSessions());
+  }
+
+  private async buildWorkoutStats(
+    completedSessions: WorkoutSession[],
+  ): Promise<WorkoutStats> {
     const totalWorkouts = completedSessions.length;
 
     if (totalWorkouts === 0) {
@@ -81,9 +116,10 @@ export class ProgressService {
     };
   }
 
-  async getFrequentWorkouts(limit: number = 5): Promise<FrequentWorkout[]> {
-    const completedSessions = await this.getCompletedSessions();
-
+  private async buildFrequentWorkouts(
+    completedSessions: WorkoutSession[],
+    limit: number = 5,
+  ): Promise<FrequentWorkout[]> {
     if (completedSessions.length === 0) return [];
 
     // Group sessions by workout_id
@@ -127,9 +163,9 @@ export class ProgressService {
     return result.sort((a, b) => b.count - a.count).slice(0, limit);
   }
 
-  async getExercisePRs(): Promise<ExercisePR[]> {
-    const completedSessions = await this.getCompletedSessions();
-
+  private async buildExercisePRs(
+    completedSessions: WorkoutSession[],
+  ): Promise<ExercisePR[]> {
     if (completedSessions.length === 0) return [];
 
     const sessionMap = new Map(completedSessions.map((s) => [s.id, s]));
@@ -181,9 +217,9 @@ export class ProgressService {
     return results.sort((a, b) => b.prWeight - a.prWeight);
   }
 
-  async getMuscleDistribution(): Promise<MuscleDistribution[]> {
-    const completedSessions = await this.getCompletedSessions();
-
+  private async buildMuscleDistribution(
+    completedSessions: WorkoutSession[],
+  ): Promise<MuscleDistribution[]> {
     if (completedSessions.length === 0) return [];
 
     const workoutIds = Array.from(

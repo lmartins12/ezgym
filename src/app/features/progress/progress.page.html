@@ -10,11 +10,11 @@
     <div class="loading-container">
       <ion-spinner name="crescent"></ion-spinner>
     </div>
-    } @else if (stats(); as statsValue) {
-    <app-stats-cards [stats]="statsValue" [locale]="currentLocale()" />
-    <app-frequent-workouts />
-    <app-exercise-prs />
-    <app-muscle-distribution />
+    } @else if (snapshot(); as data) {
+    <app-stats-cards [stats]="data.stats" [locale]="currentLocale()" />
+    <app-frequent-workouts [workouts]="data.frequentWorkouts" />
+    <app-exercise-prs [prs]="data.exercisePRs" />
+    <app-muscle-distribution [distribution]="data.muscleDistribution" />
     } @else {
     <div class="empty-state">
       <ion-icon name="trending-up"></ion-icon>
