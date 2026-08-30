@@ -29,7 +29,7 @@ import {
   IonListHeader,
   IonRange,
   IonRow,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';

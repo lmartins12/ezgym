@@ -1,5 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, EventEmitter, input, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  input,
+  Output,
+} from '@angular/core';
 import {
   IonButton,
   IonDatetime,
@@ -7,7 +13,7 @@ import {
   IonIcon,
   IonLabel,
   IonModal,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { calendarOutline, closeCircle } from 'ionicons/icons';
 import { TranslateModule } from '@ngx-translate/core';
@@ -49,8 +55,12 @@ export class DashboardDateFilterComponent {
   public readonly clearFilter = new EventEmitter<void>();
 
   protected readonly localeValue = computed(() => this.locale());
-  protected readonly startDateISO = computed(() => this.startDate()?.toISOString() ?? null);
-  protected readonly endDateISO = computed(() => this.endDate()?.toISOString() ?? null);
+  protected readonly startDateISO = computed(
+    () => this.startDate()?.toISOString() ?? null,
+  );
+  protected readonly endDateISO = computed(
+    () => this.endDate()?.toISOString() ?? null,
+  );
 
   protected onStartDateChange(event: CustomEvent): void {
     const value = event.detail.value;
@@ -68,10 +78,7 @@ export class DashboardDateFilterComponent {
     this.clearFilter.emit();
   }
 
-  private emitFilterChange(
-    start: Date | null,
-    end: Date | null,
-  ): void {
+  private emitFilterChange(start: Date | null, end: Date | null): void {
     this.filterChanged.emit({ start, end });
   }
 }

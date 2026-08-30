@@ -14,7 +14,7 @@ import {
   IonicRouteStrategy,
   iosTransitionAnimation,
   provideIonicAngular,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
 import {
   provideTranslateHttpLoader,

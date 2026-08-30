@@ -8,13 +8,9 @@
       }
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button
-        (click)="close()"
-        fill="clear"
-        shape="round"
-        color="danger"
-        >{{ "COMMON.CANCEL" | translate }}</ion-button
-      >
+      <ion-button (click)="close()" fill="clear" shape="round" color="danger">{{
+        "COMMON.CANCEL" | translate
+      }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -34,7 +30,7 @@
 
     <!-- Muscle Group -->
     <div>
-      <ion-label position="stacked" class="ion-margin-bottom">
+      <ion-label labelPlacement="stacked" class="ion-margin-bottom">
         {{ "EXERCISE.MUSCLE_GROUP_LABEL" | translate }}
       </ion-label>
       <app-muscle-group-selector [(muscleGroup)]="muscleGroup" />

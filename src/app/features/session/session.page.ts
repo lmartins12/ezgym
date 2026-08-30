@@ -15,7 +15,7 @@ import {
   IonTitle,
   IonToolbar,
   NavController,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { barbellOutline, closeOutline } from 'ionicons/icons';

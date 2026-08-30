@@ -2,7 +2,10 @@ import { inject, Injectable } from '@angular/core';
 import type { Exercise, WorkoutExercise } from '@core/models/app-models';
 import { DatabaseService } from '@core/services/database.service';
 import { v4 as uuidv4 } from 'uuid';
-import type { AddExerciseData, UpdateExerciseData } from '../models/workout-detail.model';
+import type {
+  AddExerciseData,
+  UpdateExerciseData,
+} from '../models/workout-detail.model';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutExercisesService {
@@ -20,7 +23,10 @@ export class WorkoutExercisesService {
     if (workoutExercises.length === 0) return [];
 
     const exerciseIds = workoutExercises.map((we) => we.exercise_id);
-    const exercises = await db.exercises.where('id').anyOf(exerciseIds).toArray();
+    const exercises = await db.exercises
+      .where('id')
+      .anyOf(exerciseIds)
+      .toArray();
     const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
 
     const result: WorkoutExercise[] = workoutExercises.map((we) => {

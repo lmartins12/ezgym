@@ -131,7 +131,10 @@ export class WorkoutsService {
     );
   }
 
-  public async updateOrderIndex(workoutId: string, orderIndex: number): Promise<void> {
+  public async updateOrderIndex(
+    workoutId: string,
+    orderIndex: number,
+  ): Promise<void> {
     await this.dbService.updateWorkoutOrder(workoutId, orderIndex);
   }
 }

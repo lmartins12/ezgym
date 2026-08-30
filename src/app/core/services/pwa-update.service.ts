@@ -1,7 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
-import { ToastController } from '@ionic/angular/standalone';
+import { ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 

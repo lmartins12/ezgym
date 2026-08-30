@@ -11,7 +11,10 @@ export class ThemeService {
   public readonly theme = this.currentTheme.asReadonly();
   public readonly isDarkMode = computed(() => this.currentTheme() === 'dark');
 
-  public readonly availableThemes: readonly Theme[] = ['dark', 'light'] as const;
+  public readonly availableThemes: readonly Theme[] = [
+    'dark',
+    'light',
+  ] as const;
 
   constructor() {
     this.initTheme();

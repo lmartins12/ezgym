@@ -5,10 +5,16 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import { barbell, playCircle, settings, statsChart, trendingUp } from 'ionicons/icons';
+import {
+  barbell,
+  playCircle,
+  settings,
+  statsChart,
+  trendingUp,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-tabs',

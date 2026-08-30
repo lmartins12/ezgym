@@ -6,14 +6,11 @@ import type {
   WorkoutExercise,
   WorkoutSession,
 } from '@core/models/app-models';
-import { NavController } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 import { v4 as uuidv4 } from 'uuid';
 
 export type SessionState =
-  | 'PREPARING'
-  | 'IN_PROGRESS'
-  | 'FINISHING'
-  | 'COMPLETED';
+  'PREPARING' | 'IN_PROGRESS' | 'FINISHING' | 'COMPLETED';
 
 @Injectable({
   providedIn: 'root',
@@ -106,7 +103,10 @@ export class SessionService {
           .toArray();
 
         const exerciseIds = workoutExercises.map((we) => we.exercise_id);
-        const exercises = await db.exercises.where('id').anyOf(exerciseIds).toArray();
+        const exercises = await db.exercises
+          .where('id')
+          .anyOf(exerciseIds)
+          .toArray();
         const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
 
         const detailedExercises: WorkoutExercise[] = workoutExercises
@@ -150,7 +150,10 @@ export class SessionService {
       .toArray();
 
     const exerciseIds = workoutExercises.map((we) => we.exercise_id);
-    const exercises = await db.exercises.where('id').anyOf(exerciseIds).toArray();
+    const exercises = await db.exercises
+      .where('id')
+      .anyOf(exerciseIds)
+      .toArray();
     const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
 
     const detailedExercises: WorkoutExercise[] = workoutExercises

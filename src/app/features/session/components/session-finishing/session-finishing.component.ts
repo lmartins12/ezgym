@@ -14,7 +14,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonTextarea,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({

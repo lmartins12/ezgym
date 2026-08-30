@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, Output, model } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  model,
+} from '@angular/core';
 import { ImportExportService } from '@core/services/import-export.service';
 import {
   IonButton,
@@ -10,7 +17,7 @@ import {
   IonTitle,
   IonToolbar,
   ModalController,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
@@ -62,7 +69,12 @@ export class AiPromptModalComponent {
   }
 
   protected get showIntroMessage(): boolean {
-    return this.introMessage !== undefined && this.introMessage !== null && this.introMessage !== '' && this.introMessage.length > 0;
+    return (
+      this.introMessage !== undefined &&
+      this.introMessage !== null &&
+      this.introMessage !== '' &&
+      this.introMessage.length > 0
+    );
   }
 
   public onClose(): void {

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
-import { IonCard, IonCardContent, IonIcon } from '@ionic/angular/standalone';
+import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { DatabaseService } from '@core/services/database.service';
 import { LanguageService } from '@core/services/language.service';
 import { ThemeService } from '@core/services/theme.service';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { IonApp, IonRouterOutlet } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',

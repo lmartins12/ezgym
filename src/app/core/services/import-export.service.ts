@@ -106,8 +106,15 @@ export class ImportExportService {
   /**
    * Share JSON using Web Share API or download fallback
    */
-  public async shareJson(json: string, filename = 'ezgym-workouts.json'): Promise<void> {
-    if (navigator.share && navigator.canShare && navigator.canShare({ text: json })) {
+  public async shareJson(
+    json: string,
+    filename = 'ezgym-workouts.json',
+  ): Promise<void> {
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare({ text: json })
+    ) {
       try {
         await navigator.share({
           title: 'EzGym Workouts Export',
@@ -188,7 +195,8 @@ export class ImportExportService {
             workoutsImported++;
 
             for (const exerciseData of workoutData.exercises) {
-              const { exerciseId, isNew } = await this.findOrCreateExercise(exerciseData);
+              const { exerciseId, isNew } =
+                await this.findOrCreateExercise(exerciseData);
               if (isNew) {
                 exercisesCreated++;
               } else {

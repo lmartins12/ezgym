@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import type { MuscleGroup } from '@core/models/app-models';
-import { IonIcon, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { IonIcon, IonItem, IonLabel } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';

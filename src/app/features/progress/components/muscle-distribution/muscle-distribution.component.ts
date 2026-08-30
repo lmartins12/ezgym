@@ -5,7 +5,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import type { MuscleDistribution } from '../../models/progress.models';
 import { ProgressService } from '../../services/progress.service';

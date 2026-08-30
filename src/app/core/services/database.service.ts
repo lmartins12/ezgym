@@ -51,7 +51,11 @@ export class DatabaseService {
 
     const sessionMap = new Map(sessions.map((s) => [s.id, s]));
 
-    const progressList: { date: number; maxWeight: number; totalVolume: number }[] = [];
+    const progressList: {
+      date: number;
+      maxWeight: number;
+      totalVolume: number;
+    }[] = [];
 
     for (const [sessionId, sessionLogs] of logsBySession.entries()) {
       const session = sessionMap.get(sessionId);
@@ -76,7 +80,10 @@ export class DatabaseService {
     return progressList.sort((a, b) => a.date - b.date);
   }
 
-  public async updateWorkoutOrder(workoutId: string, orderIndex: number): Promise<void> {
+  public async updateWorkoutOrder(
+    workoutId: string,
+    orderIndex: number,
+  ): Promise<void> {
     await this.initialize();
     await this.db.workouts.update(workoutId, {
       order_index: orderIndex,

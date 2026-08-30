@@ -19,9 +19,9 @@ describe('ThemeService', () => {
     const service = TestBed.inject(ThemeService);
     service.setTheme('dark');
 
-    expect(document.documentElement.classList.contains('ion-palette-dark')).toBe(
-      true,
-    );
+    expect(
+      document.documentElement.classList.contains('ion-palette-dark'),
+    ).toBe(true);
   });
 
   it('removes the ion-palette-dark class on light theme', () => {
@@ -29,9 +29,9 @@ describe('ThemeService', () => {
     service.setTheme('light');
 
     expect(service.isDarkMode()).toBe(false);
-    expect(document.documentElement.classList.contains('ion-palette-dark')).toBe(
-      false,
-    );
+    expect(
+      document.documentElement.classList.contains('ion-palette-dark'),
+    ).toBe(false);
   });
 
   it('persists the chosen theme in localStorage', () => {

@@ -12,7 +12,7 @@ import {
   IonLabel,
   IonList,
   IonNote,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';

@@ -46,11 +46,14 @@ export class ProgressService {
     }, 0);
 
     // Average weekly frequency
-    const minStartedAt = Math.min(...completedSessions.map((s) => s.started_at));
+    const minStartedAt = Math.min(
+      ...completedSessions.map((s) => s.started_at),
+    );
     const now = Date.now();
     const totalDays = Math.max(1, (now - minStartedAt) / (1000 * 60 * 60 * 24));
     const weeks = Math.max(1, totalDays / 7);
-    const averageWeeklyFrequency = Math.round((totalWorkouts / weeks) * 10) / 10;
+    const averageWeeklyFrequency =
+      Math.round((totalWorkouts / weeks) * 10) / 10;
 
     // Current streak (consecutive days)
     const dates = completedSessions
@@ -60,7 +63,9 @@ export class ProgressService {
     const currentStreak = this.calculateStreak(dates);
 
     // Last workout date
-    const lastWorkoutDate = Math.max(...completedSessions.map((s) => s.started_at));
+    const lastWorkoutDate = Math.max(
+      ...completedSessions.map((s) => s.started_at),
+    );
 
     return {
       totalWorkouts,
@@ -116,9 +121,7 @@ export class ProgressService {
       });
     }
 
-    return result
-      .sort((a, b) => b.count - a.count)
-      .slice(0, limit);
+    return result.sort((a, b) => b.count - a.count).slice(0, limit);
   }
 
   async getExercisePRs(): Promise<ExercisePR[]> {
@@ -159,7 +162,10 @@ export class ProgressService {
     const exerciseIds = Array.from(prMap.keys());
     if (exerciseIds.length === 0) return [];
 
-    const exercises = await db.exercises.where('id').anyOf(exerciseIds).toArray();
+    const exercises = await db.exercises
+      .where('id')
+      .anyOf(exerciseIds)
+      .toArray();
     const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
 
     const results: ExercisePR[] = [];
@@ -189,7 +195,9 @@ export class ProgressService {
 
     if (completedSessions.length === 0) return [];
 
-    const workoutIds = Array.from(new Set(completedSessions.map((s) => s.workout_id)));
+    const workoutIds = Array.from(
+      new Set(completedSessions.map((s) => s.workout_id)),
+    );
     const workouts = await db.workouts.where('id').anyOf(workoutIds).toArray();
     const workoutMap = new Map(workouts.map((w) => [w.id, w]));
 
@@ -239,7 +247,11 @@ export class ProgressService {
     if (normalizedDates.length === 0) return 0;
 
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const today = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+    ).getTime();
 
     // Check if the most recent workout is today or yesterday
     const mostRecent = normalizedDates[0];

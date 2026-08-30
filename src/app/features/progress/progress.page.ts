@@ -7,7 +7,7 @@ import {
   IonSpinner,
   IonTitle,
   IonToolbar,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { ExercisePRsComponent } from './components/exercise-prs/exercise-prs.component';
 import { FrequentWorkoutsComponent } from './components/frequent-workouts/frequent-workouts.component';

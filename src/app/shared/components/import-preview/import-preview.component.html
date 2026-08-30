@@ -9,7 +9,7 @@
       <div class="import-preview__text">
         <span class="import-preview__count">{{ preview().workoutCount }}</span>
         <span class="import-preview__label">{{
-          'IMPORT_EXPORT.WORKOUTS_TO_IMPORT' | translate
+          "IMPORT_EXPORT.WORKOUTS_TO_IMPORT" | translate
         }}</span>
       </div>
     </div>
@@ -23,7 +23,7 @@
         ></ion-icon>
         <div class="import-preview__text">
           <span class="import-preview__label">{{
-            'IMPORT_EXPORT.NEW_EXERCISES' | translate
+            "IMPORT_EXPORT.NEW_EXERCISES" | translate
           }}</span>
           <span class="import-preview__count">{{
             preview().newExercises.length
@@ -33,7 +33,9 @@
 
       <div class="import-preview__exercise-list">
         @for (exercise of preview().newExercises; track exercise) {
-          <span class="import-preview__exercise-tag import-preview__exercise-tag--new">
+          <span
+            class="import-preview__exercise-tag import-preview__exercise-tag--new"
+          >
             {{ exercise }}
           </span>
         }
@@ -49,7 +51,7 @@
         ></ion-icon>
         <div class="import-preview__text">
           <span class="import-preview__label">{{
-            'IMPORT_EXPORT.EXISTING_EXERCISES' | translate
+            "IMPORT_EXPORT.EXISTING_EXERCISES" | translate
           }}</span>
           <span class="import-preview__count">{{
             preview().existingExercises.length

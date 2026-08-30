@@ -6,7 +6,7 @@ import {
   IonTitle,
   IonToolbar,
   ModalController,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   dateToUnixEndOfDay,
@@ -18,7 +18,10 @@ import { DashboardCalendarComponent } from './components/dashboard-calendar/dash
 import { DashboardDateFilterComponent } from './components/dashboard-date-filter/dashboard-date-filter.component';
 import { DashboardHistoryListComponent } from './components/dashboard-history-list/dashboard-history-list.component';
 import { SessionDetailModalComponent } from './components/session-detail-modal/session-detail-modal.component';
-import type { DashboardEvent, PaginationState } from './models/dashboard.models';
+import type {
+  DashboardEvent,
+  PaginationState,
+} from './models/dashboard.models';
 import { DashboardService } from './services/dashboard.service';
 
 const PAGE_SIZE = 20;

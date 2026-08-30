@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import type { MuscleGroup } from '@core/models/app-models';
-import { IonIcon } from '@ionic/angular/standalone';
+import { IonIcon } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { barbellOutline } from 'ionicons/icons';
 
@@ -44,5 +44,7 @@ export class MuscleIconComponent {
     () => this.iconMap[this.muscleGroup() ?? 'other'] !== '',
   );
 
-  protected readonly iconPath = computed(() => this.iconMap[this.muscleGroup() ?? 'other']);
+  protected readonly iconPath = computed(
+    () => this.iconMap[this.muscleGroup() ?? 'other'],
+  );
 }

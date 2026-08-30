@@ -15,7 +15,7 @@ import {
   IonTitle,
   IonToolbar,
   ModalController,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { AiPromptModalComponent } from '@shared/components/ai-prompt-modal/ai-prompt-modal.component';
 import { ImportPreviewComponent } from '@shared/components/import-preview/import-preview.component';

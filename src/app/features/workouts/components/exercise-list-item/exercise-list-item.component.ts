@@ -9,7 +9,7 @@ import {
   IonItemSliding,
   IonLabel,
   IonReorder,
-} from '@ionic/angular/standalone';
+} from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { createOutline, trashOutline } from 'ionicons/icons';
 

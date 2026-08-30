@@ -7,19 +7,19 @@
 <ion-content>
   <div class="progress-container">
     @if (loading()) {
-      <div class="loading-container">
-        <ion-spinner name="crescent"></ion-spinner>
-      </div>
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
     } @else if (stats(); as statsValue) {
-      <app-stats-cards [stats]="statsValue" [locale]="currentLocale()" />
-      <app-frequent-workouts />
-      <app-exercise-prs />
-      <app-muscle-distribution />
+    <app-stats-cards [stats]="statsValue" [locale]="currentLocale()" />
+    <app-frequent-workouts />
+    <app-exercise-prs />
+    <app-muscle-distribution />
     } @else {
-      <div class="empty-state">
-        <ion-icon name="trending-up"></ion-icon>
-        <p>{{ 'PROGRESS.NO_DATA' | translate }}</p>
-      </div>
+    <div class="empty-state">
+      <ion-icon name="trending-up"></ion-icon>
+      <p>{{ 'PROGRESS.NO_DATA' | translate }}</p>
+    </div>
     }
   </div>
 </ion-content>

@@ -5,7 +5,7 @@ import {
   input,
   Output,
 } from '@angular/core';
-import { IonDatetime } from '@ionic/angular/standalone';
+import { IonDatetime } from '@ionic/angular';
 import { toIsoDateString } from '@shared/utils/date.utils';
 
 interface HighlightedDate {
@@ -46,9 +46,7 @@ export class DashboardCalendarComponent {
   /**
    * Today's date as ISO string (YYYY-MM-DD) for comparison.
    */
-  protected readonly todayISO = computed(() =>
-    toIsoDateString(this.today()),
-  );
+  protected readonly todayISO = computed(() => toIsoDateString(this.today()));
 
   /**
    * Set of date strings (YYYY-MM-DD) that have events for O(1) lookup.

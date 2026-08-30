@@ -15,8 +15,9 @@ import {
   IonList,
   IonListHeader,
   IonTitle,
-  IonToolbar, ModalController
-} from '@ionic/angular/standalone';
+  IonToolbar,
+  ModalController,
+} from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
@@ -46,8 +47,8 @@ addIcons({ close, fitness, barbell });
     IonTitle,
     IonToolbar,
     TranslateModule,
-    MuscleIconComponent
-],
+    MuscleIconComponent,
+  ],
   templateUrl: './session-detail-modal.component.html',
   styleUrls: ['./session-detail-modal.component.scss'],
 })

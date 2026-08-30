@@ -40,7 +40,10 @@ describe('ImportValidation.validateImport', () => {
       const json = buildExport([
         {
           name: 'Push Day',
-          exercises: [buildExercise(), buildExercise({ exercise_name: 'Incline Press', order_index: 1 })],
+          exercises: [
+            buildExercise(),
+            buildExercise({ exercise_name: 'Incline Press', order_index: 1 }),
+          ],
         },
       ]);
 
@@ -63,7 +66,9 @@ describe('ImportValidation.validateImport', () => {
       const data = JSON.parse(buildExport([{ name: 'A', exercises: [] }]));
       data.version = '999';
 
-      const result = await ImportValidation.validateImport(JSON.stringify(data));
+      const result = await ImportValidation.validateImport(
+        JSON.stringify(data),
+      );
 
       expect(result.isValid).toBe(false);
       expect(result.errors[0].type).toBe('UNSUPPORTED_VERSION');

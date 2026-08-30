@@ -3,13 +3,7 @@ import type {
   ValidationError,
   ValidationWarning,
 } from '@core/models/import-export.models';
-import {
-  IonCard,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-} from '@ionic/angular/standalone';
+import { IonCard, IonIcon, IonItem, IonLabel, IonList } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { alertCircle, warningOutline } from 'ionicons/icons';

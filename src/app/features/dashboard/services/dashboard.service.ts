@@ -147,9 +147,10 @@ export class DashboardService {
       .toArray();
 
     const exerciseIds = Array.from(new Set(setLogs.map((l) => l.exercise_id)));
-    const exercises = exerciseIds.length > 0
-      ? await db.exercises.where('id').anyOf(exerciseIds).toArray()
-      : [];
+    const exercises =
+      exerciseIds.length > 0
+        ? await db.exercises.where('id').anyOf(exerciseIds).toArray()
+        : [];
     const exerciseMap = new Map(exercises.map((e) => [e.id, e]));
 
     // Group sets by exercise
@@ -205,7 +206,8 @@ export class DashboardService {
       subtitle,
       workout_id: session.workout_id,
       workout_name: session.workout_name ?? '',
-      muscle_group: (session.muscle_group ?? undefined) as MuscleGroup | undefined,
+      muscle_group: (session.muscle_group ?? undefined) as
+        MuscleGroup | undefined,
       finished_at: session.finished_at ?? undefined,
       notes: session.notes ?? undefined,
     };

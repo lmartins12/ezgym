@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import type { ImportPreview } from '@core/models/import-export.models';
-import { IonCard, IonCardContent, IonIcon } from '@ionic/angular/standalone';
+import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {

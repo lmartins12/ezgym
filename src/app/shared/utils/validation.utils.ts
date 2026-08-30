@@ -221,9 +221,7 @@ export class ImportValidation {
   /**
    * Map Zod error code to ValidationErrorType
    */
-  private static getErrorTypeFromZod(
-    error: z.ZodIssue,
-  ): ValidationErrorType {
+  private static getErrorTypeFromZod(error: z.ZodIssue): ValidationErrorType {
     switch (error.code) {
       case z.ZodIssueCode.invalid_type:
         return 'INVALID_JSON' as ValidationErrorType;
