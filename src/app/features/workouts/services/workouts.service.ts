@@ -13,7 +13,7 @@ export class WorkoutsService {
     const db = this.dbService.db;
 
     const [workouts, exerciseCountMap, lastTrainedMap] = await Promise.all([
-      db.workouts.orderBy('order_index').toArray(),
+      db.workouts.toArray(),
       this.buildExerciseCountMap(),
       this.buildLastTrainedMap(),
     ]);
