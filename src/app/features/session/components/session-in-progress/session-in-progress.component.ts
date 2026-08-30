@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   Component,
   computed,
@@ -45,7 +44,6 @@ import {
   selector: 'app-session-in-progress',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     TranslateModule,
     IonCard,

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { LanguageService } from '@core/services/language.service';
 import {
@@ -22,7 +21,6 @@ addIcons({ barbell, calendar, trophy });
   selector: 'app-exercise-prs',
   standalone: true,
   imports: [
-    CommonModule,
     IonCard,
     IonCardContent,
     IonIcon,

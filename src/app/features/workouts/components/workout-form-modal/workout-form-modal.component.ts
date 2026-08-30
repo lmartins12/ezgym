@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, Workout } from '@core/models/app-models';
@@ -28,7 +27,6 @@ export interface WorkoutFormResult {
   selector: 'app-workout-form-modal',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     IonHeader,
     IonToolbar,

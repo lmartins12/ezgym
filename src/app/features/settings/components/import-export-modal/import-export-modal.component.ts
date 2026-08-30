@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import type {
   ValidationErrorType,
@@ -38,7 +37,6 @@ export type ImportExportTab = 'export' | 'import';
   selector: 'app-import-export-modal',
   standalone: true,
   imports: [
-    CommonModule,
     IonButton,
     IonButtons,
     IonContent,

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, input, Output } from '@angular/core';
 import type { Workout, WorkoutExercise } from '@core/models/app-models';
 import {
@@ -23,7 +22,6 @@ import { timeOutline } from 'ionicons/icons';
   selector: 'app-session-preparing',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     IonCard,
     IonCardHeader,

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   Component,
   computed,
@@ -22,7 +21,6 @@ import { TranslateModule } from '@ngx-translate/core';
   selector: 'app-session-finishing',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     TranslateModule,
     IonCard,

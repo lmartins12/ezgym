@@ -1,7 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import type { MuscleGroup, Workout, WorkoutExercise } from '@core/models/app-models';
+import type {
+  MuscleGroup,
+  Workout,
+  WorkoutExercise,
+} from '@core/models/app-models';
 import {
   AlertController,
   IonButton,
@@ -42,7 +45,6 @@ import { WorkoutsService } from '../services/workouts.service';
   selector: 'app-workout-detail',
   standalone: true,
   imports: [
-    CommonModule,
     TranslateModule,
     IonHeader,
     IonToolbar,

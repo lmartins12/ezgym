@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -37,7 +36,6 @@ import { WorkoutsService } from '../services/workouts.service';
   selector: 'app-workouts-list',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     TranslateModule,
     IonHeader,

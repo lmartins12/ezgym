@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import {
   IonCard,
@@ -15,7 +14,6 @@ import { ProgressService } from '../../services/progress.service';
   selector: 'app-muscle-distribution',
   standalone: true,
   imports: [
-    CommonModule,
     IonCard,
     IonCardContent,
     IonLabel,
