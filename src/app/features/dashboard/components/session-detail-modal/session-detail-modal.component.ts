@@ -27,6 +27,7 @@ import {
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
+import { formatStatNumber } from '@shared/utils/number.utils';
 import { addIcons } from 'ionicons';
 import { barbell, close, fitness } from 'ionicons/icons';
 import type { SessionDetail } from '../../models/dashboard.models';
@@ -84,6 +85,10 @@ export class SessionDetailModalComponent implements OnInit {
 
     return detail.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
   });
+
+  protected formatStat(value: number): string {
+    return formatStatNumber(value, this.locale);
+  }
 
   ngOnInit(): void {
     this.detail.set(this.sessionDetail);

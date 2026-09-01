@@ -1,6 +1,7 @@
 import { Component, computed, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { SetLog, Workout, WorkoutSession } from '@core/models/app-models';
+import { NOTES_MAX_LENGTH } from '@core/models/limits';
 import {
   IonButton,
   IonCard,
@@ -36,6 +37,8 @@ export class SessionFinishingComponent {
 
   notes = '';
 
+  protected readonly notesMaxLength = NOTES_MAX_LENGTH;
+
   public readonly duration = computed(() => {
     const start = this.session().started_at;
     const end = Date.now();
@@ -53,6 +56,6 @@ export class SessionFinishingComponent {
   });
 
   onSave() {
-    this.saveSession.emit(this.notes);
+    this.saveSession.emit(this.notes.trim());
   }
 }

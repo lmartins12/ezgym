@@ -3,15 +3,6 @@
   font-size: 13px;
 }
 
-ion-label {
-  h2 {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
-}
-
 // Estilo para o botão Play inline
 ion-button[slot="end"] {
   --padding-start: 12px;

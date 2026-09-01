@@ -1,4 +1,4 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -11,6 +11,7 @@ import {
   trendingUp,
 } from 'ionicons/icons';
 import type { WorkoutStats } from '../../models/progress.models';
+import { formatStatNumber } from '@shared/utils/number.utils';
 
 addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
 
@@ -18,7 +19,6 @@ addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
   selector: 'app-stats-cards',
   imports: [
     DatePipe,
-    DecimalPipe,
     IonCard,
     IonCardContent,
     IonIcon,
@@ -32,4 +32,11 @@ export class StatsCardsComponent {
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
 
   protected readonly localeValue = computed(() => this.locale());
+
+  protected formatStat(
+    value: number | null | undefined,
+    maximumFractionDigits = 0,
+  ): string {
+    return formatStatNumber(value, this.locale(), maximumFractionDigits);
+  }
 }

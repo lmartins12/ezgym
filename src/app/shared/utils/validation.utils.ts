@@ -10,6 +10,16 @@ import {
   type ValidationWarningType,
 } from '@core/models/import-export.models';
 import { MUSCLE_GROUPS, type MuscleGroup } from '@core/models/app-models';
+import {
+  DESCRIPTION_MAX_LENGTH,
+  EQUIPMENT_MAX_LENGTH,
+  NAME_MAX_LENGTH,
+  NOTES_MAX_LENGTH,
+  REST_SECONDS_RANGE,
+  SETS_RANGE,
+  WEIGHT_RANGE,
+  isValidRepsFormat,
+} from '@core/models/limits';
 import { z } from 'zod';
 
 const muscleGroupSchema: z.ZodType<MuscleGroup> = z.enum(
@@ -20,20 +30,31 @@ const muscleGroupSchema: z.ZodType<MuscleGroup> = z.enum(
  * Zod schema for validating export data structure
  */
 const exportExerciseSchema: z.ZodType<ExportExercise> = z.object({
-  exercise_name: z.string().min(1, 'Exercise name is required'),
+  exercise_name: z
+    .string()
+    .min(1, 'Exercise name is required')
+    .max(NAME_MAX_LENGTH),
   muscle_group: muscleGroupSchema,
-  equipment: z.string().optional(),
-  notes: z.string().optional(),
+  equipment: z.string().max(EQUIPMENT_MAX_LENGTH).optional(),
+  notes: z.string().max(NOTES_MAX_LENGTH).optional(),
   order_index: z.number().int().min(0),
-  sets: z.number().int().min(1).max(20),
+  sets: z.number().int().min(SETS_RANGE.min).max(SETS_RANGE.max),
   reps: z.string().min(1),
-  rest_seconds: z.number().int().min(0).max(600),
-  target_weight: z.number().nonnegative().max(1000).optional(),
+  rest_seconds: z
+    .number()
+    .int()
+    .min(REST_SECONDS_RANGE.min)
+    .max(REST_SECONDS_RANGE.max),
+  target_weight: z
+    .number()
+    .nonnegative()
+    .max(WEIGHT_RANGE.max)
+    .optional(),
 });
 
 const exportWorkoutSchema: z.ZodType<ExportWorkout> = z.object({
-  name: z.string().min(1, 'Workout name is required'),
-  description: z.string().optional(),
+  name: z.string().min(1, 'Workout name is required').max(NAME_MAX_LENGTH),
+  description: z.string().max(DESCRIPTION_MAX_LENGTH).optional(),
   muscle_group: muscleGroupSchema.optional(),
   exercises: z.array(exportExerciseSchema),
 });
@@ -168,12 +189,7 @@ export class ImportValidation {
    * Validate reps format (must be "12" or "8-10")
    */
   private static isValidRepsFormat(reps: string): boolean {
-    // Single number: "12"
-    const singleNumber = /^\d+$/;
-    // Range: "8-10"
-    const range = /^\d+-\d+$/;
-
-    return singleNumber.test(reps) || range.test(reps);
+    return isValidRepsFormat(reps);
   }
 
   /**
@@ -214,6 +230,15 @@ export class ImportValidation {
         }
         if (error.path.includes('target_weight')) {
           return 'INVALID_WEIGHT_RANGE' as ValidationErrorType;
+        }
+        if (
+          error.path.some((segment) =>
+            ['exercise_name', 'name', 'description', 'notes', 'equipment'].includes(
+              String(segment),
+            ),
+          )
+        ) {
+          return 'TEXT_TOO_LONG' as ValidationErrorType;
         }
         return 'INVALID_JSON' as ValidationErrorType;
       default:

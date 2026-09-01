@@ -75,6 +75,7 @@
       justify-content: center;
       width: 36px;
       height: 36px;
+      flex-shrink: 0;
       background: var(--glass-bg-elevated);
       border: 1px solid var(--glass-border);
       border-radius: var(--glass-radius-sm);
@@ -89,6 +90,8 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-1);
+      min-width: 0;
+      overflow: hidden;
 
       .pr-exercise {
         font-weight: 600;
@@ -108,17 +111,20 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-2);
     padding-left: 52px;
 
     .pr-weight {
       display: flex;
       align-items: baseline;
       gap: var(--space-1);
+      flex-shrink: 0;
 
       .weight-value {
         font-size: 20px;
         font-weight: 700;
         color: var(--ion-color-primary);
+        white-space: nowrap;
       }
 
       .weight-unit {
@@ -132,6 +138,7 @@
       display: flex;
       align-items: center;
       gap: var(--space-1);
+      flex-shrink: 0;
 
       ion-icon {
         font-size: 14px;
@@ -141,6 +148,7 @@
       span {
         font-size: 12px;
         color: var(--ion-text-color-step-550);
+        white-space: nowrap;
       }
     }
   }

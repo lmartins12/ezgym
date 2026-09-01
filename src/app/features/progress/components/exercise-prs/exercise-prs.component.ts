@@ -10,6 +10,7 @@ import {
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
+import { formatStatNumber } from '@shared/utils/number.utils';
 import { addIcons } from 'ionicons';
 import { barbell, calendar, trophy } from 'ionicons/icons';
 import type { ExercisePR } from '../../models/progress.models';
@@ -50,5 +51,9 @@ export class ExercisePRsComponent {
       month: 'short',
       year: 'numeric',
     });
+  }
+
+  protected formatWeight(weight: number): string {
+    return formatStatNumber(weight, this.currentLocale());
   }
 }

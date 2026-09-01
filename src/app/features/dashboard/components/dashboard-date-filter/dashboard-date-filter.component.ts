@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import {
   IonButton,
   IonDatetime,
@@ -8,6 +8,7 @@ import {
   IonLabel,
   IonModal,
 } from '@ionic/angular';
+import { BackButtonService } from '@core/services/back-button.service';
 import { addIcons } from 'ionicons';
 import { calendarOutline, closeCircle } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -33,6 +34,8 @@ addIcons({
   styleUrl: './dashboard-date-filter.component.scss',
 })
 export class DashboardDateFilterComponent {
+  private readonly backButton = inject(BackButtonService);
+
   public readonly startDate = input<Date | null>(null);
   public readonly endDate = input<Date | null>(null);
   public readonly isActive = input(false);
@@ -55,6 +58,10 @@ export class DashboardDateFilterComponent {
     const value = event.detail.value;
     const startDate = value ? new Date(value) : null;
     this.emitFilterChange(startDate, this.endDate());
+  }
+
+  protected onDatetimeModalPresent(modal: IonModal): void {
+    void this.backButton.track(modal);
   }
 
   protected onEndDateChange(event: CustomEvent): void {

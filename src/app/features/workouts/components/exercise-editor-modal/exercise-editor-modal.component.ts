@@ -1,6 +1,17 @@
-import { Component, inject, Input, model } from '@angular/core';
+import { Component, inject, Input, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, WorkoutExercise } from '@core/models/app-models';
+import {
+  EQUIPMENT_MAX_LENGTH,
+  NAME_MAX_LENGTH,
+  NOTES_MAX_LENGTH,
+  REPS_MAX_LENGTH,
+  REST_SECONDS_RANGE,
+  SETS_RANGE,
+  WEIGHT_RANGE,
+  clampToRange,
+  isValidRepsFormat,
+} from '@core/models/limits';
 import {
   IonButton,
   IonButtons,
@@ -62,6 +73,16 @@ export class ExerciseEditorModalComponent {
   public readonly targetWeight = model<number | undefined>(undefined);
   public readonly restSeconds = model(60);
 
+  public readonly repsInvalid = signal(false);
+
+  protected readonly nameMaxLength = NAME_MAX_LENGTH;
+  protected readonly equipmentMaxLength = EQUIPMENT_MAX_LENGTH;
+  protected readonly notesMaxLength = NOTES_MAX_LENGTH;
+  protected readonly repsMaxLength = REPS_MAX_LENGTH;
+  protected readonly setsMax = SETS_RANGE.max;
+  protected readonly weightMax = WEIGHT_RANGE.max;
+  protected readonly restMax = REST_SECONDS_RANGE.max;
+
   private readonly modalCtrl = inject(ModalController);
 
   public ionViewDidEnter(): void {
@@ -82,20 +103,50 @@ export class ExerciseEditorModalComponent {
     this.modalCtrl.dismiss();
   }
 
+  public onSetsChange(value: number | string | null): void {
+    if (value === '' || value === null || value === undefined) return;
+    this.sets.set(clampToRange(Number(value), SETS_RANGE));
+  }
+
+  public onWeightChange(value: number | string | null): void {
+    if (value === '' || value === null || value === undefined) {
+      this.targetWeight.set(undefined);
+      return;
+    }
+    this.targetWeight.set(clampToRange(Number(value), WEIGHT_RANGE));
+  }
+
+  public onRestChange(value: number | string | null): void {
+    if (value === '' || value === null || value === undefined) return;
+    this.restSeconds.set(clampToRange(Number(value), REST_SECONDS_RANGE));
+  }
+
   public submit(): void {
-    if (!this.name()) {
+    const name = this.name().trim();
+    if (!name) {
       return;
     }
 
+    const reps = this.reps().trim();
+    if (!isValidRepsFormat(reps)) {
+      this.repsInvalid.set(true);
+      return;
+    }
+
+    const rawTargetWeight = this.targetWeight();
+
     const data: ExerciseData = {
-      name: this.name(),
+      name,
       muscleGroup: this.muscleGroup(),
-      equipment: this.equipment() || undefined,
-      notes: this.notes() || undefined,
-      sets: this.sets(),
-      reps: this.reps(),
-      targetWeight: this.targetWeight(),
-      restSeconds: this.restSeconds(),
+      equipment: this.equipment().trim() || undefined,
+      notes: this.notes().trim() || undefined,
+      sets: clampToRange(Number(this.sets()), SETS_RANGE),
+      reps,
+      targetWeight:
+        rawTargetWeight === undefined || rawTargetWeight === null
+          ? undefined
+          : clampToRange(Number(rawTargetWeight), WEIGHT_RANGE),
+      restSeconds: clampToRange(Number(this.restSeconds()), REST_SECONDS_RANGE),
     };
 
     this.modalCtrl.dismiss(data);

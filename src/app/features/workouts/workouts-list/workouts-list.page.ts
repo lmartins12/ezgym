@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BackButtonService } from '@core/services/back-button.service';
 import {
   AlertController,
   IonButton,
@@ -59,6 +60,7 @@ export class WorkoutsListPage {
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
   private readonly modalCtrl = inject(ModalController);
+  private readonly backButton = inject(BackButtonService);
 
   public readonly workouts = signal<WorkoutDetail[]>([]);
   public readonly loading = signal(false);
@@ -93,6 +95,7 @@ export class WorkoutsListPage {
     });
 
     await modal.present();
+    void this.backButton.track(modal);
 
     const { data } = await modal.onWillDismiss<WorkoutFormResult>();
 
@@ -127,6 +130,7 @@ export class WorkoutsListPage {
     });
 
     await alert.present();
+    void this.backButton.track(alert);
   }
 
   public startWorkout(workout: WorkoutDetail): void {

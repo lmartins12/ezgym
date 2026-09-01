@@ -48,7 +48,7 @@
               }}</span>
             </div>
             <div class="stat">
-              <span class="stat-value">{{ totalVolume() }}</span>
+              <span class="stat-value">{{ formatStat(totalVolume()) }}</span>
               <span class="stat-label">{{
                 "DASHBOARD.SESSION_DETAIL.VOLUME" | translate
               }}</span>
@@ -80,7 +80,9 @@
               style="margin-right: var(--space-4)"
             ></app-muscle-icon>
             <div class="exercise-content">
-              <div class="exercise-name">{{ exercise.name }}</div>
+              <div class="exercise-name ez-truncate">
+                {{ exercise.name }}
+              </div>
               <div class="exercise-sets">
                 @for (set of exercise.sets; track set.setNumber) {
                   <span class="set-badge">

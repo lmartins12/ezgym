@@ -1,6 +1,7 @@
 import { Component, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { SetLog } from '@core/models/app-models';
+import { BackButtonService } from '@core/services/back-button.service';
 import {
   AlertController,
   IonButton,
@@ -61,6 +62,7 @@ export class SessionPage {
   private readonly alertCtrl = inject(AlertController);
   private readonly navCtrl = inject(NavController);
   private readonly translate = inject(TranslateService);
+  private readonly backButton = inject(BackButtonService);
 
   async ionViewWillEnter() {
     const workoutId = this.id();
@@ -104,6 +106,7 @@ export class SessionPage {
         ],
       });
       await alert.present();
+      void this.backButton.track(alert);
     } else {
       await this.cancelAndLeave();
     }

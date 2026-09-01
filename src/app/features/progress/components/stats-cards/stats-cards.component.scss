@@ -52,6 +52,8 @@
     font-weight: 700;
     color: var(--ion-color-primary);
     line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .stat-value-small {

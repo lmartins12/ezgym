@@ -16,6 +16,12 @@ import type {
   WorkoutSession,
 } from '@core/models/app-models';
 import {
+  LOG_REPS_RANGE,
+  WEIGHT_RANGE,
+  clampToRange,
+} from '@core/models/limits';
+import { BackButtonService } from '@core/services/back-button.service';
+import {
   AlertController,
   IonButton,
   IonCard,
@@ -87,6 +93,7 @@ export class SessionInProgressComponent {
   // Injections
   private readonly alertCtrl = inject(AlertController);
   private readonly translate = inject(TranslateService);
+  private readonly backButton = inject(BackButtonService);
 
   // View references
   private readonly exerciseItems =
@@ -100,6 +107,9 @@ export class SessionInProgressComponent {
   public reps: number | null = null;
   public weight: number | null = null;
   public rpe: number = DEFAULT_RPE;
+
+  protected readonly logRepsMax = LOG_REPS_RANGE.max;
+  protected readonly weightMax = WEIGHT_RANGE.max;
 
   /**
    * Guarded against out-of-bounds indexes (e.g. exercises removed during
@@ -176,6 +186,22 @@ export class SessionInProgressComponent {
     this.rpe = log.rpe ?? 0;
   }
 
+  onRepsChange(value: number | string | null): void {
+    if (value === '' || value === null || value === undefined) {
+      this.reps = null;
+      return;
+    }
+    this.reps = clampToRange(Number(value), LOG_REPS_RANGE);
+  }
+
+  onWeightChange(value: number | string | null): void {
+    if (value === '' || value === null || value === undefined) {
+      this.weight = null;
+      return;
+    }
+    this.weight = clampToRange(Number(value), WEIGHT_RANGE);
+  }
+
   cancelEdit() {
     this.resetForm();
   }
@@ -184,13 +210,16 @@ export class SessionInProgressComponent {
     const exercise = this.currentExercise();
     if (!exercise || this.reps === null || this.weight === null) return;
 
+    const reps = clampToRange(Number(this.reps), LOG_REPS_RANGE);
+    const weight = clampToRange(Number(this.weight), WEIGHT_RANGE);
+
     if (this.editingSetId()) {
       const log = this.setLogs().find((l) => l.id === this.editingSetId());
       if (log) {
         this.updateSet.emit({
           ...log,
-          reps: this.reps,
-          weight: this.weight,
+          reps,
+          weight,
           rpe: this.rpe,
         });
       }
@@ -199,8 +228,8 @@ export class SessionInProgressComponent {
       this.logSet.emit({
         exerciseId: exercise.exercise_id,
         setNumber: this.nextSetNumber(),
-        reps: this.reps,
-        weight: this.weight,
+        reps,
+        weight,
         rpe: this.rpe,
       });
       this.checkAndAdvanceToNextExercise(true);
@@ -229,6 +258,7 @@ export class SessionInProgressComponent {
       ],
     });
     await alert.present();
+    void this.backButton.track(alert);
   }
 
   private isExerciseComplete(exerciseIndex: number): boolean {

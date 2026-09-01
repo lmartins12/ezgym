@@ -5,6 +5,12 @@ import {
   type ExerciseSeedData,
 } from '@core/services/exercise-repository.service';
 import { DatabaseService } from '@core/services/database.service';
+import {
+  REST_SECONDS_RANGE,
+  SETS_RANGE,
+  WEIGHT_RANGE,
+  clampToRange,
+} from '@core/models/limits';
 import { v4 as uuidv4 } from 'uuid';
 import type {
   AddExerciseData,
@@ -45,10 +51,13 @@ export class WorkoutExercisesService {
       workout_id: data.workoutId,
       exercise_id: exerciseId,
       order_index: orderIndex,
-      sets: data.sets,
+      sets: clampToRange(Number(data.sets), SETS_RANGE),
       reps: data.reps,
-      rest_seconds: data.restSeconds,
-      target_weight: data.targetWeight ?? undefined,
+      rest_seconds: clampToRange(Number(data.restSeconds), REST_SECONDS_RANGE),
+      target_weight:
+        data.targetWeight === undefined || data.targetWeight === null
+          ? undefined
+          : clampToRange(Number(data.targetWeight), WEIGHT_RANGE),
     };
 
     await db.workout_exercises.add(newWorkoutExercise);
@@ -70,10 +79,16 @@ export class WorkoutExercisesService {
         if (!row) return;
 
         await db.workout_exercises.update(id, {
-          sets: data.sets,
+          sets: clampToRange(Number(data.sets), SETS_RANGE),
           reps: data.reps,
-          rest_seconds: data.restSeconds,
-          target_weight: data.targetWeight ?? undefined,
+          rest_seconds: clampToRange(
+            Number(data.restSeconds),
+            REST_SECONDS_RANGE,
+          ),
+          target_weight:
+            data.targetWeight === undefined || data.targetWeight === null
+              ? undefined
+              : clampToRange(Number(data.targetWeight), WEIGHT_RANGE),
         });
 
         // Manual edits keep the canonical catalog entry in sync — same

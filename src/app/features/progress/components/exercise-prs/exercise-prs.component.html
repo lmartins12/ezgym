@@ -26,9 +26,11 @@
                 }
               </div>
               <div class="pr-info">
-                <span class="pr-exercise">{{ pr.exerciseName }}</span>
+                <span class="pr-exercise ez-truncate">{{
+                  pr.exerciseName
+                }}</span>
                 @if (pr.muscleGroup) {
-                  <span class="pr-muscle">
+                  <span class="pr-muscle ez-truncate">
                     {{ "EXERCISE.MUSCLE_GROUP_LABEL" | translate }}:
                     {{
                       "EXERCISE.MUSCLE_" + pr.muscleGroup.toUpperCase()
@@ -40,7 +42,7 @@
             </div>
             <div class="pr-stats">
               <div class="pr-weight">
-                <span class="weight-value">{{ pr.prWeight }}</span>
+                <span class="weight-value">{{ formatWeight(pr.prWeight) }}</span>
                 <span class="weight-unit">kg</span>
               </div>
               <div class="pr-date">

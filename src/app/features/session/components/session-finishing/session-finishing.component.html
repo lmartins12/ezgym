@@ -33,6 +33,7 @@
         [(ngModel)]="notes"
         placeholder="{{ 'SESSION.FINISHING.NOTES_PLACEHOLDER' | translate }}"
         autoGrow="true"
+        [maxlength]="notesMaxLength"
         rows="3"
       ></ion-textarea>
     </ion-card-content>

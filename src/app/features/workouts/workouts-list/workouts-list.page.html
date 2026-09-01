@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content style="--padding-bottom: 64px">
   @if (loading()) {
   <div class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
@@ -19,10 +19,7 @@
     </ion-button>
   </div>
   } @else {
-  <ion-reorder-group
-    (ionItemReorder)="reorderWorkouts($event)"
-    disabled="false"
-  >
+  <ion-reorder-group (ionReorderEnd)="reorderWorkouts($event)">
     @for (workout of workouts(); track workout.id) {
     <ion-list lines="none" inset>
       <app-workout-card

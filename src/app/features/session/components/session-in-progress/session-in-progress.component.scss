@@ -19,9 +19,13 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    min-width: 0;
+    overflow: hidden;
 
     .exercise-name {
       text-align: left;
+      min-width: 0;
+      overflow: hidden;
 
       h2 {
         margin: 0;
@@ -42,6 +46,7 @@
     border-radius: 8px;
     font-size: 12px;
     font-weight: 600;
+    flex-shrink: 0;
   }
 }
 

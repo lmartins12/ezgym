@@ -34,7 +34,7 @@
       <div class="import-preview__exercise-list">
         @for (exercise of preview().newExercises; track exercise) {
           <span
-            class="import-preview__exercise-tag import-preview__exercise-tag--new"
+            class="import-preview__exercise-tag import-preview__exercise-tag--new ez-truncate"
           >
             {{ exercise }}
           </span>
@@ -62,7 +62,7 @@
       <div class="import-preview__exercise-list">
         @for (exercise of preview().existingExercises; track exercise) {
           <span
-            class="import-preview__exercise-tag import-preview__exercise-tag--existing"
+            class="import-preview__exercise-tag import-preview__exercise-tag--existing ez-truncate"
           >
             {{ exercise }}
           </span>

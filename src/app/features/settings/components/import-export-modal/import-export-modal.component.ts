@@ -5,6 +5,7 @@ import type {
   ValidationWarning,
 } from '@core/models/import-export.models';
 import { ImportExportService } from '@core/services/import-export.service';
+import { BackButtonService } from '@core/services/back-button.service';
 import {
   IonButton,
   IonButtons,
@@ -59,6 +60,7 @@ export class ImportExportModalComponent {
   private readonly importExportService = inject(ImportExportService);
   private readonly toastCtrl = inject(ToastController);
   private readonly translate = inject(TranslateService);
+  private readonly backButton = inject(BackButtonService);
 
   public readonly initialTab = input<ImportExportTab>('export');
 
@@ -213,6 +215,7 @@ export class ImportExportModalComponent {
       },
     });
     await modal.present();
+    void this.backButton.track(modal);
   }
 
   private async loadExportData(): Promise<void> {

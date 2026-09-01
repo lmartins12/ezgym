@@ -29,7 +29,11 @@
         {{ "DASHBOARD.FROM_DATE" | translate }}
       </ion-label>
       <ion-datetime-button datetime="start-date"></ion-datetime-button>
-      <ion-modal [keepContentsMounted]="true">
+      <ion-modal
+        #startModal
+        [keepContentsMounted]="true"
+        (ionModalDidPresent)="onDatetimeModalPresent(startModal)"
+      >
         <ng-template>
           <ion-datetime
             id="start-date"
@@ -47,7 +51,11 @@
         {{ "DASHBOARD.TO_DATE" | translate }}
       </ion-label>
       <ion-datetime-button datetime="end-date"></ion-datetime-button>
-      <ion-modal [keepContentsMounted]="true">
+      <ion-modal
+        #endModal
+        [keepContentsMounted]="true"
+        (ionModalDidPresent)="onDatetimeModalPresent(endModal)"
+      >
         <ng-template>
           <ion-datetime
             id="end-date"

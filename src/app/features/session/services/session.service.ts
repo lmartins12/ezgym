@@ -8,6 +8,12 @@ import type {
   WorkoutExercise,
   WorkoutSession,
 } from '@core/models/app-models';
+import {
+  LOG_REPS_RANGE,
+  RPE_RANGE,
+  WEIGHT_RANGE,
+  clampToRange,
+} from '@core/models/limits';
 import { v4 as uuidv4 } from 'uuid';
 
 export type SessionState =
@@ -186,9 +192,12 @@ export class SessionService {
       session_id: session.id,
       exercise_id: data.exercise_id,
       set_number: data.set_number,
-      reps: data.reps,
-      weight: data.weight,
-      rpe: data.rpe ?? undefined,
+      reps: clampToRange(Number(data.reps), LOG_REPS_RANGE),
+      weight: clampToRange(Number(data.weight), WEIGHT_RANGE),
+      rpe:
+        data.rpe === undefined
+          ? undefined
+          : clampToRange(Number(data.rpe), RPE_RANGE),
       completed_at: Date.now(),
     };
 
@@ -209,9 +218,12 @@ export class SessionService {
     try {
       await this.dbService.initialize();
       await this.dbService.db.set_logs.update(log.id, {
-        reps: log.reps,
-        weight: log.weight,
-        rpe: log.rpe ?? undefined,
+        reps: clampToRange(Number(log.reps), LOG_REPS_RANGE),
+        weight: clampToRange(Number(log.weight), WEIGHT_RANGE),
+        rpe:
+          log.rpe === undefined
+            ? undefined
+            : clampToRange(Number(log.rpe), RPE_RANGE),
       });
 
       this.setLogs.update((logs) =>

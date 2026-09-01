@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { BackButtonService } from '@core/services/back-button.service';
 import { LanguageService } from '@core/services/language.service';
 import { PwaInstallService } from '@core/services/pwa-install.service';
 import { ThemeService } from '@core/services/theme.service';
@@ -50,6 +51,7 @@ export class SettingsPage {
   private readonly themeService = inject(ThemeService);
   private readonly pwaInstallService = inject(PwaInstallService);
   private readonly modalCtrl = inject(ModalController);
+  private readonly backButton = inject(BackButtonService);
 
   public readonly currentLang = this.languageService.language;
   public readonly isPortuguese = this.languageService.isPortuguese;
@@ -85,5 +87,6 @@ export class SettingsPage {
     });
 
     await modal.present();
+    void this.backButton.track(modal);
   }
 }

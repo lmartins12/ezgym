@@ -1,5 +1,6 @@
 import { Component, inject, input, signal } from '@angular/core';
 import type { Workout, WorkoutExercise } from '@core/models/app-models';
+import { BackButtonService } from '@core/services/back-button.service';
 import {
   AlertController,
   IonButton,
@@ -70,6 +71,7 @@ export class WorkoutDetailPage {
   private readonly exercisesService = inject(WorkoutExercisesService);
   private readonly modalCtrl = inject(ModalController);
   private readonly alertCtrl = inject(AlertController);
+  private readonly backButton = inject(BackButtonService);
 
   public readonly workout = signal<Workout | null>(null);
   public readonly exercises = signal<WorkoutExercise[]>([]);
@@ -147,6 +149,7 @@ export class WorkoutDetailPage {
     });
 
     await modal.present();
+    void this.backButton.track(modal);
 
     const { data } = await modal.onWillDismiss<WorkoutFormResult>();
 
@@ -167,6 +170,7 @@ export class WorkoutDetailPage {
     });
 
     await modal.present();
+    void this.backButton.track(modal);
 
     const { data } = await modal.onWillDismiss<ExerciseData>();
 
@@ -193,6 +197,7 @@ export class WorkoutDetailPage {
     });
 
     await modal.present();
+    void this.backButton.track(modal);
 
     const { data } = await modal.onWillDismiss<ExerciseData>();
 
@@ -231,6 +236,7 @@ export class WorkoutDetailPage {
     });
 
     await alert.present();
+    void this.backButton.track(alert);
   }
 
   public async reorderExercises(event: CustomEvent): Promise<void> {

@@ -7,7 +7,7 @@
           <ion-icon name="barbell"></ion-icon>
         </div>
         <div class="stat-info">
-          <span class="stat-value">{{ stats()?.totalWorkouts ?? 0 }}</span>
+          <span class="stat-value">{{ formatStat(stats()?.totalWorkouts) }}</span>
           <span class="stat-label">{{
             "PROGRESS.TOTAL_WORKOUTS" | translate
           }}</span>
@@ -25,7 +25,7 @@
         </div>
         <div class="stat-info">
           <span class="stat-value">{{
-            stats()?.totalVolume ?? 0 | number: "1.0-0"
+            formatStat(stats()?.totalVolume)
           }}</span>
           <span class="stat-label">{{
             "PROGRESS.TOTAL_VOLUME" | translate
@@ -44,7 +44,7 @@
         </div>
         <div class="stat-info">
           <span class="stat-value">{{
-            stats()?.averageWeeklyFrequency ?? 0 | number: "1.0-1"
+            formatStat(stats()?.averageWeeklyFrequency, 1)
           }}</span>
           <span class="stat-label">{{
             "PROGRESS.WEEKLY_FREQUENCY" | translate
@@ -62,7 +62,7 @@
           <ion-icon name="trending-up"></ion-icon>
         </div>
         <div class="stat-info">
-          <span class="stat-value">{{ stats()?.currentStreak ?? 0 }}</span>
+          <span class="stat-value">{{ formatStat(stats()?.currentStreak) }}</span>
           <span class="stat-label">{{
             "PROGRESS.CURRENT_STREAK" | translate
           }}</span>

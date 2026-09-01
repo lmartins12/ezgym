@@ -25,6 +25,7 @@
       fill="solid"
       label="{{ 'EXERCISE.NAME_LABEL' | translate }}"
       labelPlacement="floating"
+      [maxlength]="nameMaxLength"
       [(ngModel)]="name"
     />
 
@@ -42,6 +43,7 @@
       fill="solid"
       label="{{ 'EXERCISE.EQUIPMENT_LABEL' | translate }}"
       labelPlacement="floating"
+      [maxlength]="equipmentMaxLength"
       [(ngModel)]="equipment"
     />
 
@@ -52,6 +54,7 @@
       label="{{ 'EXERCISE.NOTES_LABEL' | translate }}"
       labelPlacement="floating"
       [(ngModel)]="notes"
+      [maxlength]="notesMaxLength"
       [rows]="2"
     />
 
@@ -63,12 +66,15 @@
     <!-- Sets -->
     <ion-input
       type="number"
+      inputmode="numeric"
       name="sets"
       fill="solid"
       label="{{ 'EXERCISE.SETS_LABEL' | translate }}"
       labelPlacement="floating"
-      [(ngModel)]="sets"
+      [ngModel]="sets()"
+      (ngModelChange)="onSetsChange($event)"
       min="1"
+      [max]="setsMax"
     />
 
     <!-- Reps -->
@@ -78,28 +84,37 @@
       label="{{ 'EXERCISE.REPS_LABEL' | translate }}"
       labelPlacement="floating"
       [(ngModel)]="reps"
+      [maxlength]="repsMaxLength"
+      [errorText]="repsInvalid() ? ('EXERCISE.REPS_INVALID' | translate) : ''"
+      (ionInput)="repsInvalid.set(false)"
     />
 
     <!-- Target Weight (Optional) -->
     <ion-input
       type="number"
+      inputmode="decimal"
       name="target_weight"
       fill="solid"
       label="{{ 'EXERCISE.WEIGHT_LABEL' | translate }}"
       labelPlacement="floating"
-      [(ngModel)]="targetWeight"
+      [ngModel]="targetWeight()"
+      (ngModelChange)="onWeightChange($event)"
+      min="0"
+      [max]="weightMax"
     />
 
     <!-- Rest Seconds -->
     <ion-input
       type="number"
+      inputmode="numeric"
       name="rest_seconds"
       fill="solid"
       label="{{ 'EXERCISE.REST_LABEL' | translate }}"
       labelPlacement="floating"
-      [(ngModel)]="restSeconds"
-      name="rest_seconds"
+      [ngModel]="restSeconds()"
+      (ngModelChange)="onRestChange($event)"
       min="0"
+      [max]="restMax"
     />
   </form>
 </ion-content>

@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { BackButtonService } from '@core/services/back-button.service';
 import { LanguageService } from '@core/services/language.service';
 import {
   IonContent,
@@ -46,6 +47,7 @@ export class DashboardPage {
   private readonly dashboardService = inject(DashboardService);
   private readonly languageService = inject(LanguageService);
   private readonly modalController = inject(ModalController);
+  private readonly backButton = inject(BackButtonService);
 
   @ViewChild('content', { read: IonContent })
   private readonly content?: IonContent;
@@ -185,6 +187,7 @@ export class DashboardPage {
     });
 
     await modal.present();
+    void this.backButton.track(modal);
   }
 
   private async loadDatesWithEvents(): Promise<void> {

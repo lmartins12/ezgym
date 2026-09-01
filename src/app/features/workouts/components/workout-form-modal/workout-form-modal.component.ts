@@ -2,6 +2,10 @@ import { Component, computed, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup, Workout } from '@core/models/app-models';
 import {
+  DESCRIPTION_MAX_LENGTH,
+  NAME_MAX_LENGTH,
+} from '@core/models/limits';
+import {
   IonButton,
   IonButtons,
   IonContent,
@@ -51,6 +55,9 @@ export class WorkoutFormModalComponent {
   public readonly muscleGroup = model<MuscleGroup | undefined>(undefined);
   protected readonly isEditMode = computed(() => !!this.workout);
 
+  protected readonly nameMaxLength = NAME_MAX_LENGTH;
+  protected readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
+
   private readonly modalCtrl = inject(ModalController);
 
   public ionViewDidEnter(): void {
@@ -66,16 +73,16 @@ export class WorkoutFormModalComponent {
   }
 
   public submit(): void {
-    if (!this.name()) {
+    const name = this.name().trim();
+    if (!name) {
       return;
     }
 
-    const result: WorkoutFormResult = {
-      name: this.name(),
-    };
+    const description = this.description().trim();
+    const result: WorkoutFormResult = { name };
 
-    if (this.description()) {
-      result.description = this.description();
+    if (description) {
+      result.description = description;
     }
 
     if (this.muscleGroup()) {
