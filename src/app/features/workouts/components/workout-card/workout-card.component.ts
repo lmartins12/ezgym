@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
-import { LanguageService } from '@core/services/language.service';
+import { LanguageService } from '@core/i18n/language';
 import {
   IonIcon,
   IonItem,
@@ -15,7 +15,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
 import { listOutline, playOutline, trashOutline } from 'ionicons/icons';
-import type { WorkoutDetail } from '../../models/workout-detail.model';
+import type { WorkoutDetail } from '../../models/workout-detail.models';
 
 @Component({
   selector: 'app-workout-card',

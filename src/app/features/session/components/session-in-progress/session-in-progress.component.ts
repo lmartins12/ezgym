@@ -10,17 +10,15 @@ import {
   viewChildren,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type {
-  SetLog,
-  WorkoutExercise,
-  WorkoutSession,
-} from '@core/models/app-models';
+import type { SetLog } from '@domain/sessions/set-log';
+import type { WorkoutSession } from '@domain/sessions/workout-session';
+import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import {
   LOG_REPS_RANGE,
   WEIGHT_RANGE,
   clampToRange,
-} from '@core/models/limits';
-import { BackButtonService } from '@core/services/back-button.service';
+} from '@domain/shared/limits';
+import { BackButtonService } from '@core/back-button/back-button';
 import {
   AlertController,
   IonButton,
@@ -115,13 +113,15 @@ export class SessionInProgressComponent {
    * Guarded against out-of-bounds indexes (e.g. exercises removed during
    * the session): yields undefined instead of crashing the template.
    */
-  public readonly currentExercise = computed<WorkoutExercise | undefined>(() => {
-    const exercises = this.exercises();
-    const index = this.currentExerciseIndex();
-    return index >= 0 && index < exercises.length
-      ? exercises[index]
-      : undefined;
-  });
+  public readonly currentExercise = computed<WorkoutExercise | undefined>(
+    () => {
+      const exercises = this.exercises();
+      const index = this.currentExerciseIndex();
+      return index >= 0 && index < exercises.length
+        ? exercises[index]
+        : undefined;
+    },
+  );
 
   public readonly currentLogs = computed(() => {
     const exercise = this.currentExercise();

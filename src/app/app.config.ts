@@ -21,7 +21,7 @@ import {
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { EzGymErrorHandler } from '@core/services/app-error-handler.service';
+import { EzGymErrorHandler } from '@core/error/error-handler';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {

@@ -1,7 +1,9 @@
 import { Component, computed, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { SetLog, Workout, WorkoutSession } from '@core/models/app-models';
-import { NOTES_MAX_LENGTH } from '@core/models/limits';
+import type { SetLog } from '@domain/sessions/set-log';
+import type { WorkoutSession } from '@domain/sessions/workout-session';
+import type { Workout } from '@domain/workouts/workout';
+import { NOTES_MAX_LENGTH } from '@domain/shared/limits';
 import {
   IonButton,
   IonCard,

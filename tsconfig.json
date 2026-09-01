@@ -5,6 +5,7 @@
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -22,6 +23,7 @@
     "useDefineForClassFields": false,
     "paths": {
       "@core/*": ["./src/app/core/*"],
+      "@domain/*": ["./src/app/domain/*"],
       "@features/*": ["./src/app/features/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@layouts/*": ["./src/app/layouts/*"],

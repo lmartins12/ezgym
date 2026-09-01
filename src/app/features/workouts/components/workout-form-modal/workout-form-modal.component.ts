@@ -1,10 +1,8 @@
 import { Component, computed, inject, Input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { MuscleGroup, Workout } from '@core/models/app-models';
-import {
-  DESCRIPTION_MAX_LENGTH,
-  NAME_MAX_LENGTH,
-} from '@core/models/limits';
+import type { MuscleGroup } from '@domain/shared/muscle-group';
+import type { Workout } from '@domain/workouts/workout';
+import { DESCRIPTION_MAX_LENGTH, NAME_MAX_LENGTH } from '@domain/shared/limits';
 import {
   IonButton,
   IonButtons,

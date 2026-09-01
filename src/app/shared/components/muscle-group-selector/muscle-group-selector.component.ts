@@ -1,5 +1,5 @@
 import { Component, inject, model } from '@angular/core';
-import { MUSCLE_GROUPS, type MuscleGroup } from '@core/models/app-models';
+import { MUSCLE_GROUPS, type MuscleGroup } from '@domain/shared/muscle-group';
 import { TranslateService } from '@ngx-translate/core';
 import { MuscleIconComponent } from '../muscle-icon/muscle-icon.component';
 

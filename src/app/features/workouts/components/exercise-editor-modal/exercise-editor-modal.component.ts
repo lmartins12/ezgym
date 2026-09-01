@@ -1,6 +1,7 @@
 import { Component, inject, Input, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import type { MuscleGroup, WorkoutExercise } from '@core/models/app-models';
+import type { MuscleGroup } from '@domain/shared/muscle-group';
+import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import {
   EQUIPMENT_MAX_LENGTH,
   NAME_MAX_LENGTH,
@@ -11,7 +12,7 @@ import {
   WEIGHT_RANGE,
   clampToRange,
   isValidRepsFormat,
-} from '@core/models/limits';
+} from '@domain/shared/limits';
 import {
   IonButton,
   IonButtons,

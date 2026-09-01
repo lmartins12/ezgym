@@ -3,9 +3,10 @@ import type {
   ValidationErrorType,
   ValidationResult,
   ValidationWarning,
-} from '@core/models/import-export.models';
-import { ImportExportService } from '@core/services/import-export.service';
-import { BackButtonService } from '@core/services/back-button.service';
+} from '@domain/import-export/export-data';
+import { ImportExport } from '@domain/import-export/import-export';
+import { ImportValidation } from '@domain/import-export/validation';
+import { BackButtonService } from '@core/back-button/back-button';
 import {
   IonButton,
   IonButtons,
@@ -19,10 +20,11 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { AiPromptModalComponent } from '@shared/components/ai-prompt-modal/ai-prompt-modal.component';
-import { ImportPreviewComponent } from '@shared/components/import-preview/import-preview.component';
-import { ValidationListComponent } from '@shared/components/validation-list/validation-list.component';
-import { ImportValidation } from '@shared/utils/validation.utils';
+import { ClipboardService } from '@shared/clipboard/clipboard';
+import { ShareService } from '@shared/share/share';
+import { AiPromptModalComponent } from '../ai-prompt-modal/ai-prompt-modal.component';
+import { ImportPreviewComponent } from '../import-preview/import-preview.component';
+import { ValidationListComponent } from '../validation-list/validation-list.component';
 import { addIcons } from 'ionicons';
 import {
   clipboardOutline,
@@ -32,6 +34,7 @@ import {
   shareOutline,
   sparklesOutline,
 } from 'ionicons/icons';
+import { getAiPromptText } from '../../services/ai-prompt';
 
 export type ImportExportTab = 'export' | 'import';
 
@@ -57,7 +60,9 @@ const TOAST_DURATION_MS = 3000;
 })
 export class ImportExportModalComponent {
   private readonly modalCtrl = inject(ModalController);
-  private readonly importExportService = inject(ImportExportService);
+  private readonly importExport = inject(ImportExport);
+  private readonly clipboard = inject(ClipboardService);
+  private readonly share = inject(ShareService);
   private readonly toastCtrl = inject(ToastController);
   private readonly translate = inject(TranslateService);
   private readonly backButton = inject(BackButtonService);
@@ -111,7 +116,7 @@ export class ImportExportModalComponent {
   public async onGenerateJson(): Promise<void> {
     this.isLoading.set(true);
     try {
-      const json = await this.importExportService.exportWorkouts();
+      const json = await this.importExport.exportWorkouts();
       this.exportJson.set(json);
     } catch (error) {
       console.error('Export failed:', error);
@@ -126,7 +131,7 @@ export class ImportExportModalComponent {
     if (!json) return;
 
     try {
-      await this.importExportService.copyToClipboard(json);
+      await this.clipboard.copy(json);
     } catch (error) {
       console.error('Copy failed:', error);
       await this.showErrorToast('IMPORT_EXPORT.ERROR_COPY');
@@ -136,14 +141,14 @@ export class ImportExportModalComponent {
   public async onShare(): Promise<void> {
     const json = this.exportJson();
     if (json) {
-      await this.importExportService.shareJson(json);
+      await this.share.share(json);
     }
   }
 
   public async onPasteFromClipboard(): Promise<void> {
     this.isLoading.set(true);
     try {
-      const result = await this.importExportService.getFromClipboard();
+      const result = await this.clipboard.read();
       if (result?.value) {
         this.importJson.set(result.value);
         await this.validateImport();
@@ -166,7 +171,7 @@ export class ImportExportModalComponent {
 
     this.isLoading.set(true);
     try {
-      const preview = await this.importExportService.getImportPreview(json);
+      const preview = await this.importExport.getImportPreview(json);
       if (preview) {
         this.importPreview.set(preview);
         this.showPreview.set(true);
@@ -187,7 +192,7 @@ export class ImportExportModalComponent {
 
     this.isLoading.set(true);
     try {
-      const result = await this.importExportService.importWorkouts(json);
+      const result = await this.importExport.importWorkouts(json);
       if (result.success) {
         await this.modalCtrl.dismiss(result);
       } else {
@@ -211,7 +216,7 @@ export class ImportExportModalComponent {
       component: AiPromptModalComponent,
       componentProps: {
         introMessage: '',
-        promptText: this.importExportService.getPromptText(),
+        promptText: getAiPromptText(),
       },
     });
     await modal.present();

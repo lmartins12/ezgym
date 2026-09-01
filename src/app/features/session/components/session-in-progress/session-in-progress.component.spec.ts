@@ -1,10 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { provideTranslateService } from '@ngx-translate/core';
-import type {
-  SetLog,
-  WorkoutExercise,
-  WorkoutSession,
-} from '@core/models/app-models';
+import type { SetLog } from '@domain/sessions/set-log';
+import type { WorkoutSession } from '@domain/sessions/workout-session';
+import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import {
   buildSession,
   buildSetLog,

@@ -8,7 +8,7 @@ import {
   IonLabel,
   IonModal,
 } from '@ionic/angular';
-import { BackButtonService } from '@core/services/back-button.service';
+import { BackButtonService } from '@core/back-button/back-button';
 import { addIcons } from 'ionicons';
 import { calendarOutline, closeCircle } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';

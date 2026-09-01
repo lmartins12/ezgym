@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { db } from '@core/services/app-db';
-import type {
-  Exercise,
-  SetLog,
-  Workout,
-  WorkoutExercise,
-  WorkoutSession,
-} from '@core/models/app-models';
+import { db } from '@core/db/app-db';
+import type { Exercise } from '@domain/exercises/exercise';
+import type { SetLog } from '@domain/sessions/set-log';
+import type { WorkoutSession } from '@domain/sessions/workout-session';
+import type { Workout } from '@domain/workouts/workout';
+import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 
 let idCounter = 0;
 const nextId = (prefix: string) => `${prefix}-${++idCounter}`;

@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
-import type { Workout, WorkoutExercise } from '@core/models/app-models';
+import type { Workout } from '@domain/workouts/workout';
+import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import {
   IonButton,
   IonCard,

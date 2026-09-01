@@ -17,13 +17,7 @@ addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
 
 @Component({
   selector: 'app-stats-cards',
-  imports: [
-    DatePipe,
-    IonCard,
-    IonCardContent,
-    IonIcon,
-    TranslatePipe,
-  ],
+  imports: [DatePipe, IonCard, IonCardContent, IonIcon, TranslatePipe],
   templateUrl: './stats-cards.component.html',
   styleUrl: './stats-cards.component.scss',
 })

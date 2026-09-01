@@ -1,7 +1,8 @@
 import { Component, ErrorHandler, inject } from '@angular/core';
-import { DatabaseService } from '@core/services/database.service';
-import { LanguageService } from '@core/services/language.service';
-import { ThemeService } from '@core/services/theme.service';
+import { DatabaseService } from '@core/db/database';
+import { LanguageService } from '@core/i18n/language';
+import { PwaUpdateService } from '@core/pwa/pwa-update';
+import { ThemeService } from '@core/theme/theme';
 import { IonApp, IonRouterOutlet } from '@ionic/angular';
 
 @Component({
@@ -17,6 +18,7 @@ export class AppComponent {
   private readonly databaseService = inject(DatabaseService);
   private readonly themeService = inject(ThemeService);
   private readonly languageService = inject(LanguageService);
+  private readonly pwaUpdateService = inject(PwaUpdateService);
   private readonly errorHandler = inject(ErrorHandler);
 
   constructor() {
@@ -34,6 +36,7 @@ export class AppComponent {
     try {
       await this.databaseService.initialize();
       this.themeService.initTheme();
+      void this.pwaUpdateService.checkForUpdate();
     } catch (error) {
       this.errorHandler.handleError(error);
     }

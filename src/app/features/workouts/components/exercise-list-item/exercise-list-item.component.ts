@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import type { WorkoutExercise } from '@core/models/app-models';
+import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import {
   IonIcon,

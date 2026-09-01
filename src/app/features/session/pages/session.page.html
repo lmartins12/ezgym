@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title [style.textAlign]=" !isDashboard() ? 'start' : 'center'"
+      >{{ 'SESSION.TITLE' | translate }}</ion-title
+    >
+    @if (!isDashboard()) {
+    <ion-buttons slot="end">
+      <ion-button (click)="onExitSession()">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (isDashboard()) { @if (sessionStore.activeSession(); as session) {
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle
+        >{{ 'SESSION.DASHBOARD.ACTIVE_SESSION' | translate }}</ion-card-subtitle
+      >
+      <ion-card-title>{{ sessionStore.workout()?.name }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ 'SESSION.DASHBOARD.RESUME_DESCRIPTION' | translate }}</p>
+      <ion-button
+        expand="block"
+        [routerLink]="['/session', session.workout_id]"
+      >
+        {{ 'SESSION.DASHBOARD.RESUME' | translate }}
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  } @else {
+  <div class="empty-state">
+    <ion-icon name="barbell-outline" aria-hidden="true"></ion-icon>
+    <h2>{{ 'SESSION.DASHBOARD.NO_SESSION' | translate }}</h2>
+    <p>{{ 'SESSION.DASHBOARD.START_DESCRIPTION' | translate }}</p>
+    <ion-button routerLink="/tabs/workouts">
+      {{ 'SESSION.DASHBOARD.GO_TO_WORKOUTS' | translate }}
+    </ion-button>
+  </div>
+  } } @else { @switch (sessionStore.state()) { @case ('PREPARING') { @if
+  (sessionStore.workout(); as workout) {
+  <app-session-preparing
+    [workout]="workout"
+    [exercises]="sessionStore.exercises()"
+    (startSession)="onStartSession()"
+    (cancelSession)="onCancelSession()"
+  ></app-session-preparing>
+  } } @case ('IN_PROGRESS') { @if (sessionStore.activeSession(); as session) {
+  <app-session-in-progress
+    [session]="session"
+    [exercises]="sessionStore.exercises()"
+    [setLogs]="sessionStore.setLogs()"
+    (logSet)="onLogSet($event)"
+    (deleteSet)="onDeleteSet($event)"
+    (updateSet)="onUpdateSet($event)"
+    (finishSession)="onRequestFinish()"
+  ></app-session-in-progress>
+  } } @case ('FINISHING') { @if (sessionStore.activeSession(); as session) { @if
+  (sessionStore.workout(); as workout) {
+  <app-session-finishing
+    [session]="session"
+    [workout]="workout"
+    [setLogs]="sessionStore.setLogs()"
+    (saveSession)="onSaveFinish($event)"
+    (resumeSession)="onResumeSession()"
+  ></app-session-finishing>
+  } } } } }
+</ion-content>

@@ -7,7 +7,9 @@
           <ion-icon name="barbell"></ion-icon>
         </div>
         <div class="stat-info">
-          <span class="stat-value">{{ formatStat(stats()?.totalWorkouts) }}</span>
+          <span class="stat-value">{{
+            formatStat(stats()?.totalWorkouts)
+          }}</span>
           <span class="stat-label">{{
             "PROGRESS.TOTAL_WORKOUTS" | translate
           }}</span>
@@ -24,9 +26,7 @@
           <ion-icon name="fitness"></ion-icon>
         </div>
         <div class="stat-info">
-          <span class="stat-value">{{
-            formatStat(stats()?.totalVolume)
-          }}</span>
+          <span class="stat-value">{{ formatStat(stats()?.totalVolume) }}</span>
           <span class="stat-label">{{
             "PROGRESS.TOTAL_VOLUME" | translate
           }}</span>
@@ -62,7 +62,9 @@
           <ion-icon name="trending-up"></ion-icon>
         </div>
         <div class="stat-info">
-          <span class="stat-value">{{ formatStat(stats()?.currentStreak) }}</span>
+          <span class="stat-value">{{
+            formatStat(stats()?.currentStreak)
+          }}</span>
           <span class="stat-label">{{
             "PROGRESS.CURRENT_STREAK" | translate
           }}</span>
