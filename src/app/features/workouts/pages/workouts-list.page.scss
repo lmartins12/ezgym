@@ -29,3 +29,18 @@
     color: var(--ion-color-medium);
   }
 }
+
+// Hint de primeiro uso (some após o primeiro reorder/swipe)
+.reorder-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  color: var(--ion-color-medium);
+  font-size: 12px;
+
+  ion-icon {
+    font-size: 16px;
+  }
+}

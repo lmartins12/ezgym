@@ -60,7 +60,8 @@
     "LAST_TRAINED": "Last trained",
     "DELETE_CONFIRM": "Are you sure you want to delete this workout?",
     "DELETE_ALL_EXERCISES": "This will also remove all exercises from this workout.",
-    "DETAILS": "Details"
+    "DETAILS": "Details",
+    "REORDER_HINT": "Drag to reorder or swipe for actions"
   },
   "WORKOUT_DETAIL": {
     "EXERCISES": "Exercises",

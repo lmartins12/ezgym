@@ -69,6 +69,6 @@ describe('ThemeService', () => {
 
     service.setTheme('light');
     meta = document.querySelector('meta[name="theme-color"]');
-    expect(meta?.getAttribute('content')).toBe('#ffffff');
+    expect(meta?.getAttribute('content')).toBe('#fafafa');
   });
 });

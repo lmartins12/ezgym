@@ -23,6 +23,7 @@ import {
   add,
   addOutline,
   barbellOutline,
+  reorderTwoOutline,
   settingsOutline,
 } from 'ionicons/icons';
 import { WorkoutCardComponent } from '../components/workout-card/workout-card.component';
@@ -71,6 +72,7 @@ export class WorkoutsListPage {
       addOutline,
       settingsOutline,
       barbellOutline,
+      reorderTwoOutline,
     });
   }
 

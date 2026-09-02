@@ -14,7 +14,12 @@ import {
 import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
-import { listOutline, playOutline, trashOutline } from 'ionicons/icons';
+import {
+  chevronForwardOutline,
+  listOutline,
+  playOutline,
+  trashOutline,
+} from 'ionicons/icons';
 import type { WorkoutDetail } from '../../models/workout-detail.models';
 
 @Component({
@@ -48,6 +53,7 @@ export class WorkoutCardComponent {
 
   constructor() {
     addIcons({
+      chevronForwardOutline,
       listOutline,
       playOutline,
       trashOutline,

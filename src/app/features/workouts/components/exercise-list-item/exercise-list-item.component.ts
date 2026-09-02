@@ -11,7 +11,11 @@ import {
   IonReorder,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { createOutline, trashOutline } from 'ionicons/icons';
+import {
+  chevronForwardOutline,
+  createOutline,
+  trashOutline,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-exercise-list-item',
@@ -35,6 +39,7 @@ export class ExerciseListItemComponent {
 
   constructor() {
     addIcons({
+      chevronForwardOutline,
       createOutline,
       trashOutline,
     });

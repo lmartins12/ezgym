@@ -19,7 +19,11 @@
     </ion-button>
   </div>
   } @else {
-  <ion-reorder-group (ionReorderEnd)="reorderWorkouts($event)">
+  <p class="reorder-hint">
+    <ion-icon name="reorder-two-outline" aria-hidden="true"></ion-icon>
+    {{ 'WORKOUTS.REORDER_HINT' | translate }}
+  </p>
+  <ion-reorder-group disabled="false" (ionReorderEnd)="reorderWorkouts($event)">
     @for (workout of workouts(); track workout.id) {
     <ion-list lines="none" inset>
       <app-workout-card
