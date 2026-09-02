@@ -1,11 +1,41 @@
-ion-list-header {
-  margin-top: var(--space-6);
+ion-list {
+  --ion-item-background: transparent;
+  margin: 0 var(--space-4) var(--space-2);
 }
 
 ion-item {
   ion-icon {
     margin-right: var(--space-3);
+    font-size: 22px;
   }
+
+  ion-icon[slot="end"] {
+    margin-right: 0;
+    opacity: 0.6;
+  }
+}
+
+ion-item.danger-item {
+  --color: var(--ion-color-danger);
+  --ripple-color: var(--ion-color-danger);
+
+  ion-icon[slot="start"] {
+    color: var(--ion-color-danger);
+  }
+
+  ion-label p {
+    color: var(--ion-color-danger);
+    opacity: 0.7;
+  }
+}
+
+.storage-note {
+  margin: var(--space-3) var(--space-4) var(--space-6);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ion-text-color);
+  opacity: 0.5;
+  text-align: center;
 }
 
 ion-select.always-flip::part(icon) {

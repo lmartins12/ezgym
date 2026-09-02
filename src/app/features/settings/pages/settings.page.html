@@ -5,9 +5,17 @@
 </ion-header>
 
 <ion-content>
-  <ion-list lines="none" inset>
+  <ion-list-header>
+    <ion-label>{{ 'SETTINGS.SECTION_PREFERENCES' | translate }}</ion-label>
+  </ion-list-header>
+
+  <ion-list lines="full">
     <ion-item>
-      <ion-icon name="settings-outline" slot="start"></ion-icon>
+      <ion-icon
+        name="language-outline"
+        slot="start"
+        aria-hidden="true"
+      ></ion-icon>
       <ion-select
         interface="popover"
         class="always-flip"
@@ -26,63 +34,85 @@
     </ion-item>
 
     <ion-item>
-      <ion-icon name="moon-outline" slot="start"></ion-icon>
-      <ion-label>{{ 'SETTINGS.DARK_MODE' | translate }}</ion-label>
+      <ion-icon name="moon-outline" slot="start" aria-hidden="true"></ion-icon>
+      <ion-label>{{ 'SETTINGS.THEME' | translate }}</ion-label>
       <ion-toggle
         slot="end"
         [checked]="isDarkMode()"
         (ionChange)="toggleTheme()"
+        aria-label="{{ 'SETTINGS.THEME' | translate }}"
       ></ion-toggle>
     </ion-item>
   </ion-list>
 
   @if (canInstall()) {
-  <ion-list lines="none" inset>
+  <ion-list-header>
+    <ion-label>{{ 'SETTINGS.SECTION_APP' | translate }}</ion-label>
+  </ion-list-header>
+
+  <ion-list lines="full">
     <ion-item button="true" (click)="installApp()" detail="true">
-      <ion-icon name="download-outline" slot="start" color="primary"></ion-icon>
-      <ion-label color="primary"
-        >{{ 'SETTINGS.INSTALL_APP' | translate }}</ion-label
-      >
+      <ion-icon
+        name="download-outline"
+        slot="start"
+        aria-hidden="true"
+      ></ion-icon>
+      <ion-label>
+        <h2>{{ 'SETTINGS.INSTALL_APP' | translate }}</h2>
+        <p>{{ 'SETTINGS.INSTALL_APP_DESCRIPTION' | translate }}</p>
+      </ion-label>
     </ion-item>
   </ion-list>
   }
 
-  <ion-list lines="none" inset>
-    <ion-item button="true" (click)="openImportExport()">
-      <ion-icon name="settings-outline" slot="start"></ion-icon>
-      <ion-label>{{ 'IMPORT_EXPORT.TITLE' | translate }}</ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-list-header>
+    <ion-label>{{ 'SETTINGS.SECTION_DATA' | translate }}</ion-label>
+  </ion-list-header>
 
-  <ion-list lines="none" inset>
-    <ion-item button="true" (click)="confirmWipeData()" detail="true">
-      <ion-icon name="trash-outline" slot="start" color="danger"></ion-icon>
-      <ion-label color="danger">
-        {{ 'SETTINGS.WIPE_DATA' | translate }}
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-list lines="none" inset>
-    <ion-list-header>
-      <ion-label>{{ 'SETTINGS.ABOUT' | translate }}</ion-label>
-    </ion-list-header>
-
-    <ion-item>
-      <ion-icon name="barbell-outline" slot="start"></ion-icon>
+  <ion-list lines="full">
+    <ion-item button="true" (click)="openImportExport()" detail="true">
+      <ion-icon
+        name="swap-horizontal-outline"
+        slot="start"
+        aria-hidden="true"
+      ></ion-icon>
       <ion-label>
-        <h2>EzGym</h2>
-        <p>{{ 'SETTINGS.ABOUT_STORAGE' | translate }}</p>
+        <h2>{{ 'SETTINGS.MANAGE_DATA' | translate }}</h2>
+        <p>{{ 'SETTINGS.MANAGE_DATA_DESCRIPTION' | translate }}</p>
       </ion-label>
-      <ion-badge slot="end" color="medium">v{{ appVersion }}</ion-badge>
     </ion-item>
 
-    <ion-item button="true" (click)="checkForUpdates()" detail="true">
-      <ion-icon name="refresh-outline" slot="start" color="primary"></ion-icon>
+    <ion-item button="true" (click)="confirmWipeData()" class="danger-item">
+      <ion-icon name="trash-outline" slot="start" aria-hidden="true"></ion-icon>
+      <ion-label>
+        <h2>{{ 'SETTINGS.WIPE_DATA' | translate }}</h2>
+        <p>{{ 'SETTINGS.WIPE_DATA_DESCRIPTION' | translate }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list-header>
+    <ion-label>{{ 'SETTINGS.ABOUT' | translate }}</ion-label>
+  </ion-list-header>
+
+  <ion-list lines="full">
+    <ion-item>
+      <ion-label>{{ 'SETTINGS.VERSION' | translate }}</ion-label>
+      <ion-note slot="end">v{{ appVersion }}</ion-note>
+    </ion-item>
+
+    <ion-item button="true" (click)="checkForUpdates()">
+      <ion-icon
+        name="refresh-outline"
+        slot="start"
+        aria-hidden="true"
+      ></ion-icon>
       <ion-label>
         <h2>{{ 'SETTINGS.CHECK_UPDATES' | translate }}</h2>
         @if (pwaUpdate.hasPendingUpdate()) {
         <p>{{ 'PWA.UPDATE_AVAILABLE' | translate }}</p>
+        } @else {
+        <p>{{ 'SETTINGS.CHECK_UPDATES_DESCRIPTION' | translate }}</p>
         }
       </ion-label>
     </ion-item>
@@ -91,10 +121,15 @@
       href="https://github.com/lmartins12/ezgym"
       target="_blank"
       rel="noopener noreferrer"
-      detail="true"
     >
-      <ion-icon name="logo-github" slot="start"></ion-icon>
-      <ion-label>{{ 'SETTINGS.ABOUT_REPOSITORY' | translate }}</ion-label>
+      <ion-icon name="logo-github" slot="start" aria-hidden="true"></ion-icon>
+      <ion-label>
+        <h2>{{ 'SETTINGS.SOURCE_CODE' | translate }}</h2>
+        <p>{{ 'SETTINGS.SOURCE_CODE_DESCRIPTION' | translate }}</p>
+      </ion-label>
+      <ion-icon slot="end" name="open-outline" aria-hidden="true"></ion-icon>
     </ion-item>
   </ion-list>
+
+  <p class="storage-note">{{ 'SETTINGS.ABOUT_STORAGE' | translate }}</p>
 </ion-content>

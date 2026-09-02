@@ -1,6 +1,6 @@
 {
   "name": "ezgym",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "packageManager": "pnpm@10.34.5",
   "author": "Lucas Martins",
   "scripts": {

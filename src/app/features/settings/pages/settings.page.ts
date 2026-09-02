@@ -8,7 +8,6 @@ import { DataWipeService } from '@core/wipe/data-wipe';
 import { APP_VERSION } from '@domain/import-export/export-data';
 import {
   AlertController,
-  IonBadge,
   IonContent,
   IonHeader,
   IonIcon,
@@ -16,6 +15,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonNote,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -27,13 +27,14 @@ import {
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
-  barbellOutline,
   caretDownSharp,
   downloadOutline,
+  languageOutline,
   logoGithub,
   moonOutline,
+  openOutline,
   refreshOutline,
-  settingsOutline,
+  swapHorizontalOutline,
   trashOutline,
 } from 'ionicons/icons';
 import { ImportExportModalComponent } from '../components/import-export-modal/import-export-modal.component';
@@ -57,7 +58,7 @@ const TOAST_DURATION_MS = 3000;
     IonSelectOption,
     IonToggle,
     IonIcon,
-    IonBadge,
+    IonNote,
   ],
   templateUrl: './settings.page.html',
   styleUrl: './settings.page.scss',
@@ -85,12 +86,13 @@ export class SettingsPage {
     addIcons({
       caretDownSharp,
       moonOutline,
-      settingsOutline,
+      languageOutline,
       downloadOutline,
+      swapHorizontalOutline,
       refreshOutline,
       trashOutline,
-      barbellOutline,
       logoGithub,
+      openOutline,
     });
   }
 
