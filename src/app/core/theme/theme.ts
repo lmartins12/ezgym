@@ -40,7 +40,7 @@ export class ThemeService {
 
   private updateThemeColorMeta(theme: Theme): void {
     const isDark = theme === 'dark';
-    const color = isDark ? '#000000' : '#ffffff';
+    const color = isDark ? '#000000' : '#fafafa';
 
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {

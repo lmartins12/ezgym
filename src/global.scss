@@ -13,15 +13,14 @@
 
 @import "@ionic/angular/css/palettes/dark.class.css";
 
-/* PWA & Safe Area Optimizations */
+/* Safe areas: `--ion-safe-area-*` são definidos pelo Ionic core (html) a partir
+   de `env(safe-area-inset-*)`, com fallback de status bar para iOS PWA.
+   Header/tab bar/footer já aplicam os insets nativamente. */
+
 :root {
   --ion-font-family:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
-  --ion-safe-area-top: env(safe-area-inset-top, 0px);
-  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
-  --ion-safe-area-left: env(safe-area-inset-left, 0px);
-  --ion-safe-area-right: env(safe-area-inset-right, 0px);
 }
 
 html,
@@ -33,10 +32,13 @@ body {
   -webkit-touch-callout: none;
 }
 
-/* Standalone PWA adjustments */
-@media all and (display-mode: standalone) {
-  ion-header ion-toolbar:first-of-type {
-    padding-top: env(safe-area-inset-top, 0px);
+/* Landscape: Ionic só cobre top/bottom; laterais ficam sob a notch em
+   iOS (browser e PWA). Modais são tratados pelo core no iOS. */
+@media (orientation: landscape) {
+  ion-header:not(ion-modal ion-header) ion-toolbar:first-of-type,
+  ion-footer:not(ion-modal ion-footer) ion-toolbar:first-of-type {
+    --padding-start: calc(var(--ion-safe-area-left, 0px) + 4px);
+    --padding-end: calc(var(--ion-safe-area-right, 0px) + 4px);
   }
 }
 
