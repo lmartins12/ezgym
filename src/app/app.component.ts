@@ -1,5 +1,6 @@
 import { Component, ErrorHandler, inject } from '@angular/core';
 import { DatabaseService } from '@core/db/database';
+import { KeyboardService } from '@core/keyboard/keyboard';
 import { LanguageService } from '@core/i18n/language';
 import { PwaUpdateService } from '@core/pwa/pwa-update';
 import { ThemeService } from '@core/theme/theme';
@@ -28,10 +29,12 @@ export class AppComponent {
   private readonly themeService = inject(ThemeService);
   private readonly languageService = inject(LanguageService);
   private readonly pwaUpdateService = inject(PwaUpdateService);
+  private readonly keyboardService = inject(KeyboardService);
   private readonly errorHandler = inject(ErrorHandler);
 
   constructor() {
     this.registerUnhandledRejectionHandler();
+    this.keyboardService.init();
     this.initApp();
   }
 

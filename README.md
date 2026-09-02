@@ -38,6 +38,7 @@ src/app/
 │   ├── i18n/         # idioma pt/en
 │   ├── pwa/          # detecção de instalado, invite e update do SW
 │   ├── back-button/  # hardware back (Android)
+│   ├── keyboard/     # blur do input focado quando o teclado fecha (scroll assist)
 │   ├── haptics/      # feedback tátil
 │   ├── error/        # ErrorHandler global
 │   ├── onboarding/   # welcome na primeira visita
