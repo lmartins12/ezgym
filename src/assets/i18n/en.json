@@ -69,7 +69,14 @@
   },
   "PWA": {
     "UPDATE_AVAILABLE": "A new version of EzGym is available!",
-    "UPDATE_ACTION": "Update"
+    "UPDATE_ACTION": "Update",
+    "INVITE_TITLE": "Install EzGym",
+    "INVITE_DESCRIPTION": "Add to your home screen for quick access and a native app experience.",
+    "IOS_STEP_SHARE": "Tap Share in the Safari toolbar",
+    "IOS_STEP_ADD": "Choose Add to Home Screen",
+    "INSTALL_BUTTON": "Install",
+    "INSTALL_GOT_IT": "Got it",
+    "INSTALL_LATER": "Not now"
   },
   "SESSION": {
     "TITLE": "Workout Session",

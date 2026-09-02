@@ -69,7 +69,14 @@
   },
   "PWA": {
     "UPDATE_AVAILABLE": "Uma nova versão do EzGym está disponível!",
-    "UPDATE_ACTION": "Atualizar"
+    "UPDATE_ACTION": "Atualizar",
+    "INVITE_TITLE": "Instale o EzGym",
+    "INVITE_DESCRIPTION": "Adicione à tela de início para acesso rápido e uma experiência de app.",
+    "IOS_STEP_SHARE": "Toque em Compartilhar na barra do Safari",
+    "IOS_STEP_ADD": "Escolha Adicionar à Tela de Início",
+    "INSTALL_BUTTON": "Instalar",
+    "INSTALL_GOT_IT": "Entendi",
+    "INSTALL_LATER": "Agora não"
   },
   "SESSION": {
     "TITLE": "Sessão de Treino",    "PREPARING": {
