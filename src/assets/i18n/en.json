@@ -35,7 +35,13 @@
     "LANGUAGE_PT": "Português-BR",
     "LANGUAGE_EN": "English-US",
     "DARK_MODE": "Dark Mode",
-    "INSTALL_APP": "Install App"
+    "INSTALL_APP": "Install App",
+    "WIPE_DATA": "Erase all data",
+    "WIPE_CONFIRM_TITLE": "Erase all data?",
+    "WIPE_CONFIRM_MESSAGE": "This action is permanent and deletes all workouts, session history and settings (theme and language).",
+    "WIPE_CONFIRM_ACTION": "Erase everything",
+    "WIPE_SUCCESS": "All data has been erased",
+    "WIPE_ERROR": "Failed to erase data"
   },
   "WORKOUTS": {
     "TITLE": "Workouts",

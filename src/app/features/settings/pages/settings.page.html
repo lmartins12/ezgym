@@ -53,4 +53,13 @@
       <ion-label>{{ 'IMPORT_EXPORT.TITLE' | translate }}</ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-list lines="none" inset>
+    <ion-item button="true" (click)="confirmWipeData()" detail="true">
+      <ion-icon name="trash-outline" slot="start" color="danger"></ion-icon>
+      <ion-label color="danger">
+        {{ 'SETTINGS.WIPE_DATA' | translate }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

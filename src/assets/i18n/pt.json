@@ -35,7 +35,13 @@
     "LANGUAGE_PT": "Português-BR",
     "LANGUAGE_EN": "English-US",
     "DARK_MODE": "Modo Escuro",
-    "INSTALL_APP": "Instalar Aplicativo"
+    "INSTALL_APP": "Instalar Aplicativo",
+    "WIPE_DATA": "Apagar todos os dados",
+    "WIPE_CONFIRM_TITLE": "Apagar todos os dados?",
+    "WIPE_CONFIRM_MESSAGE": "Esta ação é permanente e apaga todos os treinos, o histórico de sessões e os ajustes (tema e idioma).",
+    "WIPE_CONFIRM_ACTION": "Apagar tudo",
+    "WIPE_SUCCESS": "Todos os dados foram apagados",
+    "WIPE_ERROR": "Falha ao apagar os dados"
   },
   "WORKOUTS": {
     "TITLE": "Treinos",

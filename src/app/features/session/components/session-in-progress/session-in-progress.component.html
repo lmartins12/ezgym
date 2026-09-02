@@ -65,7 +65,8 @@
                 inputmode="numeric"
                 helperText="{{
                   'COMMON.VALUE_RANGE'
-                    | translate: { min: logRepsRange.min, max: logRepsRange.max }
+                    | translate
+                      : { min: logRepsRange.min, max: logRepsRange.max }
                 }}"
                 [appNumberClamp]="logRepsRange"
                 [ngModel]="reps"

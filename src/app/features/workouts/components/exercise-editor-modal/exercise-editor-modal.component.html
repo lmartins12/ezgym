@@ -75,7 +75,8 @@
       label="{{ 'EXERCISE.SETS_LABEL' | translate }}"
       labelPlacement="floating"
       helperText="{{
-        'COMMON.VALUE_RANGE' | translate: { min: setsRange.min, max: setsRange.max }
+        'COMMON.VALUE_RANGE'
+          | translate: { min: setsRange.min, max: setsRange.max }
       }}"
       [appNumberClamp]="setsRange"
       [ngModel]="sets()"
@@ -106,7 +107,8 @@
       label="{{ 'EXERCISE.WEIGHT_LABEL' | translate }}"
       labelPlacement="floating"
       helperText="{{
-        'COMMON.VALUE_RANGE' | translate: { min: weightRange.min, max: weightRange.max }
+        'COMMON.VALUE_RANGE'
+          | translate: { min: weightRange.min, max: weightRange.max }
       }}"
       [appNumberClamp]="weightRange"
       [ngModel]="targetWeight()"
@@ -124,7 +126,8 @@
       label="{{ 'EXERCISE.REST_LABEL' | translate }}"
       labelPlacement="floating"
       helperText="{{
-        'COMMON.VALUE_RANGE' | translate: { min: restRange.min, max: restRange.max }
+        'COMMON.VALUE_RANGE'
+          | translate: { min: restRange.min, max: restRange.max }
       }}"
       [appNumberClamp]="restRange"
       [ngModel]="restSeconds()"

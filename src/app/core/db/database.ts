@@ -32,6 +32,17 @@ export class DatabaseService {
   }
 
   /**
+   * Permanently deletes the whole IndexedDB database and reopens a
+   * fresh, empty connection. Irreversible.
+   */
+  public async wipe(): Promise<void> {
+    db.close();
+    this.isReady.set(false);
+    await db.delete();
+    await this.initialize();
+  }
+
+  /**
    * Runs fn inside a read-write transaction over every table.
    * Repository calls made inside fn join this transaction.
    */
