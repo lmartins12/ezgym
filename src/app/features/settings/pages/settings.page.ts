@@ -6,12 +6,14 @@ import { ThemeService } from '@core/theme/theme';
 import { DataWipeService } from '@core/wipe/data-wipe';
 import {
   AlertController,
+  IonBadge,
   IonContent,
   IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
+  IonListHeader,
   IonSelect,
   IonSelectOption,
   IonTitle,
@@ -23,12 +25,15 @@ import {
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
+  barbellOutline,
   caretDownSharp,
   downloadOutline,
+  logoGithub,
   moonOutline,
   settingsOutline,
   trashOutline,
 } from 'ionicons/icons';
+import { APP_VERSION } from '@domain/import-export/export-data';
 import { ImportExportModalComponent } from '../components/import-export-modal/import-export-modal.component';
 
 const WIPE_TOAST_DURATION_MS = 1500;
@@ -42,12 +47,14 @@ const WIPE_TOAST_DURATION_MS = 1500;
     IonTitle,
     IonContent,
     IonList,
+    IonListHeader,
     IonItem,
     IonLabel,
     IonSelect,
     IonSelectOption,
     IonToggle,
     IonIcon,
+    IonBadge,
   ],
   templateUrl: './settings.page.html',
   styleUrl: './settings.page.scss',
@@ -68,6 +75,7 @@ export class SettingsPage {
   public readonly isEnglish = this.languageService.isEnglish;
   public readonly isDarkMode = this.themeService.isDarkMode;
   public readonly canInstall = this.pwaInstallService.canInstall;
+  public readonly appVersion = APP_VERSION;
 
   constructor() {
     addIcons({
@@ -76,6 +84,8 @@ export class SettingsPage {
       settingsOutline,
       downloadOutline,
       trashOutline,
+      barbellOutline,
+      logoGithub,
     });
   }
 

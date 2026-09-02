@@ -1,4 +1,10 @@
-import { Injectable, DestroyRef, computed, inject, signal } from '@angular/core';
+import {
+  Injectable,
+  DestroyRef,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 
 /** Ephemeral rest countdown for the in-progress session.
  * Lives in the session feature and is provided by the session component:

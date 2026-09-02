@@ -296,8 +296,7 @@ export class SessionInProgressComponent {
     if (!exercise) return;
 
     const currentIndex = this.currentExerciseIndex();
-    const willCompleteExercise =
-      this.currentLogs().length + 1 >= exercise.sets;
+    const willCompleteExercise = this.currentLogs().length + 1 >= exercise.sets;
     const nextIndex = willCompleteExercise
       ? this.findNextIncompleteExerciseIndex(currentIndex)
       : currentIndex;

@@ -1,39 +1,39 @@
 @if (pwaInstall.canInvite()) {
-<div class="invite" role="dialog" aria-labelledby="pwa-invite-title">
-  <div class="header">
-    <ion-icon name="download-outline" aria-hidden="true"></ion-icon>
-    <span id="pwa-invite-title" class="title">
-      {{ 'PWA.INVITE_TITLE' | translate }}
-    </span>
-  </div>
+  <div class="invite" role="dialog" aria-labelledby="pwa-invite-title">
+    <div class="header">
+      <ion-icon name="download-outline" aria-hidden="true"></ion-icon>
+      <span id="pwa-invite-title" class="title">
+        {{ "PWA.INVITE_TITLE" | translate }}
+      </span>
+    </div>
 
-  @if (pwaInstall.isIos()) {
-  <p class="step">
-    <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
-    {{ 'PWA.IOS_STEP_SHARE' | translate }}
-  </p>
-  <p class="step">
-    <ion-icon name="download-outline" aria-hidden="true"></ion-icon>
-    {{ 'PWA.IOS_STEP_ADD' | translate }}
-  </p>
-  <div class="actions">
-    <ion-button size="small" (click)="dismiss()">
-      {{ 'PWA.INSTALL_GOT_IT' | translate }}
-    </ion-button>
-    <ion-button size="small" fill="clear" (click)="dismiss()">
-      {{ 'PWA.INSTALL_LATER' | translate }}
-    </ion-button>
+    @if (pwaInstall.isIos()) {
+      <p class="step">
+        <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
+        {{ "PWA.IOS_STEP_SHARE" | translate }}
+      </p>
+      <p class="step">
+        <ion-icon name="download-outline" aria-hidden="true"></ion-icon>
+        {{ "PWA.IOS_STEP_ADD" | translate }}
+      </p>
+      <div class="actions">
+        <ion-button size="small" (click)="dismiss()">
+          {{ "PWA.INSTALL_GOT_IT" | translate }}
+        </ion-button>
+        <ion-button size="small" fill="clear" (click)="dismiss()">
+          {{ "PWA.INSTALL_LATER" | translate }}
+        </ion-button>
+      </div>
+    } @else {
+      <p class="message">{{ "PWA.INVITE_DESCRIPTION" | translate }}</p>
+      <div class="actions">
+        <ion-button size="small" (click)="install()">
+          {{ "PWA.INSTALL_BUTTON" | translate }}
+        </ion-button>
+        <ion-button size="small" fill="clear" (click)="dismiss()">
+          {{ "PWA.INSTALL_LATER" | translate }}
+        </ion-button>
+      </div>
+    }
   </div>
-  } @else {
-  <p class="message">{{ 'PWA.INVITE_DESCRIPTION' | translate }}</p>
-  <div class="actions">
-    <ion-button size="small" (click)="install()">
-      {{ 'PWA.INSTALL_BUTTON' | translate }}
-    </ion-button>
-    <ion-button size="small" fill="clear" (click)="dismiss()">
-      {{ 'PWA.INSTALL_LATER' | translate }}
-    </ion-button>
-  </div>
-  }
-</div>
 }

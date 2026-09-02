@@ -41,7 +41,10 @@
     "WIPE_CONFIRM_MESSAGE": "Esta ação é permanente e apaga todos os treinos, o histórico de sessões e os ajustes (tema e idioma).",
     "WIPE_CONFIRM_ACTION": "Apagar tudo",
     "WIPE_SUCCESS": "Todos os dados foram apagados",
-    "WIPE_ERROR": "Falha ao apagar os dados"
+    "WIPE_ERROR": "Falha ao apagar os dados",
+    "ABOUT": "Sobre",
+    "ABOUT_STORAGE": "Seus treinos ficam salvos apenas neste dispositivo.",
+    "ABOUT_REPOSITORY": "Repositório"
   },
   "WORKOUTS": {
     "TITLE": "Treinos",
@@ -77,6 +80,11 @@
     "INSTALL_BUTTON": "Instalar",
     "INSTALL_GOT_IT": "Entendi",
     "INSTALL_LATER": "Agora não"
+  },
+  "ONBOARDING": {
+    "TITLE": "Bem-vindo ao EzGym",
+    "MESSAGE": "Seus dados ficam salvos apenas no seu dispositivo. O app funciona offline: você não precisa de internet para registrar treinos.",
+    "CTA": "Entendi"
   },
   "SESSION": {
     "TITLE": "Sessão de Treino",    "PREPARING": {

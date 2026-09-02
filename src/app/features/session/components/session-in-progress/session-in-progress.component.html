@@ -84,136 +84,130 @@
           </svg>
           <span class="rest-time">{{ restTimeLabel() }}</span>
         </div>
-        <span class="rest-label">{{
-          "SESSION.REST.LABEL" | translate
-        }}</span>
+        <span class="rest-label">{{ "SESSION.REST.LABEL" | translate }}</span>
         <div class="rest-actions">
-          <ion-button
-            fill="outline"
-            size="small"
-            (click)="onAddRestTime()"
-          >
+          <ion-button fill="outline" size="small" (click)="onAddRestTime()">
             {{ "SESSION.REST.ADD_30" | translate }}
           </ion-button>
-          <ion-button
-            fill="clear"
-            size="small"
-            (click)="onSkipRest()"
-          >
+          <ion-button fill="clear" size="small" (click)="onSkipRest()">
             {{ "SESSION.REST.SKIP" | translate }}
           </ion-button>
         </div>
       </ion-card-content>
     </ion-card>
   } @else {
-  <!-- Input Card -->
-  <ion-card class="input-card" [class.rest-finished]="restTimer.justFinished()">
-    <ion-card-content>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="6">
-            <div class="input-block">
-              <span class="input-label">{{
-                "SESSION.IN_PROGRESS.REPS" | translate
-              }}</span>
-              <ion-input
-                type="number"
-                inputmode="numeric"
-                helperText="{{
-                  'COMMON.VALUE_RANGE'
-                    | translate
-                      : { min: logRepsRange.min, max: logRepsRange.max }
-                }}"
-                [appNumberClamp]="logRepsRange"
-                [ngModel]="reps"
-                (ngModelChange)="onRepsChange($event)"
-                placeholder="0"
-                min="1"
-                [max]="logRepsMax"
-              ></ion-input>
-            </div>
-          </ion-col>
-          <ion-col size="6">
-            <div class="input-block">
-              <span class="input-label">{{
-                "SESSION.IN_PROGRESS.WEIGHT" | translate
-              }}</span>
-              <ion-input
-                type="number"
-                inputmode="decimal"
-                helperText="{{
-                  'COMMON.VALUE_RANGE'
-                    | translate: { min: weightRange.min, max: weightRange.max }
-                }}"
-                [appNumberClamp]="weightRange"
-                [ngModel]="weight"
-                (ngModelChange)="onWeightChange($event)"
-                placeholder="0"
-                min="0"
-                [max]="weightMax"
-              ></ion-input>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="12">
-            <div class="rpe-container">
-              <div class="rpe-header">
-                <ion-label
-                  >{{ "SESSION.IN_PROGRESS.RPE" | translate }}:
-                  {{ rpe }}</ion-label
-                >
-                <ion-button
-                  fill="clear"
-                  size="small"
-                  class="info-button"
-                  (click)="showRPEInfo()"
-                  aria-label="Show RPE information"
-                >
-                  <ion-icon
-                    name="information-circle-outline"
-                    slot="icon-only"
-                  />
-                </ion-button>
+    <!-- Input Card -->
+    <ion-card
+      class="input-card"
+      [class.rest-finished]="restTimer.justFinished()"
+    >
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="input-block">
+                <span class="input-label">{{
+                  "SESSION.IN_PROGRESS.REPS" | translate
+                }}</span>
+                <ion-input
+                  type="number"
+                  inputmode="numeric"
+                  helperText="{{
+                    'COMMON.VALUE_RANGE'
+                      | translate
+                        : { min: logRepsRange.min, max: logRepsRange.max }
+                  }}"
+                  [appNumberClamp]="logRepsRange"
+                  [ngModel]="reps"
+                  (ngModelChange)="onRepsChange($event)"
+                  placeholder="0"
+                  min="1"
+                  [max]="logRepsMax"
+                ></ion-input>
               </div>
-              <ion-range
-                min="1"
-                max="10"
-                step="1"
-                snaps="true"
-                [(ngModel)]="rpe"
-              ></ion-range>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+            </ion-col>
+            <ion-col size="6">
+              <div class="input-block">
+                <span class="input-label">{{
+                  "SESSION.IN_PROGRESS.WEIGHT" | translate
+                }}</span>
+                <ion-input
+                  type="number"
+                  inputmode="decimal"
+                  helperText="{{
+                    'COMMON.VALUE_RANGE'
+                      | translate
+                        : { min: weightRange.min, max: weightRange.max }
+                  }}"
+                  [appNumberClamp]="weightRange"
+                  [ngModel]="weight"
+                  (ngModelChange)="onWeightChange($event)"
+                  placeholder="0"
+                  min="0"
+                  [max]="weightMax"
+                ></ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <div class="rpe-container">
+                <div class="rpe-header">
+                  <ion-label
+                    >{{ "SESSION.IN_PROGRESS.RPE" | translate }}:
+                    {{ rpe }}</ion-label
+                  >
+                  <ion-button
+                    fill="clear"
+                    size="small"
+                    class="info-button"
+                    (click)="showRPEInfo()"
+                    aria-label="Show RPE information"
+                  >
+                    <ion-icon
+                      name="information-circle-outline"
+                      slot="icon-only"
+                    />
+                  </ion-button>
+                </div>
+                <ion-range
+                  min="1"
+                  max="10"
+                  step="1"
+                  snaps="true"
+                  [(ngModel)]="rpe"
+                ></ion-range>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
 
-      <ion-button
-        expand="block"
-        (click)="onLogSet()"
-        [color]="editingSetId() ? 'warning' : 'primary'"
-        [disabled]="!reps || weight === null"
-      >
-        @if (editingSetId()) {
-          {{ "SESSION.IN_PROGRESS.UPDATE_SET" | translate }}
-        } @else {
-          {{ "SESSION.IN_PROGRESS.COMPLETE_SET" | translate }}
-        }
-        <ion-icon slot="end" name="checkmark-circle"></ion-icon>
-      </ion-button>
-
-      @if (editingSetId()) {
         <ion-button
           expand="block"
-          fill="clear"
-          color="medium"
-          (click)="cancelEdit()"
+          (click)="onLogSet()"
+          [color]="editingSetId() ? 'warning' : 'primary'"
+          [disabled]="!reps || weight === null"
         >
-          {{ "COMMON.CANCEL" | translate }}
+          @if (editingSetId()) {
+            {{ "SESSION.IN_PROGRESS.UPDATE_SET" | translate }}
+          } @else {
+            {{ "SESSION.IN_PROGRESS.COMPLETE_SET" | translate }}
+          }
+          <ion-icon slot="end" name="checkmark-circle"></ion-icon>
         </ion-button>
-      }
-    </ion-card-content>
-  </ion-card>
+
+        @if (editingSetId()) {
+          <ion-button
+            expand="block"
+            fill="clear"
+            color="medium"
+            (click)="cancelEdit()"
+          >
+            {{ "COMMON.CANCEL" | translate }}
+          </ion-button>
+        }
+      </ion-card-content>
+    </ion-card>
   }
 
   <!-- Logs List -->

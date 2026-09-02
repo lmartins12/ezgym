@@ -41,7 +41,10 @@
     "WIPE_CONFIRM_MESSAGE": "This action is permanent and deletes all workouts, session history and settings (theme and language).",
     "WIPE_CONFIRM_ACTION": "Erase everything",
     "WIPE_SUCCESS": "All data has been erased",
-    "WIPE_ERROR": "Failed to erase data"
+    "WIPE_ERROR": "Failed to erase data",
+    "ABOUT": "About",
+    "ABOUT_STORAGE": "Your workouts are stored only on this device.",
+    "ABOUT_REPOSITORY": "Repository"
   },
   "WORKOUTS": {
     "TITLE": "Workouts",
@@ -77,6 +80,11 @@
     "INSTALL_BUTTON": "Install",
     "INSTALL_GOT_IT": "Got it",
     "INSTALL_LATER": "Not now"
+  },
+  "ONBOARDING": {
+    "TITLE": "Welcome to EzGym",
+    "MESSAGE": "Your data is stored only on your device. The app works offline: you don't need internet to log workouts.",
+    "CTA": "Got it"
   },
   "SESSION": {
     "TITLE": "Workout Session",

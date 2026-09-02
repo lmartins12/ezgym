@@ -25,4 +25,5 @@ export class PwaInstallInviteComponent {
 
   public dismiss(): void {
     this.pwaInstall.dismiss();
-  }}
+  }
+}

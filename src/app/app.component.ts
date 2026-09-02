@@ -4,6 +4,7 @@ import { LanguageService } from '@core/i18n/language';
 import { PwaUpdateService } from '@core/pwa/pwa-update';
 import { ThemeService } from '@core/theme/theme';
 import { IonApp, IonRouterOutlet } from '@ionic/angular';
+import { OnboardingWelcomeComponent } from '@shared/components/onboarding-welcome/onboarding-welcome.component';
 import { PwaInstallInviteComponent } from '@shared/components/pwa-install-invite/pwa-install-invite.component';
 
 @Component({
@@ -12,9 +13,15 @@ import { PwaInstallInviteComponent } from '@shared/components/pwa-install-invite
     <ion-app>
       <ion-router-outlet></ion-router-outlet>
       <app-pwa-install-invite></app-pwa-install-invite>
+      <app-onboarding-welcome></app-onboarding-welcome>
     </ion-app>
   `,
-  imports: [IonApp, IonRouterOutlet, PwaInstallInviteComponent],
+  imports: [
+    IonApp,
+    IonRouterOutlet,
+    PwaInstallInviteComponent,
+    OnboardingWelcomeComponent,
+  ],
 })
 export class AppComponent {
   private readonly databaseService = inject(DatabaseService);

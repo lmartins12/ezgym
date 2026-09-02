@@ -1,0 +1,17 @@
+@if (onboarding.shouldShow()) {
+  <div
+    class="onboarding-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="onboarding-title"
+  >
+    <div class="onboarding-card">
+      <ion-icon name="cloud-offline-outline" aria-hidden="true"></ion-icon>
+      <h2 id="onboarding-title">{{ "ONBOARDING.TITLE" | translate }}</h2>
+      <p>{{ "ONBOARDING.MESSAGE" | translate }}</p>
+      <ion-button expand="block" (click)="dismiss()">
+        {{ "ONBOARDING.CTA" | translate }}
+      </ion-button>
+    </div>
+  </div>
+}

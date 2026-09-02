@@ -147,7 +147,13 @@ describe('SessionInProgressComponent rest flow', () => {
     });
     Element.prototype.scrollIntoView = vi.fn();
     vi.useFakeTimers({
-      toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'],
+      toFake: [
+        'setTimeout',
+        'clearTimeout',
+        'setInterval',
+        'clearInterval',
+        'Date',
+      ],
     });
   });
 
