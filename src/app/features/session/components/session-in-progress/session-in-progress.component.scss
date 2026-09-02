@@ -50,9 +50,54 @@
   }
 }
 
-.input-card {
+.input-card,
+.rest-card {
   margin: 0 16px;
   border-radius: 16px;
+}
+
+.input-card.rest-finished {
+  animation: rest-pulse 0.7s ease-in-out 2;
+}
+
+@keyframes rest-pulse {
+  50% {
+    box-shadow: 0 0 0 3px rgba(var(--ion-color-success-rgb), 0.45);
+  }
+}
+
+.rest-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.rest-ring-wrap {
+  position: relative;
+  width: 112px;
+  height: 112px;
+}
+
+.rest-ring {
+  transform: rotate(-90deg);
+}
+
+.rest-ring-track {
+  stroke: var(--ion-background-color-step-100, #e0e0e0);
+}
+
+.rest-ring-progress {
+  stroke: var(--ion-color-primary);
+}
+
+.rest-time {
+  position: absolute;
+  inset: 0;
+  text-align: center;
+  line-height: 112px;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .input-block {
@@ -101,13 +146,6 @@
   ion-range {
     padding: 0;
   }
-}
-
-.log-btn {
-  margin-top: 16px;
-  height: 48px;
-  font-weight: 700;
-  --border-radius: 12px;
 }
 
 .logs-list {

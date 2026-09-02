@@ -50,8 +50,64 @@
     </div>
   }
 
+  <!-- Rest Card (replaces the input card while the countdown runs) -->
+  @if (restTimer.isResting()) {
+    <ion-card class="rest-card">
+      <ion-card-content class="rest-content">
+        <div class="rest-ring-wrap" role="timer">
+          <svg
+            class="rest-ring"
+            viewBox="0 0 100 100"
+            width="112"
+            height="112"
+            aria-hidden="true"
+          >
+            <circle
+              class="rest-ring-track"
+              cx="50"
+              cy="50"
+              r="44"
+              fill="none"
+              stroke-width="8"
+            />
+            <circle
+              class="rest-ring-progress"
+              cx="50"
+              cy="50"
+              r="44"
+              fill="none"
+              stroke-width="8"
+              stroke-linecap="round"
+              [attr.stroke-dasharray]="ringCircumference"
+              [style.stroke-dashoffset]="restDashOffset()"
+            />
+          </svg>
+          <span class="rest-time">{{ restTimeLabel() }}</span>
+        </div>
+        <span class="rest-label">{{
+          "SESSION.REST.LABEL" | translate
+        }}</span>
+        <div class="rest-actions">
+          <ion-button
+            fill="outline"
+            size="small"
+            (click)="onAddRestTime()"
+          >
+            {{ "SESSION.REST.ADD_30" | translate }}
+          </ion-button>
+          <ion-button
+            fill="clear"
+            size="small"
+            (click)="onSkipRest()"
+          >
+            {{ "SESSION.REST.SKIP" | translate }}
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  } @else {
   <!-- Input Card -->
-  <ion-card class="input-card">
+  <ion-card class="input-card" [class.rest-finished]="restTimer.justFinished()">
     <ion-card-content>
       <ion-grid>
         <ion-row>
@@ -158,6 +214,7 @@
       }
     </ion-card-content>
   </ion-card>
+  }
 
   <!-- Logs List -->
   <div class="logs-list">

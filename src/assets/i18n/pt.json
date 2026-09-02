@@ -101,6 +101,11 @@
       "RPE_INFO_MESSAGE": "Taxa de Percepção de Esforço (escala 0-10):|n|n10 = Esforço máximo, impossível fazer outra rep|n9 = Muito difícil, conseguiria mais 1 rep|n8 = Difícil, conseguiria mais 2 reps|n7 = Moderadamente difícil, conseguiria mais 3 reps|n6 = Moderado, conseguiria 4+ reps|n|nUse RPE para registrar o esforço de cada série e ajustar o treino conforme seu nível de energia diário.",
       "RPE_INFO_CLOSE": "Entendi"
     },
+    "REST": {
+      "LABEL": "Descanso",
+      "SKIP": "Pular",
+      "ADD_30": "+30s"
+    },
     "FINISHING": {
       "TITLE": "Resumo da Sessão",
       "DURATION": "Duração",

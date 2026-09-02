@@ -102,6 +102,11 @@
       "RPE_INFO_MESSAGE": "Rate of Perceived Exertion (0-10 scale):|n|n10 = Maximum effort, couldn't do another rep|n9 = Very hard, could do 1 more rep|n8 = Hard, could do 2 more reps|n7 = Moderately hard, could do 3 more reps|n6 = Moderate, could do 4+ more reps|n|nUse RPE to track how hard each set feels and adjust training based on your daily energy levels.",
       "RPE_INFO_CLOSE": "Got it"
     },
+    "REST": {
+      "LABEL": "Rest",
+      "SKIP": "Skip",
+      "ADD_30": "+30s"
+    },
     "FINISHING": {
       "TITLE": "Session Summary",
       "DURATION": "Duration",

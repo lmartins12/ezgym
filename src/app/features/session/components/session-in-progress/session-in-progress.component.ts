@@ -20,6 +20,7 @@ import {
 } from '@domain/shared/limits';
 import type { NumericRange } from '@domain/shared/limits';
 import { BackButtonService } from '@core/back-button/back-button';
+import { HapticsService } from '@core/haptics/haptics';
 import {
   AlertController,
   IonButton,
@@ -46,12 +47,17 @@ import {
   informationCircleOutline,
   trashOutline,
 } from 'ionicons/icons';
+import { RestTimerService } from '../../services/rest-timer';
 
 /** Default RPE for a new set, kept consistent between field and resetForm. */
 const DEFAULT_RPE = 7;
 
+/** Geometry of the rest ring (viewBox 0 0 100 100). */
+const REST_RING_RADIUS = 44;
+
 @Component({
   selector: 'app-session-in-progress',
+  providers: [RestTimerService],
   imports: [
     FormsModule,
     TranslatePipe,
@@ -95,6 +101,8 @@ export class SessionInProgressComponent {
   private readonly alertCtrl = inject(AlertController);
   private readonly translate = inject(TranslateService);
   private readonly backButton = inject(BackButtonService);
+  private readonly haptics = inject(HapticsService);
+  public readonly restTimer = inject(RestTimerService);
 
   // View references
   private readonly exerciseItems =
@@ -103,6 +111,10 @@ export class SessionInProgressComponent {
   // Local state
   public readonly currentExerciseIndex = signal(0);
   public readonly editingSetId = signal<string | null>(null);
+
+  /** Rest flow: index where the rest started and where to focus when it ends. */
+  private restStartIndex: number | null = null;
+  private pendingAdvanceIndex: number | null = null;
 
   // Form state
   public reps: number | null = null;
@@ -152,6 +164,23 @@ export class SessionInProgressComponent {
 
   protected readonly allExercisesComplete = computed(() => {
     return this.exercises().every((_, index) => this.isExerciseComplete(index));
+  });
+
+  // Rest timer view helpers
+  protected readonly ringCircumference = 2 * Math.PI * REST_RING_RADIUS;
+
+  protected readonly restDashOffset = computed(() => {
+    const duration = this.restTimer.restDuration();
+    if (duration <= 0) return this.ringCircumference;
+
+    const progress = Math.min(this.restTimer.restRemaining() / duration, 1);
+    return this.ringCircumference * (1 - progress);
+  });
+
+  protected readonly restTimeLabel = computed(() => {
+    const seconds = this.restTimer.restRemaining();
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
   });
 
   constructor() {
@@ -237,7 +266,7 @@ export class SessionInProgressComponent {
         weight,
         rpe: this.rpe,
       });
-      this.checkAndAdvanceToNextExercise(true);
+      this.handlePostLogFlow();
     }
   }
 
@@ -245,6 +274,67 @@ export class SessionInProgressComponent {
     if (index >= 0 && index < this.exercises().length) {
       this.currentExerciseIndex.set(index);
       this.resetForm();
+    }
+  }
+
+  onSkipRest(): void {
+    this.restTimer.skip();
+    this.applyRestAdvance();
+  }
+
+  onAddRestTime(): void {
+    this.restTimer.addSeconds(30);
+  }
+
+  /**
+   * Decides what follows a newly logged set: rest countdown, immediate
+   * advance, or finish — reading the logs as they were BEFORE this set
+   * (the store patch is async).
+   */
+  private handlePostLogFlow(): void {
+    const exercise = this.currentExercise();
+    if (!exercise) return;
+
+    const currentIndex = this.currentExerciseIndex();
+    const willCompleteExercise =
+      this.currentLogs().length + 1 >= exercise.sets;
+    const nextIndex = willCompleteExercise
+      ? this.findNextIncompleteExerciseIndex(currentIndex)
+      : currentIndex;
+    const hasMoreWork = willCompleteExercise ? nextIndex !== null : true;
+
+    if (!hasMoreWork) {
+      this.finishSession.emit();
+      return;
+    }
+
+    const restSeconds = exercise.rest_seconds ?? 0;
+    if (restSeconds <= 0) {
+      this.checkAndAdvanceToNextExercise(true);
+      return;
+    }
+
+    this.restStartIndex = currentIndex;
+    this.pendingAdvanceIndex = nextIndex;
+    this.restTimer.start(restSeconds, () => this.onRestCountdownEnd());
+  }
+
+  private onRestCountdownEnd(): void {
+    this.haptics.doubleTap();
+    this.applyRestAdvance();
+  }
+
+  /** Focuses the next set, unless the user navigated away during the rest. */
+  private applyRestAdvance(): void {
+    const startIndex = this.restStartIndex;
+    const targetIndex = this.pendingAdvanceIndex;
+    if (startIndex === null || targetIndex === null) return;
+
+    this.restStartIndex = null;
+    this.pendingAdvanceIndex = null;
+    if (this.currentExerciseIndex() !== startIndex) return;
+    if (targetIndex !== startIndex) {
+      this.selectExercise(targetIndex);
     }
   }
 
@@ -276,6 +366,15 @@ export class SessionInProgressComponent {
     return exerciseLogs.length >= exercise.sets;
   }
 
+  private findNextIncompleteExerciseIndex(fromIndex: number): number | null {
+    for (let i = fromIndex + 1; i < this.exercises().length; i++) {
+      if (!this.isExerciseComplete(i)) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   private checkAndAdvanceToNextExercise(newSetAdded: boolean = false): void {
     const currentIndex = this.currentExerciseIndex();
     const currentExercise = this.exercises()[currentIndex];
@@ -292,12 +391,10 @@ export class SessionInProgressComponent {
       return;
     }
 
-    for (let i = currentIndex + 1; i < this.exercises().length; i++) {
-      if (!this.isExerciseComplete(i)) {
-        this.currentExerciseIndex.set(i);
-        this.resetForm();
-        return;
-      }
+    const nextIndex = this.findNextIncompleteExerciseIndex(currentIndex);
+    if (nextIndex !== null) {
+      this.currentExerciseIndex.set(nextIndex);
+      this.resetForm();
     }
   }
 
