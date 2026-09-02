@@ -13,6 +13,7 @@ import {
   clampToRange,
   isValidRepsFormat,
 } from '@domain/shared/limits';
+import type { NumericRange } from '@domain/shared/limits';
 import {
   IonButton,
   IonButtons,
@@ -29,6 +30,8 @@ import {
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleGroupSelectorComponent } from '@shared/components/muscle-group-selector/muscle-group-selector.component';
+import { NumberClampDirective } from '@shared/directives/number-clamp.directive';
+import { TextLimitDirective } from '@shared/directives/text-limit.directive';
 
 export interface ExerciseData {
   name: string;
@@ -58,6 +61,8 @@ export interface ExerciseData {
     IonFooter,
     TranslatePipe,
     MuscleGroupSelectorComponent,
+    NumberClampDirective,
+    TextLimitDirective,
   ],
   templateUrl: './exercise-editor-modal.component.html',
   styleUrl: './exercise-editor-modal.component.scss',
@@ -83,6 +88,9 @@ export class ExerciseEditorModalComponent {
   protected readonly setsMax = SETS_RANGE.max;
   protected readonly weightMax = WEIGHT_RANGE.max;
   protected readonly restMax = REST_SECONDS_RANGE.max;
+  protected readonly setsRange: NumericRange = SETS_RANGE;
+  protected readonly weightRange: NumericRange = WEIGHT_RANGE;
+  protected readonly restRange: NumericRange = REST_SECONDS_RANGE;
 
   private readonly modalCtrl = inject(ModalController);
 

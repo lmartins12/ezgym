@@ -13,6 +13,7 @@ import {
   IonTextarea,
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { TextLimitDirective } from '@shared/directives/text-limit.directive';
 
 @Component({
   selector: 'app-session-finishing',
@@ -25,6 +26,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     IonCardContent,
     IonTextarea,
     IonButton,
+    TextLimitDirective,
   ],
   templateUrl: './session-finishing.component.html',
   styleUrl: './session-finishing.component.scss',

@@ -218,9 +218,7 @@ describe('ImportExport', () => {
     });
 
     it('returns null for invalid JSON', async () => {
-      const errorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const preview = await useCase.getImportPreview('not json');
 

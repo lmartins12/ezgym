@@ -30,6 +30,7 @@
   <ion-card class="notes-card">
     <ion-card-content>
       <ion-textarea
+        [appTextLimit]="notesMaxLength"
         [(ngModel)]="notes"
         placeholder="{{ 'SESSION.FINISHING.NOTES_PLACEHOLDER' | translate }}"
         autoGrow="true"

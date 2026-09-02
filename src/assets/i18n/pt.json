@@ -13,6 +13,7 @@
     "SUCCESS": "Sucesso",
     "CREATE": "Criar",
     "CLEAR": "Limpar",
+    "VALUE_RANGE": "De {{min}} a {{max}}",
     "UNEXPECTED_ERROR": "Ocorreu um erro inesperado. Tente novamente."
   },
   "NAV": {
@@ -141,9 +142,9 @@
     "NO_DISTRIBUTION": "Nenhum dado de distribuição",
     "TIME_TODAY": "Hoje",
     "TIME_YESTERDAY": "Ontem",
-    "TIME_DAYS_AGO": "{count} dias atrás",
-    "TIME_WEEKS_AGO": "{count} semanas atrás",
-    "TIME_MONTHS_AGO": "{count} meses atrás"
+    "TIME_DAYS_AGO": "{{count}} dias atrás",
+    "TIME_WEEKS_AGO": "{{count}} semanas atrás",
+    "TIME_MONTHS_AGO": "{{count}} meses atrás"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Adicionar Exercício",
@@ -178,8 +179,8 @@
     "EXPORT": "Exportar Treinos",
     "IMPORT": "Importar Treinos",
     "EXPORT_SUCCESS": "Treinos exportados com sucesso",
-    "IMPORT_SUCCESS": "{count} treinos importados",
-    "CONFIRM_IMPORT": "Importar {count} treinos?",
+    "IMPORT_SUCCESS": "{{count}} treinos importados",
+    "CONFIRM_IMPORT": "Importar {{count}} treinos?",
     "PREVIEW": "Visualizar",
     "VALIDATION_ERRORS": "Erros Encontrados",
     "WORKOUTS_TO_IMPORT": "Treinos para Importar",
@@ -202,12 +203,12 @@
     "DUPLICATE_ORDER_INDEX": "Ordem de exercício duplicada no treino '{workout}'",
     "EMPTY_EXERCISE_NAME": "Nome do exercício não pode estar vazio",
     "WORKOUT_WITHOUT_EXERCISES": "Treino '{workout}' não tem exercícios",
-    "VALIDATION_ERRORS_FOUND": "{count} erro(s) encontrado(s)",
-    "VALIDATION_WARNINGS_FOUND": "{count} aviso(s)",
+    "VALIDATION_ERRORS_FOUND": "{{count}} erro(s) encontrado(s)",
+    "VALIDATION_WARNINGS_FOUND": "{{count}} aviso(s)",
     "IMPORT_FAILED": "Importação falhou",
     "NO_WORKOUTS_TO_IMPORT": "Nenhum treino para importar",
-    "WILL_CREATE_EXERCISES": "Serão criados {count} novos exercícios",
-    "WILL_REUSE_EXERCISES": "Serão reutilizados {count} exercícios existentes",
+    "WILL_CREATE_EXERCISES": "Serão criados {{count}} novos exercícios",
+    "WILL_REUSE_EXERCISES": "Serão reutilizados {{count}} exercícios existentes",
     "JSON_PLACEHOLDER": "Cole seu JSON de treinos aqui...",
     "EXPORT_MODAL_TITLE": "Exportar Treinos",
     "IMPORT_MODAL_TITLE": "Importar Treinos",

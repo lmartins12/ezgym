@@ -18,6 +18,7 @@ import {
   WEIGHT_RANGE,
   clampToRange,
 } from '@domain/shared/limits';
+import type { NumericRange } from '@domain/shared/limits';
 import { BackButtonService } from '@core/back-button/back-button';
 import {
   AlertController,
@@ -37,6 +38,7 @@ import {
 } from '@ionic/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
+import { NumberClampDirective } from '@shared/directives/number-clamp.directive';
 import { addIcons } from 'ionicons';
 import {
   checkmarkCircle,
@@ -67,6 +69,7 @@ const DEFAULT_RPE = 7;
     IonRange,
     IonListHeader,
     MuscleIconComponent,
+    NumberClampDirective,
   ],
   templateUrl: './session-in-progress.component.html',
   styleUrl: './session-in-progress.component.scss',
@@ -108,6 +111,8 @@ export class SessionInProgressComponent {
 
   protected readonly logRepsMax = LOG_REPS_RANGE.max;
   protected readonly weightMax = WEIGHT_RANGE.max;
+  protected readonly logRepsRange: NumericRange = LOG_REPS_RANGE;
+  protected readonly weightRange: NumericRange = WEIGHT_RANGE;
 
   /**
    * Guarded against out-of-bounds indexes (e.g. exercises removed during

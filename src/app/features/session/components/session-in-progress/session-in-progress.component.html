@@ -63,6 +63,11 @@
               <ion-input
                 type="number"
                 inputmode="numeric"
+                helperText="{{
+                  'COMMON.VALUE_RANGE'
+                    | translate: { min: logRepsRange.min, max: logRepsRange.max }
+                }}"
+                [appNumberClamp]="logRepsRange"
                 [ngModel]="reps"
                 (ngModelChange)="onRepsChange($event)"
                 placeholder="0"
@@ -79,6 +84,11 @@
               <ion-input
                 type="number"
                 inputmode="decimal"
+                helperText="{{
+                  'COMMON.VALUE_RANGE'
+                    | translate: { min: weightRange.min, max: weightRange.max }
+                }}"
+                [appNumberClamp]="weightRange"
                 [ngModel]="weight"
                 (ngModelChange)="onWeightChange($event)"
                 placeholder="0"

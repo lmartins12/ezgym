@@ -13,6 +13,7 @@
     "SUCCESS": "Success",
     "CREATE": "Create",
     "CLEAR": "Clear",
+    "VALUE_RANGE": "{{min}} to {{max}}",
     "UNEXPECTED_ERROR": "An unexpected error occurred. Please try again."
   },
   "NAV": {
@@ -142,9 +143,9 @@
     "NO_DISTRIBUTION": "No distribution data",
     "TIME_TODAY": "Today",
     "TIME_YESTERDAY": "Yesterday",
-    "TIME_DAYS_AGO": "{count} days ago",
-    "TIME_WEEKS_AGO": "{count} weeks ago",
-    "TIME_MONTHS_AGO": "{count} months ago"
+    "TIME_DAYS_AGO": "{{count}} days ago",
+    "TIME_WEEKS_AGO": "{{count}} weeks ago",
+    "TIME_MONTHS_AGO": "{{count}} months ago"
   },
   "EXERCISE": {
     "CREATE_TITLE": "Add Exercise",
@@ -179,8 +180,8 @@
     "EXPORT": "Export Workouts",
     "IMPORT": "Import Workouts",
     "EXPORT_SUCCESS": "Workouts exported successfully",
-    "IMPORT_SUCCESS": "Imported {count} workouts",
-    "CONFIRM_IMPORT": "Import {count} workouts?",
+    "IMPORT_SUCCESS": "Imported {{count}} workouts",
+    "CONFIRM_IMPORT": "Import {{count}} workouts?",
     "PREVIEW": "Preview",
     "VALIDATION_ERRORS": "Errors Found",
     "WORKOUTS_TO_IMPORT": "Workouts to Import",
@@ -203,12 +204,12 @@
     "DUPLICATE_ORDER_INDEX": "Duplicate exercise order in workout '{workout}'",
     "EMPTY_EXERCISE_NAME": "Exercise name cannot be empty",
     "WORKOUT_WITHOUT_EXERCISES": "Workout '{workout}' has no exercises",
-    "VALIDATION_ERRORS_FOUND": "{count} error(s) found",
-    "VALIDATION_WARNINGS_FOUND": "{count} warning(s)",
+    "VALIDATION_ERRORS_FOUND": "{{count}} error(s) found",
+    "VALIDATION_WARNINGS_FOUND": "{{count}} warning(s)",
     "IMPORT_FAILED": "Import failed",
     "NO_WORKOUTS_TO_IMPORT": "No workouts to import",
-    "WILL_CREATE_EXERCISES": "Will create {count} new exercises",
-    "WILL_REUSE_EXERCISES": "Will reuse {count} existing exercises",
+    "WILL_CREATE_EXERCISES": "Will create {{count}} new exercises",
+    "WILL_REUSE_EXERCISES": "Will reuse {{count}} existing exercises",
     "JSON_PLACEHOLDER": "Paste your workout JSON here...",
     "EXPORT_MODAL_TITLE": "Export Workouts",
     "IMPORT_MODAL_TITLE": "Import Workouts",

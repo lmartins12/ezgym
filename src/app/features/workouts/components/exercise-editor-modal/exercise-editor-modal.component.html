@@ -25,6 +25,7 @@
       fill="solid"
       label="{{ 'EXERCISE.NAME_LABEL' | translate }}"
       labelPlacement="floating"
+      [appTextLimit]="nameMaxLength"
       [maxlength]="nameMaxLength"
       [(ngModel)]="name"
     />
@@ -43,6 +44,7 @@
       fill="solid"
       label="{{ 'EXERCISE.EQUIPMENT_LABEL' | translate }}"
       labelPlacement="floating"
+      [appTextLimit]="equipmentMaxLength"
       [maxlength]="equipmentMaxLength"
       [(ngModel)]="equipment"
     />
@@ -53,6 +55,7 @@
       fill="solid"
       label="{{ 'EXERCISE.NOTES_LABEL' | translate }}"
       labelPlacement="floating"
+      [appTextLimit]="notesMaxLength"
       [(ngModel)]="notes"
       [maxlength]="notesMaxLength"
       [rows]="2"
@@ -71,6 +74,10 @@
       fill="solid"
       label="{{ 'EXERCISE.SETS_LABEL' | translate }}"
       labelPlacement="floating"
+      helperText="{{
+        'COMMON.VALUE_RANGE' | translate: { min: setsRange.min, max: setsRange.max }
+      }}"
+      [appNumberClamp]="setsRange"
       [ngModel]="sets()"
       (ngModelChange)="onSetsChange($event)"
       min="1"
@@ -83,6 +90,7 @@
       fill="solid"
       label="{{ 'EXERCISE.REPS_LABEL' | translate }}"
       labelPlacement="floating"
+      [appTextLimit]="repsMaxLength"
       [(ngModel)]="reps"
       [maxlength]="repsMaxLength"
       [errorText]="repsInvalid() ? ('EXERCISE.REPS_INVALID' | translate) : ''"
@@ -97,6 +105,10 @@
       fill="solid"
       label="{{ 'EXERCISE.WEIGHT_LABEL' | translate }}"
       labelPlacement="floating"
+      helperText="{{
+        'COMMON.VALUE_RANGE' | translate: { min: weightRange.min, max: weightRange.max }
+      }}"
+      [appNumberClamp]="weightRange"
       [ngModel]="targetWeight()"
       (ngModelChange)="onWeightChange($event)"
       min="0"
@@ -111,6 +123,10 @@
       fill="solid"
       label="{{ 'EXERCISE.REST_LABEL' | translate }}"
       labelPlacement="floating"
+      helperText="{{
+        'COMMON.VALUE_RANGE' | translate: { min: restRange.min, max: restRange.max }
+      }}"
+      [appNumberClamp]="restRange"
       [ngModel]="restSeconds()"
       (ngModelChange)="onRestChange($event)"
       min="0"

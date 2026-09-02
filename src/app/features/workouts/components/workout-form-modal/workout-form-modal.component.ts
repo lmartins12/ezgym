@@ -18,6 +18,7 @@ import {
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleGroupSelectorComponent } from '@shared/components/muscle-group-selector/muscle-group-selector.component';
+import { TextLimitDirective } from '@shared/directives/text-limit.directive';
 
 export interface WorkoutFormResult {
   name: string;
@@ -41,6 +42,7 @@ export interface WorkoutFormResult {
     IonFooter,
     TranslatePipe,
     MuscleGroupSelectorComponent,
+    TextLimitDirective,
   ],
   templateUrl: './workout-form-modal.component.html',
   styleUrl: './workout-form-modal.component.scss',

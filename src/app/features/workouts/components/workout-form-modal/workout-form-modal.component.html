@@ -23,6 +23,7 @@
       fill="solid"
       label="{{ 'WORKOUTS.NAME_LABEL' | translate }}"
       labelPlacement="floating"
+      [appTextLimit]="nameMaxLength"
       [maxlength]="nameMaxLength"
       [(ngModel)]="name"
     />
@@ -32,8 +33,9 @@
       fill="solid"
       label="{{ 'WORKOUTS.DESCRIPTION_LABEL' | translate }}"
       labelPlacement="floating"
-      [(ngModel)]="description"
+      [appTextLimit]="descriptionMaxLength"
       [maxlength]="descriptionMaxLength"
+      [(ngModel)]="description"
     />
 
     <ion-label labelPlacement="stacked" class="ion-margin-bottom">
