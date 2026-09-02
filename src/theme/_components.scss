@@ -76,3 +76,10 @@ ion-fab-button {
   --color: var(--ion-color-primary-contrast);
   --box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
+
+ion-modal.exercise-details-modal {
+  --width: 90%;
+  --max-width: 420px;
+  --height: auto;
+  --border-radius: var(--glass-radius);
+}

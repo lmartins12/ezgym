@@ -19,3 +19,7 @@ ion-select.always-flip.select-expanded::part(icon) {
 ion-select.never-flip::part(icon) {
   transform: none;
 }
+
+ion-toggle {
+  --track-background-checked: var(--track-background);
+}

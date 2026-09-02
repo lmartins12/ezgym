@@ -44,7 +44,9 @@
     "WIPE_ERROR": "Failed to erase data",
     "ABOUT": "About",
     "ABOUT_STORAGE": "Your workouts are stored only on this device.",
-    "ABOUT_REPOSITORY": "Repository"
+    "ABOUT_REPOSITORY": "Repository",
+    "CHECK_UPDATES": "Check for updates",
+    "UP_TO_DATE": "You're on the latest version"
   },
   "WORKOUTS": {
     "TITLE": "Workouts",
@@ -98,6 +100,8 @@
       "TARGET": "Target",
       "REPS": "Reps",
       "WEIGHT": "Weight (kg)",
+      "EXERCISE_DETAILS": "Exercise Details",
+      "NOTES": "Notes",
       "COMPLETE_SET": "Log Set",
       "UPDATE_SET": "Update Set",
       "HISTORY": "History",

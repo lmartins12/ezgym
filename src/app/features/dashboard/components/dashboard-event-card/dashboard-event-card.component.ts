@@ -3,7 +3,12 @@ import { Component, computed, input, output } from '@angular/core';
 import { IonIcon, IonItem, IonLabel } from '@ionic/angular';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
-import { barbell, moon, nutritionOutline } from 'ionicons/icons';
+import {
+  barbell,
+  ellipseOutline,
+  moon,
+  nutritionOutline,
+} from 'ionicons/icons';
 import type {
   DashboardEvent,
   DashboardEventType,
@@ -12,6 +17,7 @@ import type {
 
 addIcons({
   barbell,
+  ellipseOutline,
   nutritionOutline,
   moon,
 });

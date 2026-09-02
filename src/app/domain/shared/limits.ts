@@ -6,7 +6,7 @@ export interface NumericRange {
 export const NAME_MAX_LENGTH = 60;
 export const DESCRIPTION_MAX_LENGTH = 280;
 export const NOTES_MAX_LENGTH = 500;
-export const EQUIPMENT_MAX_LENGTH = 120;
+export const EQUIPMENT_MAX_LENGTH = 40;
 
 export const REPS_MAX_LENGTH = 7;
 export const REPS_PATTERN = /^\d+(-\d+)?$/;

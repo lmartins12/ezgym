@@ -17,7 +17,9 @@
             [muscleGroup]="state.exercise.muscle_group"
             size="md"
           />
-          <span class="exercise-name">{{ state.exercise.exercise_name }}</span>
+          <span class="exercise-name ez-truncate-2">{{
+            state.exercise.exercise_name
+          }}</span>
           <span class="exercise-target"
             >{{ state.exercise.sets }}×{{ state.exercise.reps }}</span
           >
@@ -25,9 +27,13 @@
       }
     </div>
   </div>
-  <!-- Exercise Info Header -->
+
   @if (currentExercise(); as exercise) {
-    <div class="exercise-header">
+    <button
+      type="button"
+      class="exercise-header"
+      (click)="openExerciseDetails()"
+    >
       <div class="exercise-info">
         <app-muscle-icon
           [muscleGroup]="exercise.muscle_group"
@@ -44,10 +50,20 @@
               <span> • {{ exercise.rest_seconds }}s</span>
             }
           </p>
+          @if (exercise.equipment) {
+            <div class="exercise-equipment">
+              <ion-icon name="barbell-outline" aria-hidden="true"></ion-icon>
+              <span class="ez-truncate">{{ exercise.equipment }}</span>
+            </div>
+          }
         </div>
       </div>
-      <div class="set-counter">{{ nextSetNumber() }} / {{ exercise.sets }}</div>
-    </div>
+      <div class="header-end">
+        <div class="set-counter">
+          {{ nextSetNumber() }} / {{ exercise.sets }}
+        </div>
+      </div>
+    </button>
   }
 
   <!-- Rest Card (replaces the input card while the countdown runs) -->
@@ -89,7 +105,7 @@
           <ion-button fill="outline" size="small" (click)="onAddRestTime()">
             {{ "SESSION.REST.ADD_30" | translate }}
           </ion-button>
-          <ion-button fill="clear" size="small" (click)="onSkipRest()">
+          <ion-button fill="solid" size="small" (click)="onSkipRest()">
             {{ "SESSION.REST.SKIP" | translate }}
           </ion-button>
         </div>
@@ -233,7 +249,11 @@
               {{ "SESSION.IN_PROGRESS.SET" | translate }}
               {{ log.set_number + 1 }}
             </h3>
-            <p>{{ log.reps }} reps @ {{ log.weight }}kg (RPE: {{ log.rpe }})</p>
+            <p>
+              {{ log.reps }}
+              {{ "SESSION.IN_PROGRESS.REPS" | translate }} @ {{ log.weight }}kg
+              (RPE: {{ log.rpe }})
+            </p>
           </ion-label>
           <ion-button
             fill="clear"

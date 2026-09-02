@@ -36,17 +36,21 @@ import {
   IonListHeader,
   IonRange,
   IonRow,
+  ModalController,
 } from '@ionic/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { NumberClampDirective } from '@shared/directives/number-clamp.directive';
 import { addIcons } from 'ionicons';
 import {
+  barbellOutline,
   checkmarkCircle,
+  chevronForwardOutline,
   createOutline,
   informationCircleOutline,
   trashOutline,
 } from 'ionicons/icons';
+import { ExerciseDetailsModalComponent } from '../exercise-details-modal/exercise-details-modal.component';
 import { RestTimerService } from '../../services/rest-timer';
 
 /** Default RPE for a new set, kept consistent between field and resetForm. */
@@ -102,6 +106,7 @@ export class SessionInProgressComponent {
   private readonly translate = inject(TranslateService);
   private readonly backButton = inject(BackButtonService);
   private readonly haptics = inject(HapticsService);
+  private readonly modalCtrl = inject(ModalController);
   public readonly restTimer = inject(RestTimerService);
 
   // View references
@@ -185,7 +190,9 @@ export class SessionInProgressComponent {
 
   constructor() {
     addIcons({
+      barbellOutline,
       checkmarkCircle,
+      chevronForwardOutline,
       trashOutline,
       createOutline,
       informationCircleOutline,
@@ -275,6 +282,21 @@ export class SessionInProgressComponent {
       this.currentExerciseIndex.set(index);
       this.resetForm();
     }
+  }
+
+  /** Opens the readonly details (target, equipment, notes) of the current exercise. */
+  public async openExerciseDetails(): Promise<void> {
+    const exercise = this.currentExercise();
+    if (!exercise) return;
+
+    const modal = await this.modalCtrl.create({
+      component: ExerciseDetailsModalComponent,
+      componentProps: { exercise },
+      cssClass: 'exercise-details-modal',
+    });
+
+    await modal.present();
+    void this.backButton.track(modal);
   }
 
   onSkipRest(): void {

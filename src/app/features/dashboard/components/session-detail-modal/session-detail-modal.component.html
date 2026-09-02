@@ -30,13 +30,7 @@
             @if (detailValue.finishedAt) {
               <div class="meta-item">
                 <ion-icon name="barbell"></ion-icon>
-                <span
-                  >{{
-                    detailValue.finishedAt - detailValue.startedAt
-                      | date: "mm" : ""
-                  }}
-                  min</span
-                >
+                <span>{{ durationMinutes() }} min</span>
               </div>
             }
           </div>

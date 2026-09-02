@@ -86,6 +86,17 @@ export class SessionDetailModalComponent implements OnInit {
     return detail.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
   });
 
+  /** Session duration in whole minutes (DatePipe 'mm' breaks past 59 min). */
+  protected readonly durationMinutes = computed(() => {
+    const detail = this.detail();
+    if (!detail?.finishedAt) return 0;
+
+    return Math.max(
+      0,
+      Math.round((detail.finishedAt - detail.startedAt) / 60000),
+    );
+  });
+
   protected formatStat(value: number): string {
     return formatStatNumber(value, this.locale);
   }

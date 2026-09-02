@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideIonicAngular } from '@ionic/angular';
 import { provideTranslateService } from '@ngx-translate/core';
 import type { SetLog } from '@domain/sessions/set-log';
 import type { WorkoutSession } from '@domain/sessions/workout-session';
@@ -14,7 +15,7 @@ import { SessionInProgressComponent } from './session-in-progress.component';
 describe('SessionInProgressComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideTranslateService()],
+      providers: [provideIonicAngular(), provideTranslateService()],
     });
   });
 
@@ -143,7 +144,7 @@ describe('SessionInProgressComponent', () => {
 describe('SessionInProgressComponent rest flow', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideTranslateService()],
+      providers: [provideIonicAngular(), provideTranslateService()],
     });
     Element.prototype.scrollIntoView = vi.fn();
     vi.useFakeTimers({

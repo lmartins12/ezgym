@@ -44,7 +44,9 @@
     "WIPE_ERROR": "Falha ao apagar os dados",
     "ABOUT": "Sobre",
     "ABOUT_STORAGE": "Seus treinos ficam salvos apenas neste dispositivo.",
-    "ABOUT_REPOSITORY": "Repositório"
+    "ABOUT_REPOSITORY": "Repositório",
+    "CHECK_UPDATES": "Buscar atualizações",
+    "UP_TO_DATE": "Você já está na versão mais recente"
   },
   "WORKOUTS": {
     "TITLE": "Treinos",
@@ -88,7 +90,8 @@
     "CTA": "Entendi"
   },
   "SESSION": {
-    "TITLE": "Sessão de Treino",    "PREPARING": {
+    "TITLE": "Sessão de Treino",
+    "PREPARING": {
       "START": "Iniciar Treino",
       "SUBTITLE": "Pronto para começar?",
       "EXERCISES_LIST": "Exercícios de hoje"
@@ -97,6 +100,8 @@
       "TARGET": "Alvo",
       "REPS": "Repetições",
       "WEIGHT": "Carga (kg)",
+      "EXERCISE_DETAILS": "Detalhes do Exercício",
+      "NOTES": "Notas",
       "COMPLETE_SET": "Registrar Série",
       "UPDATE_SET": "Atualizar Série",
       "HISTORY": "Histórico",

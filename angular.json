@@ -50,7 +50,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "5kb"
                 }
               ],
               "fileReplacements": [
@@ -82,9 +82,7 @@
             "development": {
               "buildTarget": "app:build:development"
             },
-            "ci": {
-              "progress": false
-            }
+            "ci": {}
           },
           "defaultConfiguration": "development"
         },
@@ -116,7 +114,10 @@
     }
   },
   "cli": {
-    "schematicCollections": ["@ionic/angular-toolkit", "@angular-eslint/schematics"]
+    "schematicCollections": [
+      "@ionic/angular-toolkit",
+      "@angular-eslint/schematics"
+    ]
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

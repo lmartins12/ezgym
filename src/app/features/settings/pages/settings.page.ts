@@ -2,8 +2,10 @@ import { Component, inject } from '@angular/core';
 import { BackButtonService } from '@core/back-button/back-button';
 import { LanguageService } from '@core/i18n/language';
 import { PwaInstallService } from '@core/pwa/pwa-install';
+import { PwaUpdateService } from '@core/pwa/pwa-update';
 import { ThemeService } from '@core/theme/theme';
 import { DataWipeService } from '@core/wipe/data-wipe';
+import { APP_VERSION } from '@domain/import-export/export-data';
 import {
   AlertController,
   IonBadge,
@@ -30,13 +32,14 @@ import {
   downloadOutline,
   logoGithub,
   moonOutline,
+  refreshOutline,
   settingsOutline,
   trashOutline,
 } from 'ionicons/icons';
-import { APP_VERSION } from '@domain/import-export/export-data';
 import { ImportExportModalComponent } from '../components/import-export-modal/import-export-modal.component';
 
 const WIPE_TOAST_DURATION_MS = 1500;
+const TOAST_DURATION_MS = 3000;
 
 @Component({
   selector: 'app-settings',
@@ -69,6 +72,7 @@ export class SettingsPage {
   private readonly toastCtrl = inject(ToastController);
   private readonly translate = inject(TranslateService);
   private readonly dataWipe = inject(DataWipeService);
+  public readonly pwaUpdate = inject(PwaUpdateService);
 
   public readonly currentLang = this.languageService.language;
   public readonly isPortuguese = this.languageService.isPortuguese;
@@ -83,6 +87,7 @@ export class SettingsPage {
       moonOutline,
       settingsOutline,
       downloadOutline,
+      refreshOutline,
       trashOutline,
       barbellOutline,
       logoGithub,
@@ -100,6 +105,24 @@ export class SettingsPage {
 
   public async installApp(): Promise<void> {
     await this.pwaInstallService.promptInstall();
+  }
+
+  /**
+   * Manual update check (Settings). When a new version is found, the
+   * PwaUpdateService toast with the "Update" action shows up on its own
+   * (the SW re-broadcasts VERSION_READY on every check), so this only
+   * gives feedback for the "nothing to update" and failure cases.
+   */
+  public async checkForUpdates(): Promise<void> {
+    try {
+      const available = await this.pwaUpdate.checkForUpdate();
+      if (!available) {
+        await this.showUpToDateToast();
+      }
+    } catch (error) {
+      console.error('Update check failed:', error);
+      await this.showCheckFailedToast();
+    }
   }
 
   public async openImportExport(): Promise<void> {
@@ -144,11 +167,32 @@ export class SettingsPage {
     }
   }
 
+  private async showUpToDateToast(): Promise<void> {
+    const toast = await this.toastCtrl.create({
+      message: this.translate.instant('SETTINGS.UP_TO_DATE'),
+      duration: TOAST_DURATION_MS,
+      position: 'top',
+    });
+
+    await toast.present();
+  }
+
+  private async showCheckFailedToast(): Promise<void> {
+    const toast = await this.toastCtrl.create({
+      message: this.translate.instant('COMMON.UNEXPECTED_ERROR'),
+      duration: TOAST_DURATION_MS,
+      position: 'top',
+      color: 'danger',
+    });
+
+    await toast.present();
+  }
+
   private async showWipeSuccessToast(): Promise<void> {
     const toast = await this.toastCtrl.create({
       message: this.translate.instant('SETTINGS.WIPE_SUCCESS'),
       duration: WIPE_TOAST_DURATION_MS,
-      position: 'bottom',
+      position: 'top',
     });
 
     await toast.present();
@@ -159,7 +203,7 @@ export class SettingsPage {
     const toast = await this.toastCtrl.create({
       message: this.translate.instant('SETTINGS.WIPE_ERROR'),
       duration: WIPE_TOAST_DURATION_MS,
-      position: 'bottom',
+      position: 'top',
       color: 'danger',
     });
 

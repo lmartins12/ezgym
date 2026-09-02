@@ -77,6 +77,16 @@
       <ion-badge slot="end" color="medium">v{{ appVersion }}</ion-badge>
     </ion-item>
 
+    <ion-item button="true" (click)="checkForUpdates()" detail="true">
+      <ion-icon name="refresh-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ 'SETTINGS.CHECK_UPDATES' | translate }}</h2>
+        @if (pwaUpdate.hasPendingUpdate()) {
+        <p>{{ 'PWA.UPDATE_AVAILABLE' | translate }}</p>
+        }
+      </ion-label>
+    </ion-item>
+
     <ion-item
       href="https://github.com/lmartins12/ezgym"
       target="_blank"
