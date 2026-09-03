@@ -2,7 +2,7 @@
 
 App de treinos (PWA) que funciona 100% offline, com dados no dispositivo. Este README explica como o projeto funciona para um dev clonar, rodar e saber onde mexer.
 
-License: MIT — see [LICENSE](./LICENSE). Contributions: see [CONTRIBUTING.md](./CONTRIBUTING.md).
+License: MIT — see [LICENSE](./LICENSE).
 
 ## Stack
 
@@ -22,7 +22,7 @@ Requer Node 20+ e pnpm (`corepack enable`; versão do pnpm fixada em `packageMan
 ```bash
 pnpm install
 pnpm start        # dev (sem service worker)
-pnpm lint && pnpm test && pnpm build   # gate obrigatório antes de PR/release
+pnpm lint && pnpm test && pnpm build   # gate obrigatório antes de release
 ```
 
 Para validar o PWA (service worker, update e install prompt), sirva a pasta `www/` do `pnpm build` via HTTPS.
