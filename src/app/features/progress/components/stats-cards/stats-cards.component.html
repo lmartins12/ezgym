@@ -1,16 +1,16 @@
-<div class="stats-grid">
+<div class="stats-cards">
   <!-- Total Workouts -->
-  <ion-card class="stat-card">
+  <ion-card class="stats-cards__card">
     <ion-card-content>
-      <div class="stat-content">
-        <div class="stat-icon">
+      <div class="stats-cards__content">
+        <div class="stats-cards__icon">
           <ion-icon name="barbell"></ion-icon>
         </div>
-        <div class="stat-info">
-          <span class="stat-value">{{
+        <div class="stats-cards__info">
+          <span class="stats-cards__value">{{
             formatStat(stats()?.totalWorkouts)
           }}</span>
-          <span class="stat-label">{{
+          <span class="stats-cards__label">{{
             "PROGRESS.TOTAL_WORKOUTS" | translate
           }}</span>
         </div>
@@ -19,15 +19,17 @@
   </ion-card>
 
   <!-- Total Volume -->
-  <ion-card class="stat-card">
+  <ion-card class="stats-cards__card">
     <ion-card-content>
-      <div class="stat-content">
-        <div class="stat-icon">
+      <div class="stats-cards__content">
+        <div class="stats-cards__icon">
           <ion-icon name="fitness"></ion-icon>
         </div>
-        <div class="stat-info">
-          <span class="stat-value">{{ formatStat(stats()?.totalVolume) }}</span>
-          <span class="stat-label">{{
+        <div class="stats-cards__info">
+          <span class="stats-cards__value">{{
+            formatStat(stats()?.totalVolume)
+          }}</span>
+          <span class="stats-cards__label">{{
             "PROGRESS.TOTAL_VOLUME" | translate
           }}</span>
         </div>
@@ -36,17 +38,17 @@
   </ion-card>
 
   <!-- Weekly Frequency -->
-  <ion-card class="stat-card">
+  <ion-card class="stats-cards__card">
     <ion-card-content>
-      <div class="stat-content">
-        <div class="stat-icon">
+      <div class="stats-cards__content">
+        <div class="stats-cards__icon">
           <ion-icon name="calendar-number"></ion-icon>
         </div>
-        <div class="stat-info">
-          <span class="stat-value">{{
+        <div class="stats-cards__info">
+          <span class="stats-cards__value">{{
             formatStat(stats()?.averageWeeklyFrequency, 1)
           }}</span>
-          <span class="stat-label">{{
+          <span class="stats-cards__label">{{
             "PROGRESS.WEEKLY_FREQUENCY" | translate
           }}</span>
         </div>
@@ -55,17 +57,17 @@
   </ion-card>
 
   <!-- Current Streak -->
-  <ion-card class="stat-card">
+  <ion-card class="stats-cards__card">
     <ion-card-content>
-      <div class="stat-content">
-        <div class="stat-icon">
+      <div class="stats-cards__content">
+        <div class="stats-cards__icon">
           <ion-icon name="trending-up"></ion-icon>
         </div>
-        <div class="stat-info">
-          <span class="stat-value">{{
+        <div class="stats-cards__info">
+          <span class="stats-cards__value">{{
             formatStat(stats()?.currentStreak)
           }}</span>
-          <span class="stat-label">{{
+          <span class="stats-cards__label">{{
             "PROGRESS.CURRENT_STREAK" | translate
           }}</span>
         </div>
@@ -75,17 +77,17 @@
 
   <!-- Last Workout -->
   @if (stats()?.lastWorkoutDate) {
-    <ion-card class="stat-card stat-card-full">
+    <ion-card class="stats-cards__card stats-cards__card--full">
       <ion-card-content>
-        <div class="stat-content">
-          <div class="stat-icon">
+        <div class="stats-cards__content">
+          <div class="stats-cards__icon">
             <ion-icon name="time"></ion-icon>
           </div>
-          <div class="stat-info">
-            <span class="stat-label">{{
+          <div class="stats-cards__info">
+            <span class="stats-cards__label">{{
               "PROGRESS.LAST_WORKOUT" | translate
             }}</span>
-            <span class="stat-value-small">{{
+            <span class="stats-cards__value-small">{{
               stats()?.lastWorkoutDate | date: "longDate" : "" : localeValue()
             }}</span>
           </div>

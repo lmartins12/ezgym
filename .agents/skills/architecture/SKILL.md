@@ -45,7 +45,7 @@ Exceções de specs: `*.spec.ts` e `src/testing` têm `no-restricted-imports: 'o
 page → facade/store/query → repository → DatabaseService/db (Dexie)
 ```
 
-- **Páginas nunca importam repository nem `@core/db/app-db`** — usam facade/store/query da própria feature.
+- **Páginas nunca importam repository nem `@core/db/*`** — usam facade/store/query da própria feature. Fronteira com lint próprio (`features/<x>/pages/**` falha no lint se importar `*.repository` ou `@core/db`).
 - Escritas **multi-agregado** (cascade delete, import) passam por `DatabaseService.write()` (`core/db/database.ts`), que abre `db.transaction('rw', [...todas as tabelas])` — rollback atômico.
 - Repositório (`*.repository.ts`): `@Injectable({ providedIn: 'root' })`, injeta `DatabaseService`, **todo método público começa com `await this.database.initialize()`** e retorna Promise (`Promise<T | null>`, nunca undefined). Sem interfaces — só existe Dexie.
 - UUID (`uuidv4`) e timestamps (`created_at`/`updated_at = Date.now()`) gerados em **facade/store**; repository recebe a entidade pronta.
@@ -87,7 +87,7 @@ Naming: `*Page` (rotas), `*Component`, `*Facade`, `*Query`, `*Store`, `*Reposito
 
 ## i18n
 
-`src/assets/i18n/pt.json` **e** `en.json` (fallback `pt`), JSON aninhado com namespace UPPER_SNAKE por tela/feature + `COMMON`/`NAV`/`TABS` compartilhados. Chave nova vai **nos dois arquivos**, sempre.
+`src/assets/i18n/pt.json` **e** `en.json` (fallback `pt`), JSON aninhado com namespace UPPER_SNAKE por tela/feature + `COMMON`/`TABS` compartilhados. Chave nova vai **nos dois arquivos**, sempre.
 
 ## Testes
 

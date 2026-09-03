@@ -1,10 +1,10 @@
-<div class="history-list">
+<div class="dashboard-history-list">
   @if (loading()) {
-    <div class="loading-state">
+    <div class="dashboard-history-list__loading">
       <ion-spinner name="crescent" />
     </div>
   } @else if (events().length === 0) {
-    <div class="empty-state">
+    <div class="dashboard-history-list__empty">
       <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
       <h2>{{ "DASHBOARD.NO_EVENTS" | translate }}</h2>
       <p>{{ "DASHBOARD.NO_EVENTS_DESC" | translate }}</p>
@@ -29,7 +29,7 @@
     }
 
     @if (loadingMore()) {
-      <div class="loading-more">
+      <div class="dashboard-history-list__loading-more">
         <ion-spinner name="crescent"></ion-spinner>
       </div>
     }

@@ -2,7 +2,7 @@
   display: block;
 }
 
-.event-card {
+.dashboard-event-card {
   --background: var(--glass-bg);
   --border-color: var(--glass-border);
   --padding-start: var(--space-4);
@@ -16,32 +16,32 @@
   &:hover {
     --background: var(--glass-bg-elevated);
   }
-}
 
-.event-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--glass-bg-elevated);
-  border-radius: var(--glass-radius-sm);
-  margin-right: var(--space-3);
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--glass-bg-elevated);
+    border-radius: var(--glass-radius-sm);
+    margin-right: var(--space-3);
 
-  ion-icon {
-    font-size: 20px;
-    color: var(--ion-color-primary);
+    ion-icon {
+      font-size: 20px;
+      color: var(--ion-color-primary);
+    }
   }
-}
 
-.subtitle {
-  color: var(--ion-text-color-step-550);
-  font-size: 13px;
-  margin-top: var(--space-1);
-}
+  &__subtitle {
+    color: var(--ion-text-color-step-550);
+    font-size: 13px;
+    margin-top: var(--space-1);
+  }
 
-.timestamp {
-  color: var(--ion-text-color-step-650);
-  font-size: 12px;
-  margin-top: var(--space-1);
+  &__timestamp {
+    color: var(--ion-text-color-step-650);
+    font-size: 12px;
+    margin-top: var(--space-1);
+  }
 }

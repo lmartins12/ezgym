@@ -6,11 +6,11 @@
 
 <ion-content class="workouts-list__content">
   @if (loading()) {
-  <div class="loading-container">
+  <div class="workouts-list__loading">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   } @else if (workouts().length === 0) {
-  <div class="empty-state">
+  <div class="workouts-list__empty">
     <ion-icon name="barbell-outline" aria-hidden="true"></ion-icon>
     <h2>{{ 'WORKOUTS.EMPTY_TITLE' | translate }}</h2>
     <p>{{ 'WORKOUTS.EMPTY_DESCRIPTION' | translate }}</p>
@@ -19,7 +19,7 @@
     </ion-button>
   </div>
   } @else {
-  <p class="reorder-hint">
+  <p class="workouts-list__reorder-hint">
     <ion-icon name="reorder-two-outline" aria-hidden="true"></ion-icon>
     {{ 'WORKOUTS.REORDER_HINT' | translate }}
   </p>

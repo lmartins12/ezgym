@@ -1,6 +1,8 @@
-.last-trained {
-  opacity: 0.6;
-  font-size: 13px;
+.workout-card {
+  &__last-trained {
+    opacity: 0.6;
+    font-size: 13px;
+  }
 }
 
 // Estilo para o botão Play inline

@@ -18,7 +18,7 @@
       ></ion-icon>
       <ion-select
         interface="popover"
-        class="always-flip"
+        class="settings__select-flip"
         toggleIcon="caret-down-sharp"
         label="{{ 'SETTINGS.LANGUAGE' | translate }}"
         [value]="currentLang()"
@@ -82,7 +82,11 @@
       </ion-label>
     </ion-item>
 
-    <ion-item button="true" (click)="confirmWipeData()" class="danger-item">
+    <ion-item
+      button="true"
+      (click)="confirmWipeData()"
+      class="settings__danger-item"
+    >
       <ion-icon name="trash-outline" slot="start" aria-hidden="true"></ion-icon>
       <ion-label>
         <h2>{{ 'SETTINGS.WIPE_DATA' | translate }}</h2>
@@ -131,5 +135,7 @@
     </ion-item>
   </ion-list>
 
-  <p class="storage-note">{{ 'SETTINGS.ABOUT_STORAGE' | translate }}</p>
+  <p class="settings__storage-note">
+    {{ 'SETTINGS.ABOUT_STORAGE' | translate }}
+  </p>
 </ion-content>

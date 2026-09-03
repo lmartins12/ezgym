@@ -1,14 +1,19 @@
-<ion-item class="event-card" button="true" detail="false" (click)="onClick()">
-  <div class="event-icon" slot="start">
+<ion-item
+  class="dashboard-event-card"
+  button="true"
+  detail="false"
+  (click)="onClick()"
+>
+  <div class="dashboard-event-card__icon" slot="start">
     <ion-icon [name]="getIconForType(event().type)" />
   </div>
 
   <ion-label>
     <h2 class="ez-truncate">{{ event().title }}</h2>
     @if (event().subtitle) {
-      <p class="subtitle">{{ event().subtitle }}</p>
+      <p class="dashboard-event-card__subtitle">{{ event().subtitle }}</p>
     }
-    <p class="timestamp">
+    <p class="dashboard-event-card__timestamp">
       {{ event().timestamp | date: "shortDate" : "" : localeValue() }}
       @if (event().timestamp | date: "shortTime" : "" : localeValue()) {
         &bull;

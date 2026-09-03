@@ -1,5 +1,5 @@
-<div class="preparing-container">
-  <ion-card class="summary-card">
+<div class="session-preparing">
+  <ion-card class="session-preparing__summary-card">
     <ion-card-header>
       <ion-card-subtitle>{{
         "SESSION.PREPARING.SUBTITLE" | translate
@@ -13,7 +13,7 @@
     </ion-card-content>
   </ion-card>
 
-  <div class="exercises-section">
+  <div class="session-preparing__exercises">
     <h3>
       {{ "SESSION.PREPARING.EXERCISES_LIST" | translate }} ({{
         exercises().length
@@ -22,7 +22,7 @@
 
     <ion-list lines="none">
       @for (exercise of exercises(); track exercise.id) {
-        <ion-item class="exercise-item">
+        <ion-item class="session-preparing__exercise-item">
           <app-muscle-icon
             [muscleGroup]="exercise.muscle_group"
             slot="start"
@@ -47,7 +47,7 @@
     </ion-list>
   </div>
 
-  <div class="actions">
+  <div class="session-preparing__actions">
     <ion-button
       expand="block"
       fill="solid"

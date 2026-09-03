@@ -1,72 +1,72 @@
 .muscle-group-selector {
   width: 100%;
-}
 
-.muscle-group-scroll {
-  display: flex;
-  gap: var(--space-3);
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: var(--space-2) 0;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  &__scroll {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: var(--space-2) 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.muscle-group-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-
-  min-width: 80px;
-  flex-shrink: 0;
-
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--glass-radius-sm);
-
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 88px;
-
-  &:hover {
-    background: var(--glass-bg-elevated);
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-
-  &.selected {
-    background: rgba(var(--ion-color-primary-rgb), 0.15);
-    border-color: rgba(var(--ion-color-primary-rgb), 0.5);
-
-    .muscle-group-label {
-      color: var(--ion-color-primary);
-      font-weight: 600;
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
-}
 
-.muscle-group-label {
-  color: var(--ion-text-color);
-  font-size: 11px;
-  text-align: center;
-  line-height: 1.3;
-  max-width: 100%;
-  overflow-wrap: break-word;
-  transition: color 0.2s ease;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+
+    min-width: 80px;
+    flex-shrink: 0;
+
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-sm);
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 88px;
+
+    &:hover {
+      background: var(--glass-bg-elevated);
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+
+    &--selected {
+      background: rgba(var(--ion-color-primary-rgb), 0.15);
+      border-color: rgba(var(--ion-color-primary-rgb), 0.5);
+
+      .muscle-group-selector__label {
+        color: var(--ion-color-primary);
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__label {
+    color: var(--ion-text-color);
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    transition: color 0.2s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }

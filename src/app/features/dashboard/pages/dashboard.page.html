@@ -6,7 +6,7 @@
 
 <ion-content #content (ionScroll)="onScroll($event)" scrollEvents="true">
   <!-- Calendar Section -->
-  <div class="dashboard-section">
+  <div class="dashboard__section">
     <app-dashboard-calendar
       [currentMonth]="currentMonth()"
       [datesWithEvents]="datesWithEvents()"
@@ -19,7 +19,7 @@
   </div>
 
   <!-- Date Filter Section -->
-  <div class="dashboard-section">
+  <div class="dashboard__section">
     <app-dashboard-date-filter
       [startDate]="filterStartDate()"
       [endDate]="filterEndDate()"
@@ -31,7 +31,7 @@
   </div>
 
   <!-- History List Section -->
-  <div class="dashboard-section">
+  <div class="dashboard__section">
     <app-dashboard-history-list
       [events]="events()"
       [loading]="loading()"

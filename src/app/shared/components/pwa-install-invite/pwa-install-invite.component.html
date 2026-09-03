@@ -1,22 +1,26 @@
 @if (visible()) {
-  <div class="invite" role="dialog" aria-labelledby="pwa-invite-title">
-    <div class="header">
+  <div
+    class="pwa-install-invite"
+    role="dialog"
+    aria-labelledby="pwa-invite-title"
+  >
+    <div class="pwa-install-invite__header">
       <ion-icon name="download-outline" aria-hidden="true"></ion-icon>
-      <span id="pwa-invite-title" class="title">
+      <span id="pwa-invite-title" class="pwa-install-invite__title">
         {{ "PWA.INVITE_TITLE" | translate }}
       </span>
     </div>
 
     @if (pwaInstall.isIos()) {
-      <p class="step">
+      <p class="pwa-install-invite__step">
         <ion-icon name="share-outline" aria-hidden="true"></ion-icon>
         {{ "PWA.IOS_STEP_SHARE" | translate }}
       </p>
-      <p class="step">
+      <p class="pwa-install-invite__step">
         <ion-icon name="download-outline" aria-hidden="true"></ion-icon>
         {{ "PWA.IOS_STEP_ADD" | translate }}
       </p>
-      <div class="actions">
+      <div class="pwa-install-invite__actions">
         <ion-button size="small" (click)="dismiss()">
           {{ "PWA.INSTALL_GOT_IT" | translate }}
         </ion-button>
@@ -25,8 +29,10 @@
         </ion-button>
       </div>
     } @else {
-      <p class="message">{{ "PWA.INVITE_DESCRIPTION" | translate }}</p>
-      <div class="actions">
+      <p class="pwa-install-invite__message">
+        {{ "PWA.INVITE_DESCRIPTION" | translate }}
+      </p>
+      <div class="pwa-install-invite__actions">
         <ion-button size="small" (click)="install()">
           {{ "PWA.INSTALL_BUTTON" | translate }}
         </ion-button>

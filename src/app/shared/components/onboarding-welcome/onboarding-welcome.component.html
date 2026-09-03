@@ -1,11 +1,11 @@
 @if (onboarding.shouldShow()) {
   <div
-    class="onboarding-backdrop"
+    class="onboarding-welcome__backdrop"
     role="dialog"
     aria-modal="true"
     aria-labelledby="onboarding-title"
   >
-    <div class="onboarding-card">
+    <div class="onboarding-welcome__card">
       <ion-icon name="cloud-offline-outline" aria-hidden="true"></ion-icon>
       <h2 id="onboarding-title">{{ "ONBOARDING.TITLE" | translate }}</h2>
       <p>{{ "ONBOARDING.MESSAGE" | translate }}</p>

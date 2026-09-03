@@ -3,22 +3,22 @@
   align-items: center;
   justify-content: center;
 
-  &.muscle-icon--sm {
+  &--sm {
     width: 28px;
     height: 28px;
   }
 
-  &.muscle-icon--md {
+  &--md {
     width: 44px;
     height: 44px;
   }
 
-  &.muscle-icon--lg {
+  &--lg {
     width: 56px;
     height: 56px;
   }
 
-  &.muscle-icon--fallback {
+  &--fallback {
     color: var(--ion-text-color, #fafafa);
 
     ion-icon {

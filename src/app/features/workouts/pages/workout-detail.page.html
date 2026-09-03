@@ -42,16 +42,16 @@
   </ion-list-header>
 
   @if (loading()) {
-  <div class="loading-container">
+  <div class="workout-detail__loading">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
   } @else if (exercises().length === 0) {
-  <div class="empty-exercises">
+  <div class="workout-detail__empty">
     <ion-icon name="fitness-outline" aria-hidden="true"></ion-icon>
     <p>{{ 'WORKOUT_DETAIL.NO_EXERCISES' | translate }}</p>
   </div>
   } @else {
-  <p class="reorder-hint">
+  <p class="workout-detail__reorder-hint">
     <ion-icon name="reorder-two-outline" aria-hidden="true"></ion-icon>
     {{ 'WORKOUT_DETAIL.REORDER_HINT' | translate }}
   </p>
@@ -73,7 +73,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
+  <ion-toolbar class="ez-modal-footer">
     <ion-button
       expand="block"
       color="primary"

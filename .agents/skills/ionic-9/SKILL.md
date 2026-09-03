@@ -20,7 +20,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular';
 })
 ```
 
-- Bootstrap (já configurado em `app.config.ts`, não mexer sem motivo): `provideIonicAngular({ animated: true, navAnimation: iosTransitionAnimation })`, `IonicRouteStrategy` como `RouteReuseStrategy`.
+- Bootstrap (já configurado em `app.config.ts`, não mexer sem motivo): `provideIonicAngular({ animated: true, navAnimation: iosTransitionAnimation, useSetInputAPI: true })`, `IonicRouteStrategy` como `RouteReuseStrategy`. O `useSetInputAPI` é obrigatório: sem ele, `componentProps` não chega em `input()` (signal inputs).
 - Estrutura padrão de page: `ion-app/ion-content` (root), `ion-header > ion-toolbar > ion-title` + `ion-buttons slot="end"`.
 
 ## Ícones
@@ -47,7 +47,7 @@ Sempre via controllers (`ModalController`, `AlertController`, `ToastController`)
 ```ts
 const modal = await this.modalCtrl.create({
   component: WorkoutFormModalComponent,
-  componentProps: { workout: existing },   // props chegam como @Input() no modal
+  componentProps: { workout: existing },   // props chegam como input() no modal
 });
 await modal.present();
 void this.backButton.track(modal);         // OBRIGATÓRIO: track no hardware back
@@ -92,7 +92,7 @@ public reorderWorkouts(event: CustomEvent): void {
 - Safe areas via CSS vars do Ionic: `--ion-safe-area-top/left/right/bottom` (fix global em `global.scss` para landscape).
 - Padding de item/lista via vars do componente: `--padding-start`, `--inner-padding-end` (nunca hackear com margin no shadow DOM).
 - Esconder scrollbar: `::part(scroll)` (utilitário já em `global.scss`).
-- Scroll-to-top/filho: `IonContent` via `viewChild` (`read: IonContent`) + `scrollToTop()` — ver `dashboard.page.ts`.
+- Scroll-to-top/filho: `IonContent` via `viewChild<IonContent>('content')` + `scrollToTop()` — ver `dashboard.page.ts`.
 
 ## Haptics e feedback
 

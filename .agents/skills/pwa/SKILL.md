@@ -5,12 +5,12 @@ description: Diretrizes PWA/offline do EzGym — use ao mexer em service worker 
 
 # PWA e Offline — EzGym
 
-App 100% offline: dados só no dispositivo. **Nunca assumir rede** — nenhum fluxo do app depende de conexão; a única rede usada é o download do bundle/traduções na primeira carga (cacheadas pelo SW).
+App 100% offline: dados só no dispositivo. **Nunca assumir rede** — nenhum fluxo do app depende de conexão; a única rede usada é o download do bundle/traduções na primeira carga (cacheadas pelo SW). A fonte (Inter) é auto-hospedada em `src/assets/fonts` (`src/theme/_fonts.scss`): zero CDN, primeiro paint offline.
 
 ## Offline-first (regra de ouro)
 
 - Dados do usuário: IndexedDB (Dexie) para entidades, `localStorage` para prefs.
-- `localStorage` sempre com **prefixo `app_`**: `app_theme`, `app_language`, `app_onboarding_seen`, `app_pwa_visits`, `app_pwa_install_dismissed`.
+- `localStorage` sempre com **prefixo `app_`**: `app_theme`, `app_language`, `app_onboarding_seen`, `app_pwa_visits`, `app_pwa_install_dismissed`, `app_pwa_install_snoozed_until`.
 - Toda nova chave `app_*` deve ser considerada pelo wipe (`core/wipe`), que limpa tabelas Dexie + chaves `app_*`.
 - Nada de telemetria, fetch silencioso ou chamada de rede em background.
 
@@ -32,7 +32,7 @@ provideServiceWorker('ngsw-worker.js', {
 
 `PwaUpdateService` é injetado no `AppComponent` (constructor chama `checkForUpdate()`). Não quebrar estes comportamentos:
 
-- Escuta `SwUpdate.versionUpdates` filtrado a `VERSION_READY` → `hasPendingUpdate = signal(false→true)` + toast persistente com botão "Atualizar" (`activateUpdate().then(() => reload)`).
+- Escuta `SwUpdate.versionUpdates` filtrado a `VERSION_READY` → `hasPendingUpdate` (privado + `asReadonly()`) + toast persistente com botão "Atualizar" (`activateUpdate().then(() => reload)`). O check manual (`checkForUpdate()`) também promove o toast direto — com dedupe para as duas fontes nunca empilharem dois toasts.
 - `unrecoverable` → reload automático.
 - **Re-check** em `visibilitychange` + `interval(30min)` — PWAs instaladas não re-navegam, então o check ativo é obrigatório.
 
@@ -42,11 +42,12 @@ Não quebrar as regras de convite:
 
 - Captura `beforeinstallprompt` (deferred prompt) para invite nativo; fallback iOS (heurística `MacIntel + maxTouchPoints > 1`) mostra passos manuais traduzidos.
 - Detecção de standalone: `display-mode: standalone` / `navigator.standalone`.
-- **Invite só a partir da 2ª visita** (`MIN_VISITS_BEFORE_INVITE = 2`, contagem em `app_pwa_visits`) e só se não foi dispensado (`app_pwa_install_dismissed`); `canInvite = computed(...)` expõe a decisão.
+- **Invite só a partir da 2ª visita** (`MIN_VISITS_BEFORE_INVITE = 2`, contagem em `app_pwa_visits`), só se não foi dispensado (`app_pwa_install_dismissed`) nem adiado (`app_pwa_install_snoozed_until`, "Later" = snooze de 7 dias, "Got it"/instalar = dispensa permanente); `canInvite = computed(...)` expõe a decisão. O invite espera o onboarding sumir (`visible = canInvite && !shouldShow`) em vez de empilhar.
+- Sinais do serviço são privados + `asReadonly()` (`canInstall/isInstalled/isIos/isDismissed/visitCount`), como em `theme`/`language`.
 
 ## Manifest (`src/manifest.webmanifest`)
 
-`display: standalone`, `orientation: portrait`, theme/background `#000000`, ícones 192/512 com `purpose: "any maskable"`. Mudanças no manifest não exigem migration, mas mudam o hash do build — o update flow cuida.
+`display: standalone` (+ `display_override`), `orientation: portrait`, theme/background `#000000`, `lang: pt-BR`, `categories`, `shortcuts` (Treinos, Sessão), ícones `any` + `maskable` 192/512 separados. Mudanças no manifest não exigem migration, mas mudam o hash do build — o update flow cuida.
 
 ## Service worker e dados
 

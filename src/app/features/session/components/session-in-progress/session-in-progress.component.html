@@ -1,14 +1,16 @@
-<div class="progress-container">
+<div class="session-in-progress">
   <!-- Exercise Carousel -->
-  <div class="exercise-carousel">
-    <div class="exercise-scroll">
+  <div class="session-in-progress__carousel">
+    <div class="session-in-progress__carousel-scroll">
       @for (state of exerciseStates(); track state.index) {
         <button
           type="button"
-          class="exercise-item"
+          class="session-in-progress__carousel-item"
           #exerciseItem
-          [class.active]="state.isActive"
-          [class.complete]="state.isComplete"
+          [class.session-in-progress__carousel-item--active]="state.isActive"
+          [class.session-in-progress__carousel-item--complete]="
+            state.isComplete
+          "
           (click)="selectExercise(state.index)"
           [attr.aria-label]="state.exercise.exercise_name"
           [attr.aria-pressed]="state.isActive"
@@ -17,10 +19,10 @@
             [muscleGroup]="state.exercise.muscle_group"
             size="md"
           />
-          <span class="exercise-name ez-truncate-2">{{
+          <span class="session-in-progress__carousel-item-name ez-truncate-2">{{
             state.exercise.exercise_name
           }}</span>
-          <span class="exercise-target"
+          <span class="session-in-progress__carousel-target"
             >{{ state.exercise.sets }}×{{ state.exercise.reps }}</span
           >
         </button>
@@ -31,14 +33,14 @@
   @if (currentExercise(); as exercise) {
     <button
       type="button"
-      class="exercise-header"
+      class="session-in-progress__header"
       (click)="openExerciseDetails()"
     >
-      <div class="exercise-info">
+      <div class="session-in-progress__header-info">
         <app-muscle-icon
           [muscleGroup]="exercise.muscle_group"
         ></app-muscle-icon>
-        <div class="exercise-name">
+        <div class="session-in-progress__header-name">
           <h2 class="ez-truncate">{{ exercise.exercise_name }}</h2>
           <p>
             {{ "SESSION.IN_PROGRESS.TARGET" | translate }}:
@@ -51,15 +53,15 @@
             }
           </p>
           @if (exercise.equipment) {
-            <div class="exercise-equipment">
+            <div class="session-in-progress__equipment">
               <ion-icon name="barbell-outline" aria-hidden="true"></ion-icon>
               <span class="ez-truncate">{{ exercise.equipment }}</span>
             </div>
           }
         </div>
       </div>
-      <div class="header-end">
-        <div class="set-counter">
+      <div class="session-in-progress__header-end">
+        <div class="session-in-progress__set-counter">
           {{ nextSetNumber() }} / {{ exercise.sets }}
         </div>
       </div>
@@ -72,15 +74,17 @@
   } @else {
     <!-- Input Card -->
     <ion-card
-      class="input-card"
-      [class.rest-finished]="restTimer.justFinished()"
+      class="session-in-progress__input-card"
+      [class.session-in-progress__input-card--rest-finished]="
+        restTimer.justFinished()
+      "
     >
       <ion-card-content>
         <ion-grid>
           <ion-row>
             <ion-col size="6">
-              <div class="input-block">
-                <span class="input-label">{{
+              <div class="session-in-progress__input-block">
+                <span class="session-in-progress__input-label">{{
                   "SESSION.IN_PROGRESS.REPS" | translate
                 }}</span>
                 <ion-input
@@ -101,8 +105,8 @@
               </div>
             </ion-col>
             <ion-col size="6">
-              <div class="input-block">
-                <span class="input-label">{{
+              <div class="session-in-progress__input-block">
+                <span class="session-in-progress__input-label">{{
                   "SESSION.IN_PROGRESS.WEIGHT" | translate
                 }}</span>
                 <ion-input
@@ -125,8 +129,8 @@
           </ion-row>
           <ion-row>
             <ion-col size="12">
-              <div class="rpe-container">
-                <div class="rpe-header">
+              <div class="session-in-progress__rpe">
+                <div class="session-in-progress__rpe-header">
                   <ion-label
                     >{{ "SESSION.IN_PROGRESS.RPE" | translate }}:
                     {{ rpe }}</ion-label
@@ -134,7 +138,7 @@
                   <ion-button
                     fill="clear"
                     size="small"
-                    class="info-button"
+                    class="session-in-progress__rpe-info-button"
                     (click)="showRPEInfo()"
                     [attr.aria-label]="
                       'SESSION.IN_PROGRESS.RPE_INFO_TITLE' | translate
@@ -195,7 +199,7 @@
   />
 
   <ion-button
-    class="finish-button"
+    class="session-in-progress__finish-button"
     expand="block"
     [fill]="allExercisesComplete() ? 'solid' : 'clear'"
     [color]="allExercisesComplete() ? 'success' : 'warning'"

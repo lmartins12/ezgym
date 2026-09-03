@@ -1,22 +1,22 @@
-<ion-card class="exercise-prs-card">
+<ion-card class="exercise-prs__card">
   <ion-card-content>
-    <ion-list class="prs-list" lines="none">
+    <ion-list class="exercise-prs__list" lines="none">
       <ion-list-header>
-        <div class="header-content">
+        <div class="exercise-prs__list-header-content">
           <ion-label>{{ "PROGRESS.EXERCISE_PRS" | translate }}</ion-label>
           <ion-icon name="trophy"></ion-icon>
         </div>
       </ion-list-header>
 
       @if (topPrs().length === 0) {
-        <div class="empty-state">
+        <div class="exercise-prs__empty">
           <p>{{ "PROGRESS.NO_PRS" | translate }}</p>
         </div>
       } @else {
         @for (pr of topPrs(); track pr.exerciseId) {
-          <div class="pr-item">
-            <div class="pr-main">
-              <div class="pr-icon">
+          <div class="exercise-prs__item">
+            <div class="exercise-prs__item-main">
+              <div class="exercise-prs__item-icon">
                 @if (pr.muscleGroup) {
                   <app-muscle-icon
                     [muscleGroup]="pr.muscleGroup"
@@ -25,12 +25,12 @@
                   <ion-icon name="barbell"></ion-icon>
                 }
               </div>
-              <div class="pr-info">
-                <span class="pr-exercise ez-truncate">{{
+              <div class="exercise-prs__item-info">
+                <span class="exercise-prs__item-exercise ez-truncate">{{
                   pr.exerciseName
                 }}</span>
                 @if (pr.muscleGroup) {
-                  <span class="pr-muscle ez-truncate">
+                  <span class="exercise-prs__item-muscle ez-truncate">
                     {{ "EXERCISE.MUSCLE_GROUP_LABEL" | translate }}:
                     {{
                       "EXERCISE.MUSCLE_" + pr.muscleGroup.toUpperCase()
@@ -40,14 +40,14 @@
                 }
               </div>
             </div>
-            <div class="pr-stats">
-              <div class="pr-weight">
-                <span class="weight-value">{{
+            <div class="exercise-prs__item-stats">
+              <div class="exercise-prs__item-weight">
+                <span class="exercise-prs__weight-value">{{
                   formatWeight(pr.prWeight)
                 }}</span>
-                <span class="weight-unit">kg</span>
+                <span class="exercise-prs__weight-unit">kg</span>
               </div>
-              <div class="pr-date">
+              <div class="exercise-prs__item-date">
                 <ion-icon name="calendar"></ion-icon>
                 <span>{{ formatPRDate(pr.prDate) }}</span>
               </div>

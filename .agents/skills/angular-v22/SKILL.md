@@ -46,7 +46,7 @@ public readonly dateFormat = computed(() =>
 
 ## Inputs/Outputs funcionais
 
-`input()`/`output()` em todo componente. Exceção consagrada: `@Input()` em **modais abertos via `componentProps`** (padrão Ionic).
+`input()`/`output()` em todo componente, **inclusive modais** abertos via `componentProps` (o Ionic entrega as props via `setInput` porque o app usa `useSetInputAPI: true` no `provideIonicAngular` — nunca `@Input()` legado, nunca mutar input).
 
 ```ts
 public readonly workout = input.required<WorkoutDetail>();

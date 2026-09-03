@@ -1,19 +1,19 @@
-<ion-card class="frequent-workouts-card">
+<ion-card class="frequent-workouts__card">
   <ion-card-content>
-    <ion-list class="workouts-list" lines="none">
+    <ion-list class="frequent-workouts__list" lines="none">
       <ion-list-header>
         <ion-label>{{ "PROGRESS.FREQUENT_WORKOUTS" | translate }}</ion-label>
       </ion-list-header>
 
       @if (workouts().length === 0) {
-        <div class="empty-state">
+        <div class="frequent-workouts__empty">
           <p>{{ "PROGRESS.NO_WORKOUTS" | translate }}</p>
         </div>
       } @else {
         @for (workout of workouts(); track workout.id) {
-          <div class="workout-item">
-            <div class="workout-main">
-              <div class="workout-icon">
+          <div class="frequent-workouts__item">
+            <div class="frequent-workouts__item-main">
+              <div class="frequent-workouts__item-icon">
                 @if (workout.muscleGroup) {
                   <app-muscle-icon
                     [muscleGroup]="workout.muscleGroup"
@@ -22,12 +22,16 @@
                   <ion-icon name="barbell"></ion-icon>
                 }
               </div>
-              <div class="workout-info">
-                <span class="workout-name ez-truncate">{{ workout.name }}</span>
-                <span class="workout-count">{{ workout.count }}x</span>
+              <div class="frequent-workouts__item-info">
+                <span class="frequent-workouts__item-name ez-truncate">{{
+                  workout.name
+                }}</span>
+                <span class="frequent-workouts__item-count"
+                  >{{ workout.count }}x</span
+                >
               </div>
             </div>
-            <div class="workout-meta">
+            <div class="frequent-workouts__item-meta">
               <ion-icon name="time"></ion-icon>
               <span>{{ getRelativeTime(workout.lastWorkout) }}</span>
             </div>

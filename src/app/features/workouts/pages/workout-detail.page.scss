@@ -1,45 +1,45 @@
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: var(--space-8);
-}
-
-.empty-exercises {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-12) var(--space-6);
-  text-align: center;
-
-  ion-icon {
-    font-size: 48px;
-    color: var(--ion-color-medium);
-    margin-bottom: var(--space-3);
-  }
-
-  p {
-    margin: 0;
-    color: var(--ion-color-medium);
-  }
-}
-
-.reorder-hint {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  margin: 0;
-  padding: var(--space-2) var(--space-4);
-  color: var(--ion-color-medium);
-  font-size: 12px;
-
-  ion-icon {
-    font-size: 16px;
-  }
-}
-
 .workout-detail {
+  &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-8);
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) var(--space-6);
+    text-align: center;
+
+    ion-icon {
+      font-size: 48px;
+      color: var(--ion-color-medium);
+      margin-bottom: var(--space-3);
+    }
+
+    p {
+      margin: 0;
+      color: var(--ion-color-medium);
+    }
+  }
+
+  &__reorder-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    padding: var(--space-2) var(--space-4);
+    color: var(--ion-color-medium);
+    font-size: 12px;
+
+    ion-icon {
+      font-size: 16px;
+    }
+  }
+
   &__list-header-icon {
     font-size: 24px;
     margin-right: var(--space-2);
@@ -62,14 +62,5 @@
       --padding-top: var(--space-2);
       --padding-bottom: var(--space-2);
     }
-  }
-}
-
-ion-footer {
-  ion-toolbar {
-    --padding-start: var(--space-4);
-    --padding-end: var(--space-4);
-    --padding-top: var(--space-3);
-    --padding-bottom: var(--space-3);
   }
 }

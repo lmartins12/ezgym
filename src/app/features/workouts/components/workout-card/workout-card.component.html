@@ -23,7 +23,7 @@
         {{ "WORKOUTS.EXERCISES" | translate }}
       </p>
       @if (workout().last_trained) {
-        <p class="last-trained">
+        <p class="workout-card__last-trained">
           {{ "WORKOUTS.LAST_TRAINED" | translate }}:
           {{ workout().last_trained | date: dateFormat() }}
         </p>

@@ -44,7 +44,7 @@ SCSS co-localizado por componente (`styleUrl`), tema próprio em `src/theme`, se
 ```
 
 - Aninhar **elementos dentro do bloco** (`&__element`), e modificadores dentro do elemento (`&--modifier`) — como no exemplo.
-- Arquivos legados com classes flat (ex.: `.empty-state`, `.loading-container`) não são bugs: ao **editar** um desses arquivos, migre as classes tocadas para BEM; não refatore o arquivo inteiro sem necessidade.
+- Todo `.scss` de componente/page segue BEM (migração concluída na 2.1.0): ao tocar um arquivo, mantenha o padrão — nunca reintroduza classes flat.
 
 ## Tokens (nada de valores mágicos)
 
@@ -75,9 +75,9 @@ O tema escuro é controlado pela classe `ion-palette-dark` em `document.document
 ## Global (`src/global.scss`)
 
 - Imports CSS do Ionic + fix de safe-area landscape.
-- Utilitários `ez-*` (`ez-truncate`, `ez-truncate-2`) — usar antes de recriar truncamento.
+- Utilitários `ez-*` (`ez-truncate`, `ez-truncate-2`, `ez-modal-form`, `ez-modal-footer`, `ez-swipe-affordance`) — usar antes de recriar truncamento, layout de modal ou affordance de swipe.
 - Novos utilitários globais entram aqui (um por vez, só com recorrência real).
 
 ## Acessibilidade/motion
 
-Animações CSS respeitam `@media (prefers-reduced-motion: reduce)` (desligar `@keyframes` — ver `workout-card.component.scss`).
+Animações CSS respeitam `@media (prefers-reduced-motion: reduce)` (desligar `@keyframes` — ver `src/theme/_components.scss`, `.ez-swipe-affordance`).

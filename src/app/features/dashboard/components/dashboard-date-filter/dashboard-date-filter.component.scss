@@ -3,8 +3,8 @@
   margin-bottom: var(--space-6);
 }
 
-.date-filter-container {
-  .filter-summary {
+.dashboard-date-filter {
+  &__summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -16,43 +16,43 @@
     flex-wrap: wrap;
     gap: var(--space-2);
 
-    .filter-label {
-      font-size: 13px;
-      color: var(--ion-text-color-step-550);
-      font-weight: var(--font-weight-medium);
-    }
-
-    .filter-dates {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-size: 14px;
-      font-weight: var(--font-weight-medium);
-
-      .separator {
-        color: var(--ion-text-color-step-650);
-      }
-    }
-
     ion-button {
       --color: var(--ion-text-color);
       margin: 0;
     }
   }
 
-  .filter-controls {
+  &__summary-label {
+    font-size: 13px;
+    color: var(--ion-text-color-step-550);
+    font-weight: var(--font-weight-medium);
+  }
+
+  &__summary-dates {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+  }
+
+  &__summary-separator {
+    color: var(--ion-text-color-step-650);
+  }
+
+  &__controls {
     display: flex;
     gap: var(--space-4);
     flex-wrap: wrap;
+  }
 
-    .date-input-group {
-      flex: 1;
-      min-width: 140px;
+  &__date-input-group {
+    flex: 1;
+    min-width: 140px;
 
-      ion-label {
-        margin-left: var(--space-2);
-        color: var(--ion-text-color-step-550);
-      }
+    ion-label {
+      margin-left: var(--space-2);
+      color: var(--ion-text-color-step-550);
     }
   }
 }

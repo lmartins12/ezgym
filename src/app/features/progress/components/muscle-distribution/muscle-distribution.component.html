@@ -1,29 +1,29 @@
-<ion-card class="muscle-distribution-card">
+<ion-card class="muscle-distribution__card">
   <ion-card-content>
-    <ion-list class="distribution-list" lines="none">
+    <ion-list class="muscle-distribution__list" lines="none">
       <ion-list-header>
         <ion-label>{{ "PROGRESS.MUSCLE_DISTRIBUTION" | translate }}</ion-label>
       </ion-list-header>
 
       @if (distribution().length === 0) {
-        <div class="empty-state">
+        <div class="muscle-distribution__empty">
           <p>{{ "PROGRESS.NO_DISTRIBUTION" | translate }}</p>
         </div>
       } @else {
-        <div class="distribution-items">
+        <div class="muscle-distribution__items">
           @for (item of distribution(); track item.muscleGroup) {
-            <div class="distribution-item">
-              <div class="item-header">
-                <span class="muscle-name">{{
+            <div class="muscle-distribution__item">
+              <div class="muscle-distribution__item-header">
+                <span class="muscle-distribution__item-muscle">{{
                   getMuscleGroupKey(item.muscleGroup) | translate
                 }}</span>
-                <span class="muscle-stats"
+                <span class="muscle-distribution__item-stats"
                   >{{ item.count }}x ({{ item.percentage }}%)</span
                 >
               </div>
-              <div class="progress-bar">
+              <div class="muscle-distribution__progress-bar">
                 <div
-                  class="progress-fill"
+                  class="muscle-distribution__progress-fill"
                   [style.width.%]="item.percentage"
                 ></div>
               </div>

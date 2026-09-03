@@ -1,33 +1,37 @@
-<div class="finishing-container">
-  <ion-card class="summary-card">
+<div class="session-finishing">
+  <ion-card class="session-finishing__summary-card">
     <ion-card-header>
       <ion-card-title>{{
         "SESSION.FINISHING.TITLE" | translate
       }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <span class="label">{{
+      <div class="session-finishing__stats-grid">
+        <div class="session-finishing__stat-item">
+          <span class="session-finishing__stat-label">{{
             "SESSION.FINISHING.DURATION" | translate
           }}</span>
-          <span class="value">{{ duration() }}</span>
+          <span class="session-finishing__stat-value">{{ duration() }}</span>
         </div>
-        <div class="stat-item">
-          <span class="label">{{ "SESSION.FINISHING.SETS" | translate }}</span>
-          <span class="value">{{ totalSets() }}</span>
+        <div class="session-finishing__stat-item">
+          <span class="session-finishing__stat-label">{{
+            "SESSION.FINISHING.SETS" | translate
+          }}</span>
+          <span class="session-finishing__stat-value">{{ totalSets() }}</span>
         </div>
-        <div class="stat-item">
-          <span class="label">{{
+        <div class="session-finishing__stat-item">
+          <span class="session-finishing__stat-label">{{
             "SESSION.FINISHING.VOLUME" | translate
           }}</span>
-          <span class="value">{{ totalVolume() }}kg</span>
+          <span class="session-finishing__stat-value"
+            >{{ totalVolume() }}kg</span
+          >
         </div>
       </div>
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="notes-card">
+  <ion-card class="session-finishing__notes-card">
     <ion-card-content>
       <ion-textarea
         [appTextLimit]="notesMaxLength"
@@ -40,7 +44,7 @@
     </ion-card-content>
   </ion-card>
 
-  <div class="actions">
+  <div class="session-finishing__actions">
     <ion-button expand="block" fill="solid" color="primary" (click)="onSave()">
       {{ "SESSION.FINISHING.SAVE_FINISH" | translate }}
     </ion-button>

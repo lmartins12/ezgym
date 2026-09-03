@@ -16,22 +16,22 @@
 
 <ion-content>
   @if (sessionDetail(); as detailValue) {
-    <div class="session-detail-container">
+    <div class="session-detail-modal__container">
       <!-- Session Header Card -->
-      <ion-card class="session-header-card">
+      <ion-card class="session-detail-modal__header-card">
         <ion-card-header>
           <ion-card-title>{{ detailValue.workoutName }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <div class="session-meta">
-            <div class="meta-item">
+          <div class="session-detail-modal__meta">
+            <div class="session-detail-modal__meta-item">
               <ion-icon name="fitness"></ion-icon>
               <span>{{
                 detailValue.startedAt | date: "longDate" : "" : locale()
               }}</span>
             </div>
             @if (detailValue.finishedAt) {
-              <div class="meta-item">
+              <div class="session-detail-modal__meta-item">
                 <ion-icon name="barbell"></ion-icon>
                 <span
                   >{{ durationMinutes() }}
@@ -40,33 +40,39 @@
               </div>
             }
           </div>
-          <div class="session-stats">
-            <div class="stat">
-              <span class="stat-value">{{ totalSets() }}</span>
-              <span class="stat-label">{{
+          <div class="session-detail-modal__stats">
+            <div class="session-detail-modal__stat">
+              <span class="session-detail-modal__stat-value">{{
+                totalSets()
+              }}</span>
+              <span class="session-detail-modal__stat-label">{{
                 "DASHBOARD.SESSION_DETAIL.SETS" | translate
               }}</span>
             </div>
-            <div class="stat">
-              <span class="stat-value">{{ formatStat(totalVolume()) }}</span>
-              <span class="stat-label">{{
+            <div class="session-detail-modal__stat">
+              <span class="session-detail-modal__stat-value">{{
+                formatStat(totalVolume())
+              }}</span>
+              <span class="session-detail-modal__stat-label">{{
                 "DASHBOARD.SESSION_DETAIL.VOLUME" | translate
               }}</span>
             </div>
           </div>
           @if (detailValue.notes) {
-            <div class="session-notes">
-              <span class="notes-label">{{
+            <div class="session-detail-modal__notes">
+              <span class="session-detail-modal__notes-label">{{
                 "DASHBOARD.SESSION_DETAIL.NOTES" | translate
               }}</span>
-              <span class="notes-text">{{ detailValue.notes }}</span>
+              <span class="session-detail-modal__notes-text">{{
+                detailValue.notes
+              }}</span>
             </div>
           }
         </ion-card-content>
       </ion-card>
 
       <!-- Exercises List -->
-      <ion-list class="exercises-list">
+      <ion-list class="session-detail-modal__exercises-list">
         <ion-list-header>
           <ion-label>{{
             "DASHBOARD.SESSION_DETAIL.EXERCISES" | translate
@@ -74,21 +80,23 @@
         </ion-list-header>
 
         @for (exercise of detailValue.exercises; track exercise.id) {
-          <ion-item class="exercise-item" lines="none">
+          <ion-item class="session-detail-modal__exercise-item" lines="none">
             <app-muscle-icon
               [muscleGroup]="exercise.muscleGroup ?? 'other'"
-              class="session-detail-container__exercise-icon"
+              class="session-detail-modal__exercise-icon"
             ></app-muscle-icon>
-            <div class="exercise-content">
-              <div class="exercise-name ez-truncate">
+            <div class="session-detail-modal__exercise-content">
+              <div class="session-detail-modal__exercise-name ez-truncate">
                 {{ exercise.name }}
               </div>
-              <div class="exercise-sets">
+              <div class="session-detail-modal__exercise-sets">
                 @for (set of exercise.sets; track set.setNumber) {
-                  <span class="set-badge">
+                  <span class="session-detail-modal__set-badge">
                     {{ set.reps }}
                     @if (set.weight) {
-                      <span class="set-weight">&times; {{ set.weight }}</span>
+                      <span class="session-detail-modal__set-weight"
+                        >&times; {{ set.weight }}</span
+                      >
                     }
                   </span>
                 }

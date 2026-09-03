@@ -1,17 +1,17 @@
-<div class="date-filter-container">
+<div class="dashboard-date-filter">
   @if (isActive()) {
-    <div class="filter-summary">
-      <span class="filter-label">{{
+    <div class="dashboard-date-filter__summary">
+      <span class="dashboard-date-filter__summary-label">{{
         "DASHBOARD.FILTER_ACTIVE" | translate
       }}</span>
-      <div class="filter-dates">
+      <div class="dashboard-date-filter__summary-dates">
         @if (startDate()) {
           <span>{{
             startDate() | date: "shortDate" : "" : localeValue()
           }}</span>
         }
         @if (startDate() && endDate()) {
-          <span class="separator">→</span>
+          <span class="dashboard-date-filter__summary-separator">→</span>
         }
         @if (endDate()) {
           <span>{{ endDate() | date: "shortDate" : "" : localeValue() }}</span>
@@ -28,8 +28,8 @@
     </div>
   }
 
-  <div class="filter-controls">
-    <div class="date-input-group">
+  <div class="dashboard-date-filter__controls">
+    <div class="dashboard-date-filter__date-input-group">
       <ion-label labelPlacement="stacked">
         {{ "DASHBOARD.FROM_DATE" | translate }}
       </ion-label>
@@ -51,7 +51,7 @@
       </ion-modal>
     </div>
 
-    <div class="date-input-group">
+    <div class="dashboard-date-filter__date-input-group">
       <ion-label labelPlacement="stacked">
         {{ "DASHBOARD.TO_DATE" | translate }}
       </ion-label>

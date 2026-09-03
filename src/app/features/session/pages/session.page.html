@@ -1,6 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title [style.textAlign]=" !isDashboard() ? 'start' : 'center'"
+    <ion-title
+      class="session__title"
+      [class.session__title--start]="!isDashboard()"
       >{{ 'SESSION.TITLE' | translate }}</ion-title
     >
     @if (!isDashboard()) {
@@ -36,7 +38,7 @@
     </ion-card-content>
   </ion-card>
   } @else {
-  <div class="empty-state">
+  <div class="session__empty">
     <ion-icon name="barbell-outline" aria-hidden="true"></ion-icon>
     <h2>{{ 'SESSION.DASHBOARD.NO_SESSION' | translate }}</h2>
     <p>{{ 'SESSION.DASHBOARD.START_DESCRIPTION' | translate }}</p>

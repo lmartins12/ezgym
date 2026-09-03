@@ -5,12 +5,14 @@ ion-content {
   --padding-end: var(--space-4);
 }
 
-.dashboard-section {
-  margin-bottom: var(--space-6);
-  display: flex;
-  justify-content: center;
+.dashboard {
+  &__section {
+    margin-bottom: var(--space-6);
+    display: flex;
+    justify-content: center;
 
-  &:last-child {
-    margin-bottom: 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
