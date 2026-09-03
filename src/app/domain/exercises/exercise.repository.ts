@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { db } from '@core/db/app-db';
 import { DatabaseService } from '@core/db/database';
 import { v4 as uuidv4 } from 'uuid';
+import { normalizeText } from '../shared/normalize-text';
 import type { Exercise } from './exercise';
 
 export interface ExerciseSeedData {
@@ -33,9 +34,9 @@ export interface FindOrCreateOptions {
 export class ExerciseRepository {
   private readonly database = inject(DatabaseService);
 
-  public async getById(id: string): Promise<Exercise | undefined> {
+  public async getById(id: string): Promise<Exercise | null> {
     await this.database.initialize();
-    return db.exercises.get(id);
+    return (await db.exercises.get(id)) ?? null;
   }
 
   public async getByIds(ids: string[]): Promise<Exercise[]> {
@@ -45,16 +46,25 @@ export class ExerciseRepository {
   }
 
   /**
-   * Map of trimmed+lowercased exercise name -> Exercise.
+   * Every catalog exercise (unordered read for pickers and merges).
+   */
+  public async listAll(): Promise<Exercise[]> {
+    await this.database.initialize();
+    return db.exercises.toArray();
+  }
+
+  /**
+   * Map of normalized (trimmed, lowercased, accent-free) exercise
+   * name -> Exercise.
    */
   public async getNameMap(): Promise<Map<string, Exercise>> {
     await this.database.initialize();
     const exercises = await db.exercises.toArray();
-    return new Map(exercises.map((e) => [e.name.trim().toLowerCase(), e]));
+    return new Map(exercises.map((e) => [normalizeText(e.name), e]));
   }
 
   /**
-   * Set of trimmed+lowercased exercise names.
+   * Set of normalized (trimmed, lowercased, accent-free) exercise names.
    */
   public async getExistingNames(): Promise<Set<string>> {
     await this.database.initialize();
@@ -62,7 +72,7 @@ export class ExerciseRepository {
     return new Set(
       names
         .filter((name): name is string => typeof name === 'string')
-        .map((name) => name.trim().toLowerCase()),
+        .map((name) => normalizeText(name)),
     );
   }
 
@@ -74,16 +84,14 @@ export class ExerciseRepository {
     options: FindOrCreateOptions = {},
   ): Promise<{ exerciseId: string; isNew: boolean }> {
     await this.database.initialize();
-    const normalizedName = data.name.trim().toLowerCase();
+    const normalizedName = normalizeText(data.name);
 
     let existing: Exercise | undefined;
     if (options.knownExercises) {
       existing = options.knownExercises.get(normalizedName);
     } else {
       const all = await db.exercises.toArray();
-      existing = all.find(
-        (e) => e.name.trim().toLowerCase() === normalizedName,
-      );
+      existing = all.find((e) => normalizeText(e.name) === normalizedName);
     }
 
     const now = Date.now();

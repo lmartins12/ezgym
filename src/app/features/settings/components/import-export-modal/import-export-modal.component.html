@@ -1,12 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title style="text-align: start">{{
+    <ion-title class="ion-text-start">{{
       isImportTab()
         ? ("IMPORT_EXPORT.IMPORT_MODAL_TITLE" | translate)
         : ("IMPORT_EXPORT.EXPORT_MODAL_TITLE" | translate)
     }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onClose()">
+      <ion-button
+        (click)="onClose()"
+        [attr.aria-label]="'COMMON.CLOSE' | translate"
+      >
         <ion-icon name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>

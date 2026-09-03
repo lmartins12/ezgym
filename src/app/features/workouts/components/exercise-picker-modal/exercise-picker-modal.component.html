@@ -1,0 +1,107 @@
+<ion-header class="picker__header">
+  <ion-toolbar>
+    <ion-title>{{ "LIBRARY.TITLE" | translate }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        fill="clear"
+        shape="round"
+        [attr.aria-label]="'COMMON.CANCEL' | translate"
+        (click)="cancel()"
+      >
+        <ion-icon slot="icon-only" name="close-outline" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [placeholder]="'LIBRARY.SEARCH_PLACEHOLDER' | translate"
+      [debounce]="250"
+      (ionInput)="onSearch($event)"
+    />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="picker__content">
+  @if (loading()) {
+    <div class="picker__loading">
+      <ion-spinner name="crescent" />
+    </div>
+  } @else {
+    <div class="picker__chips">
+      <button
+        type="button"
+        class="picker__chip picker__chip--all"
+        [class.picker__chip--active]="muscleFilter() === null"
+        [attr.aria-pressed]="muscleFilter() === null"
+        (click)="toggleFilter(null)"
+      >
+        {{ "LIBRARY.FILTER_ALL" | translate }}
+      </button>
+      @for (group of muscleGroups; track group) {
+        <button
+          type="button"
+          class="picker__chip"
+          [class.picker__chip--active]="muscleFilter() === group"
+          [attr.aria-pressed]="muscleFilter() === group"
+          (click)="toggleFilter(group)"
+        >
+          <app-muscle-icon [muscleGroup]="group" size="sm" />
+          <span class="picker__chip-label">{{ getMuscleLabel(group) }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="picker__manual">
+      <ion-button expand="block" fill="outline" (click)="createManual()">
+        <ion-icon slot="start" name="create-outline" />
+        {{ "LIBRARY.CREATE_MANUAL" | translate }}
+      </ion-button>
+    </div>
+
+    @for (section of sections(); track section.key) {
+      <div class="picker__section">
+        <h2 class="picker__section-title">
+          {{ section.titleKey | translate }}
+        </h2>
+        @for (option of section.options; track option.key) {
+          <ion-item class="picker__item">
+            <ion-checkbox
+              slot="start"
+              [checked]="isSelected(option)"
+              [aria-label]="option.name"
+              (ionChange)="toggle(option)"
+            />
+            <ion-label class="picker__label">
+              <h3 class="picker__name">{{ option.name }}</h3>
+              <p class="picker__meta">
+                <app-muscle-icon
+                  [muscleGroup]="option.muscle_group"
+                  size="sm"
+                />
+                @if (getEquipmentLabel(option); as equipment) {
+                  <span>{{ equipment }}</span>
+                }
+              </p>
+            </ion-label>
+          </ion-item>
+        }
+      </div>
+    }
+
+    @if (showCreateTerm()) {
+      <div class="picker__empty">
+        <p class="picker__empty-text">{{ "LIBRARY.NO_RESULTS" | translate }}</p>
+      </div>
+    }
+  }
+</ion-content>
+
+@if (selectedCount() > 0) {
+  <ion-footer class="picker__footer">
+    <ion-toolbar class="ez-modal-footer">
+      <ion-button expand="block" fill="outline" (click)="confirm()">
+        {{ "LIBRARY.ADD_COUNT" | translate: { count: selectedCount() } }}
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+}

@@ -13,14 +13,11 @@
     "SUCCESS": "Sucesso",
     "CREATE": "Criar",
     "CLEAR": "Limpar",
+    "CLOSE": "Fechar",
+    "BACK_TO_TOP": "Voltar ao topo",
+    "MINUTES_SHORT": "min",
     "VALUE_RANGE": "De {{min}} a {{max}}",
     "UNEXPECTED_ERROR": "Ocorreu um erro inesperado. Tente novamente."
-  },
-  "NAV": {
-    "HOME": "Início",
-    "WORKOUTS": "Treinos",
-    "EXERCISES": "Exercícios",
-    "SETTINGS": "Ajustes"
   },
   "TABS": {
     "WORKOUTS": "Treinos",
@@ -215,6 +212,29 @@
     "MUSCLE_TRICEPS": "Tríceps",
     "MUSCLE_UPPER": "Superior",
     "MUSCLE_OTHER": "Outro"
+  },
+  "LIBRARY": {
+    "TITLE": "Adicionar Exercício",
+    "SEARCH_PLACEHOLDER": "Buscar exercício...",
+    "FILTER_ALL": "Todos",
+    "SECTION_RECENTS": "Recentes",
+    "SECTION_MINE": "Meus exercícios",
+    "SECTION_LIBRARY": "Biblioteca",
+    "NO_RESULTS": "Nenhum exercício encontrado",
+    "CREATE_TERM": "Criar \"{{term}}\"",
+    "CREATE_MANUAL": "Criar manualmente",
+    "ADD_COUNT": "Adicionar ({{count}})"
+  },
+  "EQUIPMENT": {
+    "KIND_BARBELL": "Barra",
+    "KIND_DUMBBELL": "Halteres",
+    "KIND_MACHINE": "Máquina",
+    "KIND_CABLE": "Polia",
+    "KIND_BODYWEIGHT": "Peso corporal",
+    "KIND_KETTLEBELL": "Kettlebell",
+    "KIND_BAND": "Elástico",
+    "KIND_CARDIO": "Cardio",
+    "KIND_OTHER": "Outro"
   },
   "IMPORT_EXPORT": {
     "TITLE": "Gerenciamento de Dados",

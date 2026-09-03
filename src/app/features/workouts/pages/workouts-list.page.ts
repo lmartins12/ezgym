@@ -19,13 +19,7 @@ import {
 } from '@ionic/angular';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import {
-  add,
-  addOutline,
-  barbellOutline,
-  reorderTwoOutline,
-  settingsOutline,
-} from 'ionicons/icons';
+import { add, barbellOutline, reorderTwoOutline } from 'ionicons/icons';
 import { WorkoutCardComponent } from '../components/workout-card/workout-card.component';
 import {
   WorkoutFormModalComponent,
@@ -33,6 +27,7 @@ import {
 } from '../components/workout-form-modal/workout-form-modal.component';
 import type { WorkoutDetail } from '../models/workout-detail.models';
 import { WorkoutsFacade } from '../facades/workouts.facade';
+import { WorkoutsQuery } from '../queries/workouts.query';
 
 @Component({
   selector: 'app-workouts-list',
@@ -57,6 +52,7 @@ import { WorkoutsFacade } from '../facades/workouts.facade';
 })
 export class WorkoutsListPage {
   private readonly workoutsFacade = inject(WorkoutsFacade);
+  private readonly workoutsQuery = inject(WorkoutsQuery);
   private readonly alertCtrl = inject(AlertController);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
@@ -69,8 +65,6 @@ export class WorkoutsListPage {
   constructor() {
     addIcons({
       add,
-      addOutline,
-      settingsOutline,
       barbellOutline,
       reorderTwoOutline,
     });
@@ -83,7 +77,7 @@ export class WorkoutsListPage {
   public async loadWorkouts(): Promise<void> {
     this.loading.set(true);
     try {
-      const data = await this.workoutsFacade.list();
+      const data = await this.workoutsQuery.list();
       this.workouts.set(data);
     } finally {
       this.loading.set(false);

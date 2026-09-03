@@ -16,7 +16,6 @@ import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.
 import { addIcons } from 'ionicons';
 import {
   chevronForwardOutline,
-  listOutline,
   playOutline,
   trashOutline,
 } from 'ionicons/icons';
@@ -54,7 +53,6 @@ export class WorkoutCardComponent {
   constructor() {
     addIcons({
       chevronForwardOutline,
-      listOutline,
       playOutline,
       trashOutline,
     });

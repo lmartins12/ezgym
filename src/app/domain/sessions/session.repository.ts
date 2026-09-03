@@ -14,9 +14,9 @@ import type { WorkoutSession } from './workout-session';
 export class SessionRepository {
   private readonly database = inject(DatabaseService);
 
-  public async getById(id: string): Promise<WorkoutSession | undefined> {
+  public async getById(id: string): Promise<WorkoutSession | null> {
     await this.database.initialize();
-    return db.workout_sessions.get(id);
+    return (await db.workout_sessions.get(id)) ?? null;
   }
 
   /**
@@ -44,13 +44,13 @@ export class SessionRepository {
 
   public async getActiveByWorkoutId(
     workoutId: string,
-  ): Promise<WorkoutSession | undefined> {
+  ): Promise<WorkoutSession | null> {
     await this.database.initialize();
     const active = await db.workout_sessions
       .where('status')
       .equals('IN_PROGRESS')
       .toArray();
-    return active.find((s) => s.workout_id === workoutId);
+    return active.find((s) => s.workout_id === workoutId) ?? null;
   }
 
   public async add(session: WorkoutSession): Promise<void> {

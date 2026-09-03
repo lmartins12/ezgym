@@ -14,6 +14,7 @@ import { WorkoutRepository } from '@domain/workouts/workout.repository';
 import type { Workout } from '@domain/workouts/workout';
 import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import { v4 as uuidv4 } from 'uuid';
+import { WorkoutsQuery } from '../queries/workouts.query';
 import type {
   AddExerciseData,
   UpdateExerciseData,
@@ -23,6 +24,7 @@ import type {
 /**
  * Single API for the workouts screens. Coordinates the workout,
  * exercise and session repositories; pages never touch persistence.
+ * Reads delegate to WorkoutsQuery; writes live here.
  */
 @Injectable({ providedIn: 'root' })
 export class WorkoutsFacade {
@@ -30,30 +32,12 @@ export class WorkoutsFacade {
   private readonly exerciseRepository = inject(ExerciseRepository);
   private readonly sessionRepository = inject(SessionRepository);
   private readonly database = inject(DatabaseService);
+  private readonly workoutsQuery = inject(WorkoutsQuery);
 
   // --- Workouts ---
 
   public async list(): Promise<WorkoutDetail[]> {
-    const [workouts, exerciseCountMap, lastTrainedMap] = await Promise.all([
-      this.workoutRepository.getAll(),
-      this.workoutRepository.getExerciseCountMap(),
-      this.sessionRepository.getLastTrainedMap(),
-    ]);
-
-    const details: WorkoutDetail[] = workouts.map((w) => ({
-      ...w,
-      order_index: w.order_index ?? 0,
-      exercise_count: exerciseCountMap.get(w.id) ?? 0,
-      last_trained: lastTrainedMap.get(w.id) ?? undefined,
-    }));
-
-    // Sort by order_index ASC, updated_at DESC
-    return details.sort((a, b) => {
-      const orderA = a.order_index ?? 0;
-      const orderB = b.order_index ?? 0;
-      if (orderA !== orderB) return orderA - orderB;
-      return (b.updated_at ?? 0) - (a.updated_at ?? 0);
-    });
+    return this.workoutsQuery.list();
   }
 
   public async getById(id: string): Promise<Workout | null> {
@@ -119,6 +103,23 @@ export class WorkoutsFacade {
   }
 
   public async addExercise(data: AddExerciseData): Promise<string> {
+    return this.database.write(() => this.persistExercise(data));
+  }
+
+  /**
+   * Adds several exercises atomically: either every junction row (and
+   * its catalog materialization) is persisted, or nothing is.
+   */
+  public async addExercises(exercises: AddExerciseData[]): Promise<void> {
+    if (exercises.length === 0) return;
+    await this.database.write(async () => {
+      for (const data of exercises) {
+        await this.persistExercise(data);
+      }
+    });
+  }
+
+  private async persistExercise(data: AddExerciseData): Promise<string> {
     // Create-or-find exercise by name; manual edits update metadata
     const seed: ExerciseSeedData = {
       name: data.name,

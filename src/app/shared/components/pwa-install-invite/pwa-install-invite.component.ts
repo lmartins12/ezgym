@@ -5,11 +5,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { downloadOutline, shareOutline } from 'ionicons/icons';
 
-addIcons({
-  downloadOutline,
-  shareOutline,
-});
-
 @Component({
   selector: 'app-pwa-install-invite',
   imports: [TranslatePipe, IonButton, IonIcon],
@@ -18,6 +13,13 @@ addIcons({
 })
 export class PwaInstallInviteComponent {
   protected readonly pwaInstall = inject(PwaInstallService);
+
+  constructor() {
+    addIcons({
+      downloadOutline,
+      shareOutline,
+    });
+  }
 
   public install(): void {
     void this.pwaInstall.promptInstall();

@@ -5,7 +5,10 @@
     >
     @if (!isDashboard()) {
     <ion-buttons slot="end">
-      <ion-button (click)="onExitSession()">
+      <ion-button
+        (click)="onExitSession()"
+        [attr.aria-label]="'COMMON.CLOSE' | translate"
+      >
         <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>

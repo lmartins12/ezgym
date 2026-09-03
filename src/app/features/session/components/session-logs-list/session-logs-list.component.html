@@ -1,0 +1,43 @@
+<div class="session-logs-list">
+  <ion-list-header>
+    <ion-label>{{ "SESSION.IN_PROGRESS.HISTORY" | translate }}</ion-label>
+  </ion-list-header>
+
+  <ion-list lines="none">
+    @for (log of logs(); track log.id) {
+      <ion-item
+        button
+        (click)="editSet.emit(log)"
+        [color]="editingSetId() === log.id ? 'light' : ''"
+      >
+        <ion-icon slot="start" name="create-outline" color="primary"></ion-icon>
+        <ion-label>
+          <h3>
+            {{ "SESSION.IN_PROGRESS.SET" | translate }}
+            {{ log.set_number + 1 }}
+          </h3>
+          <p>
+            {{ log.reps }}
+            {{ "SESSION.IN_PROGRESS.REPS" | translate }} @ {{ log.weight }}kg
+            (RPE: {{ log.rpe }})
+          </p>
+        </ion-label>
+        <ion-button
+          fill="clear"
+          color="danger"
+          slot="end"
+          (click)="$event.stopPropagation(); deleteSet.emit(log.id)"
+          [attr.aria-label]="'COMMON.DELETE' | translate"
+        >
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    }
+
+    @if (logs().length === 0) {
+      <ion-item class="session-logs-list__empty">
+        <ion-label>{{ "SESSION.IN_PROGRESS.NO_SETS" | translate }}</ion-label>
+      </ion-item>
+    }
+  </ion-list>
+</div>

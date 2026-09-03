@@ -13,8 +13,6 @@ import {
 import type { WorkoutStats } from '../../models/progress.models';
 import { formatStatNumber } from '@shared/utils/number.utils';
 
-addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
-
 @Component({
   selector: 'app-stats-cards',
   imports: [DatePipe, IonCard, IonCardContent, IonIcon, TranslatePipe],
@@ -24,6 +22,10 @@ addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
 export class StatsCardsComponent {
   public readonly stats = input<WorkoutStats | null>(null);
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
+
+  constructor() {
+    addIcons({ barbell, calendarNumber, fitness, trendingUp, time });
+  }
 
   protected readonly localeValue = computed(() => this.locale());
 

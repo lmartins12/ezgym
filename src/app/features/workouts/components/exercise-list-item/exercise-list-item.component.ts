@@ -10,6 +10,7 @@ import {
   IonLabel,
   IonReorder,
 } from '@ionic/angular';
+import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import {
   chevronForwardOutline,
@@ -28,6 +29,7 @@ import {
     IonLabel,
     IonReorder,
     MuscleIconComponent,
+    TranslatePipe,
   ],
   templateUrl: './exercise-list-item.component.html',
   styleUrl: './exercise-list-item.component.scss',

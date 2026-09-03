@@ -15,8 +15,6 @@ import { addIcons } from 'ionicons';
 import { barbell, calendar, trophy } from 'ionicons/icons';
 import type { ExercisePR } from '../../models/progress.models';
 
-addIcons({ barbell, calendar, trophy });
-
 @Component({
   selector: 'app-exercise-prs',
   imports: [
@@ -36,6 +34,10 @@ export class ExercisePRsComponent {
   private readonly languageService = inject(LanguageService);
 
   public readonly prs = input.required<ExercisePR[]>();
+
+  constructor() {
+    addIcons({ barbell, calendar, trophy });
+  }
 
   protected readonly currentLocale = computed(() =>
     this.languageService.isPortuguese() ? 'pt-BR' : 'en-US',

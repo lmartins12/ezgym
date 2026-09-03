@@ -32,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideIonicAngular({
       animated: true,
       navAnimation: iosTransitionAnimation,
+      useSetInputAPI: true,
     }),
     provideRouter(
       routes,

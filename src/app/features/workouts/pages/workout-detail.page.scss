@@ -30,12 +30,38 @@
   align-items: center;
   gap: var(--space-1);
   margin: 0;
-  padding: 0 var(--space-4) var(--space-2);
+  padding: var(--space-2) var(--space-4);
   color: var(--ion-color-medium);
   font-size: 12px;
 
   ion-icon {
     font-size: 16px;
+  }
+}
+
+.workout-detail {
+  &__list-header-icon {
+    font-size: 24px;
+    margin-right: var(--space-2);
+  }
+}
+
+:host-context(.ios) {
+  .workout-detail__list-header {
+    align-items: center;
+    font-size: 0.875rem;
+
+    ion-label,
+    ion-button {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    ion-button {
+      font-size: 0.875rem;
+      --padding-top: var(--space-2);
+      --padding-bottom: var(--space-2);
+    }
   }
 }
 

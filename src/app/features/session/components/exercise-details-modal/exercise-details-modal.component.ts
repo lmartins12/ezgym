@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import {
   IonButton,
@@ -34,7 +34,12 @@ import { barbell, closeOutline, fitness, time } from 'ionicons/icons';
   styleUrl: './exercise-details-modal.component.scss',
 })
 export class ExerciseDetailsModalComponent {
-  @Input({ required: true }) exercise!: WorkoutExercise;
+  public readonly exercise = input.required<WorkoutExercise>();
+
+  protected readonly muscleGroupLabelKey = computed<string | null>(() => {
+    const group = this.exercise().muscle_group;
+    return group ? `EXERCISE.MUSCLE_${group.toUpperCase()}` : null;
+  });
 
   private readonly modalCtrl = inject(ModalController);
 
@@ -44,10 +49,5 @@ export class ExerciseDetailsModalComponent {
 
   public close(): void {
     void this.modalCtrl.dismiss();
-  }
-
-  protected get muscleGroupLabelKey(): string | null {
-    const group = this.exercise.muscle_group;
-    return group ? `EXERCISE.MUSCLE_${group.toUpperCase()}` : null;
   }
 }

@@ -1,0 +1,23 @@
+.session-logs-list {
+  flex: 1;
+  overflow-y: auto;
+
+  ion-list-header {
+    min-height: auto;
+    padding-bottom: 0;
+  }
+
+  ion-list {
+    background: transparent;
+  }
+
+  ion-item {
+    --background: transparent;
+  }
+
+  &__empty {
+    text-align: center;
+    color: var(--ion-color-medium);
+    font-style: italic;
+  }
+}

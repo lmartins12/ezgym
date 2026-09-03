@@ -13,14 +13,11 @@
     "SUCCESS": "Success",
     "CREATE": "Create",
     "CLEAR": "Clear",
+    "CLOSE": "Close",
+    "BACK_TO_TOP": "Back to top",
+    "MINUTES_SHORT": "min",
     "VALUE_RANGE": "{{min}} to {{max}}",
     "UNEXPECTED_ERROR": "An unexpected error occurred. Please try again."
-  },
-  "NAV": {
-    "HOME": "Home",
-    "WORKOUTS": "Workouts",
-    "EXERCISES": "Exercises",
-    "SETTINGS": "Settings"
   },
   "TABS": {
     "WORKOUTS": "Workouts",
@@ -215,6 +212,29 @@
     "MUSCLE_TRICEPS": "Triceps",
     "MUSCLE_UPPER": "Upper",
     "MUSCLE_OTHER": "Other"
+  },
+  "LIBRARY": {
+    "TITLE": "Add Exercise",
+    "SEARCH_PLACEHOLDER": "Search exercises...",
+    "FILTER_ALL": "All",
+    "SECTION_RECENTS": "Recent",
+    "SECTION_MINE": "My exercises",
+    "SECTION_LIBRARY": "Library",
+    "NO_RESULTS": "No exercises found",
+    "CREATE_TERM": "Create \"{{term}}\"",
+    "CREATE_MANUAL": "Create manually",
+    "ADD_COUNT": "Add ({{count}})"
+  },
+  "EQUIPMENT": {
+    "KIND_BARBELL": "Barbell",
+    "KIND_DUMBBELL": "Dumbbell",
+    "KIND_MACHINE": "Machine",
+    "KIND_CABLE": "Cable",
+    "KIND_BODYWEIGHT": "Bodyweight",
+    "KIND_KETTLEBELL": "Kettlebell",
+    "KIND_BAND": "Band",
+    "KIND_CARDIO": "Cardio",
+    "KIND_OTHER": "Other"
   },
   "IMPORT_EXPORT": {
     "TITLE": "Data Management",

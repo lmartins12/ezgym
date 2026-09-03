@@ -1,0 +1,45 @@
+<ion-card class="session-rest-card">
+  <ion-card-content class="session-rest-card__content">
+    <div class="session-rest-card__ring-wrap" role="timer">
+      <svg
+        class="session-rest-card__ring"
+        viewBox="0 0 100 100"
+        width="112"
+        height="112"
+        aria-hidden="true"
+      >
+        <circle
+          class="session-rest-card__ring-track"
+          cx="50"
+          cy="50"
+          r="44"
+          fill="none"
+          stroke-width="8"
+        />
+        <circle
+          class="session-rest-card__ring-progress"
+          cx="50"
+          cy="50"
+          r="44"
+          fill="none"
+          stroke-width="8"
+          stroke-linecap="round"
+          [attr.stroke-dasharray]="ringCircumference"
+          [style.stroke-dashoffset]="restDashOffset()"
+        />
+      </svg>
+      <span class="session-rest-card__time">{{ restTimeLabel() }}</span>
+    </div>
+    <span class="session-rest-card__label">{{
+      "SESSION.REST.LABEL" | translate
+    }}</span>
+    <div class="session-rest-card__actions">
+      <ion-button fill="outline" size="small" (click)="addTime.emit()">
+        {{ "SESSION.REST.ADD_30" | translate }}
+      </ion-button>
+      <ion-button fill="solid" size="small" (click)="skip.emit()">
+        {{ "SESSION.REST.SKIP" | translate }}
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>

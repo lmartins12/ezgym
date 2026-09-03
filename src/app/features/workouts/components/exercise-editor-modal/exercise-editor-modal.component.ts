@@ -1,4 +1,4 @@
-import { Component, inject, Input, model, signal } from '@angular/core';
+import { Component, inject, input, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup } from '@domain/shared/muscle-group';
 import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
@@ -44,6 +44,16 @@ export interface ExerciseData {
   restSeconds: number;
 }
 
+/**
+ * Prescription defaults for a freshly added exercise. Single source of
+ * truth for both the editor form and the picker's quick-add flow.
+ */
+export const EXERCISE_DEFAULTS = {
+  sets: 3,
+  reps: '12',
+  restSeconds: 60,
+} as const;
+
 @Component({
   selector: 'app-exercise-editor-modal',
   imports: [
@@ -68,16 +78,19 @@ export interface ExerciseData {
   styleUrl: './exercise-editor-modal.component.scss',
 })
 export class ExerciseEditorModalComponent {
-  @Input() public exercise?: WorkoutExercise;
+  public readonly exercise = input<WorkoutExercise | undefined>(undefined);
+
+  /** Pre-filled name when opened from the picker's "create term" CTA. */
+  public readonly initialName = input<string | undefined>(undefined);
 
   public readonly name = model('');
   public readonly muscleGroup = model<MuscleGroup>('upper');
   public readonly equipment = model('');
   public readonly notes = model('');
-  public readonly sets = model(3);
-  public readonly reps = model('12');
+  public readonly sets = model<number>(EXERCISE_DEFAULTS.sets);
+  public readonly reps = model<string>(EXERCISE_DEFAULTS.reps);
   public readonly targetWeight = model<number | undefined>(undefined);
-  public readonly restSeconds = model(60);
+  public readonly restSeconds = model<number>(EXERCISE_DEFAULTS.restSeconds);
 
   public readonly repsInvalid = signal(false);
 
@@ -95,21 +108,27 @@ export class ExerciseEditorModalComponent {
   private readonly modalCtrl = inject(ModalController);
 
   public ionViewDidEnter(): void {
-    if (this.exercise) {
-      const ex = this.exercise;
-      this.name.set(ex.exercise_name ?? '');
-      this.muscleGroup.set(ex.muscle_group ?? 'upper');
-      this.equipment.set(ex.equipment ?? '');
-      this.notes.set(ex.notes ?? '');
-      this.sets.set(ex.sets);
-      this.reps.set(ex.reps);
-      this.targetWeight.set(ex.target_weight);
-      this.restSeconds.set(ex.rest_seconds);
+    const exercise = this.exercise();
+    if (exercise) {
+      this.name.set(exercise.exercise_name ?? '');
+      this.muscleGroup.set(exercise.muscle_group ?? 'upper');
+      this.equipment.set(exercise.equipment ?? '');
+      this.notes.set(exercise.notes ?? '');
+      this.sets.set(exercise.sets);
+      this.reps.set(exercise.reps);
+      this.targetWeight.set(exercise.target_weight);
+      this.restSeconds.set(exercise.rest_seconds);
+      return;
+    }
+
+    const initialName = this.initialName();
+    if (initialName) {
+      this.name.set(initialName);
     }
   }
 
   public close(): void {
-    this.modalCtrl.dismiss();
+    void this.modalCtrl.dismiss();
   }
 
   public onSetsChange(value: number | string | null): void {
@@ -158,6 +177,6 @@ export class ExerciseEditorModalComponent {
       restSeconds: clampToRange(Number(this.restSeconds()), REST_SECONDS_RANGE),
     };
 
-    this.modalCtrl.dismiss(data);
+    void this.modalCtrl.dismiss(data);
   }
 }

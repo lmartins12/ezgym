@@ -68,49 +68,7 @@
 
   <!-- Rest Card (replaces the input card while the countdown runs) -->
   @if (restTimer.isResting()) {
-    <ion-card class="rest-card">
-      <ion-card-content class="rest-content">
-        <div class="rest-ring-wrap" role="timer">
-          <svg
-            class="rest-ring"
-            viewBox="0 0 100 100"
-            width="112"
-            height="112"
-            aria-hidden="true"
-          >
-            <circle
-              class="rest-ring-track"
-              cx="50"
-              cy="50"
-              r="44"
-              fill="none"
-              stroke-width="8"
-            />
-            <circle
-              class="rest-ring-progress"
-              cx="50"
-              cy="50"
-              r="44"
-              fill="none"
-              stroke-width="8"
-              stroke-linecap="round"
-              [attr.stroke-dasharray]="ringCircumference"
-              [style.stroke-dashoffset]="restDashOffset()"
-            />
-          </svg>
-          <span class="rest-time">{{ restTimeLabel() }}</span>
-        </div>
-        <span class="rest-label">{{ "SESSION.REST.LABEL" | translate }}</span>
-        <div class="rest-actions">
-          <ion-button fill="outline" size="small" (click)="onAddRestTime()">
-            {{ "SESSION.REST.ADD_30" | translate }}
-          </ion-button>
-          <ion-button fill="solid" size="small" (click)="onSkipRest()">
-            {{ "SESSION.REST.SKIP" | translate }}
-          </ion-button>
-        </div>
-      </ion-card-content>
-    </ion-card>
+    <app-session-rest-card (skip)="onSkipRest()" (addTime)="onAddRestTime()" />
   } @else {
     <!-- Input Card -->
     <ion-card
@@ -178,7 +136,9 @@
                     size="small"
                     class="info-button"
                     (click)="showRPEInfo()"
-                    aria-label="Show RPE information"
+                    [attr.aria-label]="
+                      'SESSION.IN_PROGRESS.RPE_INFO_TITLE' | translate
+                    "
                   >
                     <ion-icon
                       name="information-circle-outline"
@@ -227,52 +187,12 @@
   }
 
   <!-- Logs List -->
-  <div class="logs-list">
-    <ion-list-header>
-      <ion-label>{{ "SESSION.IN_PROGRESS.HISTORY" | translate }}</ion-label>
-    </ion-list-header>
-
-    <ion-list lines="none">
-      @for (log of currentLogs(); track log.id) {
-        <ion-item
-          button
-          (click)="editSet(log)"
-          [color]="editingSetId() === log.id ? 'light' : ''"
-        >
-          <ion-icon
-            slot="start"
-            name="create-outline"
-            color="primary"
-          ></ion-icon>
-          <ion-label>
-            <h3>
-              {{ "SESSION.IN_PROGRESS.SET" | translate }}
-              {{ log.set_number + 1 }}
-            </h3>
-            <p>
-              {{ log.reps }}
-              {{ "SESSION.IN_PROGRESS.REPS" | translate }} @ {{ log.weight }}kg
-              (RPE: {{ log.rpe }})
-            </p>
-          </ion-label>
-          <ion-button
-            fill="clear"
-            color="danger"
-            slot="end"
-            (click)="$event.stopPropagation(); deleteSet.emit(log.id)"
-          >
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-item>
-      }
-
-      @if (currentLogs().length === 0) {
-        <ion-item class="empty-state">
-          <ion-label>{{ "SESSION.IN_PROGRESS.NO_SETS" | translate }}</ion-label>
-        </ion-item>
-      }
-    </ion-list>
-  </div>
+  <app-session-logs-list
+    [logs]="currentLogs()"
+    [editingSetId]="editingSetId()"
+    (editSet)="editSet($event)"
+    (deleteSet)="deleteSet.emit($event)"
+  />
 
   <ion-button
     class="finish-button"

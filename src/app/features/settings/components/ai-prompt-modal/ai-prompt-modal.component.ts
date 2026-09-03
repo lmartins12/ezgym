@@ -1,4 +1,4 @@
-import { Component, inject, Input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { ClipboardService } from '@shared/clipboard/clipboard';
 import {
   IonButton,
@@ -40,9 +40,16 @@ export class AiPromptModalComponent {
   private readonly modalCtrl = inject(ModalController);
   private readonly clipboard = inject(ClipboardService);
 
-  @Input() public introMessage = '';
-  @Input() public promptText = '';
+  public readonly introMessage = input('');
+  public readonly promptText = input('');
   public readonly closed = output<void>();
+
+  protected readonly resolvedPromptText = computed(
+    () => this.promptText() || getAiPromptText(),
+  );
+  protected readonly showIntroMessage = computed(
+    () => this.introMessage().trim().length > 0,
+  );
 
   constructor() {
     addIcons({
@@ -52,29 +59,13 @@ export class AiPromptModalComponent {
     });
   }
 
-  public ionViewDidEnter(): void {
-    // Initialize with default prompt text if not provided
-    if (!this.promptText) {
-      this.promptText = getAiPromptText();
-    }
-  }
-
-  protected get showIntroMessage(): boolean {
-    return (
-      this.introMessage !== undefined &&
-      this.introMessage !== null &&
-      this.introMessage !== '' &&
-      this.introMessage.length > 0
-    );
-  }
-
   public onClose(): void {
     this.closed.emit();
-    this.modalCtrl.dismiss();
+    void this.modalCtrl.dismiss();
   }
 
   public async onCopyPrompt(): Promise<void> {
-    await this.clipboard.copy(this.promptText);
+    await this.clipboard.copy(this.resolvedPromptText());
     this.onClose();
   }
 

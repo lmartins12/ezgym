@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   Component,
   computed,
   effect,
@@ -30,10 +31,7 @@ import {
   IonGrid,
   IonIcon,
   IonInput,
-  IonItem,
   IonLabel,
-  IonList,
-  IonListHeader,
   IonRange,
   IonRow,
   ModalController,
@@ -45,19 +43,15 @@ import { addIcons } from 'ionicons';
 import {
   barbellOutline,
   checkmarkCircle,
-  chevronForwardOutline,
-  createOutline,
   informationCircleOutline,
-  trashOutline,
 } from 'ionicons/icons';
 import { ExerciseDetailsModalComponent } from '../exercise-details-modal/exercise-details-modal.component';
+import { SessionLogsListComponent } from '../session-logs-list/session-logs-list.component';
+import { SessionRestCardComponent } from '../session-rest-card/session-rest-card.component';
 import { RestTimerService } from '../../services/rest-timer';
 
 /** Default RPE for a new set, kept consistent between field and resetForm. */
 const DEFAULT_RPE = 7;
-
-/** Geometry of the rest ring (viewBox 0 0 100 100). */
-const REST_RING_RADIUS = 44;
 
 @Component({
   selector: 'app-session-in-progress',
@@ -67,8 +61,6 @@ const REST_RING_RADIUS = 44;
     TranslatePipe,
     IonCard,
     IonCardContent,
-    IonList,
-    IonItem,
     IonLabel,
     IonInput,
     IonButton,
@@ -77,9 +69,10 @@ const REST_RING_RADIUS = 44;
     IonRow,
     IonCol,
     IonRange,
-    IonListHeader,
     MuscleIconComponent,
     NumberClampDirective,
+    SessionLogsListComponent,
+    SessionRestCardComponent,
   ],
   templateUrl: './session-in-progress.component.html',
   styleUrl: './session-in-progress.component.scss',
@@ -89,7 +82,7 @@ export class SessionInProgressComponent {
   public readonly setLogs = input.required<SetLog[]>();
   public readonly session = input.required<WorkoutSession>();
 
-  logSet = output<{
+  public readonly logSet = output<{
     exerciseId: string;
     setNumber: number;
     reps: number;
@@ -97,9 +90,9 @@ export class SessionInProgressComponent {
     rpe?: number;
   }>();
 
-  deleteSet = output<string>();
-  finishSession = output<void>();
-  updateSet = output<SetLog>();
+  public readonly deleteSet = output<string>();
+  public readonly finishSession = output<void>();
+  public readonly updateSet = output<SetLog>();
 
   // Injections
   private readonly alertCtrl = inject(AlertController);
@@ -171,39 +164,25 @@ export class SessionInProgressComponent {
     return this.exercises().every((_, index) => this.isExerciseComplete(index));
   });
 
-  // Rest timer view helpers
-  protected readonly ringCircumference = 2 * Math.PI * REST_RING_RADIUS;
-
-  protected readonly restDashOffset = computed(() => {
-    const duration = this.restTimer.restDuration();
-    if (duration <= 0) return this.ringCircumference;
-
-    const progress = Math.min(this.restTimer.restRemaining() / duration, 1);
-    return this.ringCircumference * (1 - progress);
-  });
-
-  protected readonly restTimeLabel = computed(() => {
-    const seconds = this.restTimer.restRemaining();
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
-  });
-
   constructor() {
     addIcons({
       barbellOutline,
       checkmarkCircle,
-      chevronForwardOutline,
-      trashOutline,
-      createOutline,
       informationCircleOutline,
     });
 
-    effect(() => {
-      const exercises = this.exercises();
-      if (exercises.length > 0) {
-        this.resetForm();
-      }
+    effect(
+      () => {
+        if (this.exercises().length > 0) {
+          this.resetForm();
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
+    afterRenderEffect(() => {
       this.exerciseItems();
+      this.currentExerciseIndex();
       this.scrollToActiveExercise();
     });
   }

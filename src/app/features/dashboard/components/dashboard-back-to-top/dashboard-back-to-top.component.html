@@ -1,6 +1,9 @@
 @if (visible()) {
   <ion-fab>
-    <ion-fab-button (click)="onClick()" aria-label="Scroll to top">
+    <ion-fab-button
+      (click)="onClick()"
+      [attr.aria-label]="'COMMON.BACK_TO_TOP' | translate"
+    >
       <ion-icon name="arrow-up" />
     </ion-fab-button>
   </ion-fab>

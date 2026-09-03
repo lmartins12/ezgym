@@ -1,0 +1,44 @@
+.session-rest-card {
+  margin: 0 var(--space-4);
+  border-radius: var(--space-4);
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__ring-wrap {
+    position: relative;
+    width: 112px;
+    height: 112px;
+  }
+
+  &__ring {
+    transform: rotate(-90deg);
+  }
+
+  &__ring-track {
+    stroke: var(--ion-background-color-step-100);
+  }
+
+  &__ring-progress {
+    stroke: var(--ion-color-primary);
+  }
+
+  &__time {
+    position: absolute;
+    inset: 0;
+    text-align: center;
+    line-height: 112px;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}

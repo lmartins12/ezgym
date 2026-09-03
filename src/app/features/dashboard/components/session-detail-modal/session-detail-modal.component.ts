@@ -1,12 +1,5 @@
 import { DatePipe } from '@angular/common';
-import {
-  Component,
-  computed,
-  inject,
-  Input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -31,8 +24,6 @@ import { formatStatNumber } from '@shared/utils/number.utils';
 import { addIcons } from 'ionicons';
 import { barbell, close, fitness } from 'ionicons/icons';
 import type { SessionDetail } from '../../models/dashboard.models';
-
-addIcons({ close, fitness, barbell });
 
 @Component({
   selector: 'app-session-detail-modal',
@@ -59,20 +50,18 @@ addIcons({ close, fitness, barbell });
   templateUrl: './session-detail-modal.component.html',
   styleUrl: './session-detail-modal.component.scss',
 })
-export class SessionDetailModalComponent implements OnInit {
+export class SessionDetailModalComponent {
   private readonly modalController = inject(ModalController);
 
-  @Input({ required: true }) sessionDetail!: SessionDetail;
-  @Input() locale: 'pt-BR' | 'en-US' = 'pt-BR';
+  public readonly sessionDetail = input.required<SessionDetail>();
+  public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
 
-  // Internal signal for reactivity in template
-  protected readonly detail = signal<SessionDetail | null>(null);
+  constructor() {
+    addIcons({ close, fitness, barbell });
+  }
 
   protected readonly totalVolume = computed(() => {
-    const detail = this.detail();
-    if (!detail) return 0;
-
-    return detail.exercises.reduce(
+    return this.sessionDetail().exercises.reduce(
       (sum, ex) =>
         sum + ex.sets.reduce((s, set) => s + (set.weight ?? 0) * set.reps, 0),
       0,
@@ -80,15 +69,15 @@ export class SessionDetailModalComponent implements OnInit {
   });
 
   protected readonly totalSets = computed(() => {
-    const detail = this.detail();
-    if (!detail) return 0;
-
-    return detail.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
+    return this.sessionDetail().exercises.reduce(
+      (sum, ex) => sum + ex.sets.length,
+      0,
+    );
   });
 
   /** Session duration in whole minutes (DatePipe 'mm' breaks past 59 min). */
   protected readonly durationMinutes = computed(() => {
-    const detail = this.detail();
+    const detail = this.sessionDetail();
     if (!detail?.finishedAt) return 0;
 
     return Math.max(
@@ -98,14 +87,10 @@ export class SessionDetailModalComponent implements OnInit {
   });
 
   protected formatStat(value: number): string {
-    return formatStatNumber(value, this.locale);
-  }
-
-  ngOnInit(): void {
-    this.detail.set(this.sessionDetail);
+    return formatStatNumber(value, this.locale());
   }
 
   protected closeModal(): void {
-    this.modalController.dismiss();
+    void this.modalController.dismiss();
   }
 }

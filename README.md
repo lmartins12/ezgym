@@ -2,6 +2,8 @@
 
 App de treinos (PWA) que funciona 100% offline, com dados no dispositivo. Este README explica como o projeto funciona para um dev clonar, rodar e saber onde mexer.
 
+License: MIT — see [LICENSE](./LICENSE). Contributions: see [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 ## Stack
 
 | Camada | Tecnologia |
@@ -13,7 +15,17 @@ App de treinos (PWA) que funciona 100% offline, com dados no dispositivo. Este R
 | PWA | `manifest.webmanifest` + Angular Service Worker (`ngsw`) |
 | Testes | Vitest (via `ng test`) |
 
-Requer Node 20+ e pnpm (`corepack enable`).
+Requer Node 20+ e pnpm (`corepack enable`; versão do pnpm fixada em `packageManager`).
+
+## Primeiros passos
+
+```bash
+pnpm install
+pnpm start        # dev (sem service worker)
+pnpm lint && pnpm test && pnpm build   # gate obrigatório antes de PR/release
+```
+
+Para validar o PWA (service worker, update e install prompt), sirva a pasta `www/` do `pnpm build` via HTTPS.
 
 ## Scripts
 
@@ -43,7 +55,6 @@ src/app/
 │   ├── error/        # ErrorHandler global
 │   ├── onboarding/   # welcome na primeira visita
 │   ├── wipe/         # reset de dados do usuário
-│   └── gesture-hint/ # dicas de gesto
 ├── domain/     # modelos + repositórios (única porta para o IndexedDB)
 │   ├── workouts/     # Workout + WorkoutExercise (aggregate, reorder, cascade)
 │   ├── exercises/    # catálogo de exercícios
@@ -100,3 +111,10 @@ Mudanças de schema = nova `version(N)` no `app-db.ts` com migration do Dexie.
 - Traduções: `src/assets/i18n/pt.json` e `src/assets/i18n/en.json`
 - Fallback: `pt` (`app.config.ts`)
 - Toda string de UI usa `TranslatePipe` com chave; novas chaves vão nos dois arquivos
+
+## Backup e troubleshooting
+
+- Backup: a tela de configurações exporta/importa JSON (`features/settings`, `domain/import-export`). O payload carrega `APP_VERSION` para validar compatibilidade antes de importar.
+- PWA não atualiza: `pnpm build` + sirva `www/` via HTTPS (o SW não registra em `pnpm start`). O fluxo de update vive em `core/pwa/pwa-update`.
+- Testes usam `fake-indexeddb` (`src/test-setup.ts`); nenhum banco externo é necessário. Seeds e `resetDatabase()` vivem em `src/testing/db-test-helpers.ts`.
+- Mudança de schema Dexie exige nova `version(N)` em `core/db/app-db.ts` com migration — nunca edite a versão existente.

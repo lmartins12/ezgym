@@ -94,6 +94,7 @@ export class WorkoutRepository {
   public async getDetailedWorkoutExercises(
     workoutId: string,
   ): Promise<WorkoutExercise[]> {
+    await this.database.initialize();
     const workoutExercises = await this.getWorkoutExercises(workoutId);
     if (workoutExercises.length === 0) return [];
 
@@ -142,11 +143,9 @@ export class WorkoutRepository {
     await db.workout_exercises.update(id, changes);
   }
 
-  public async getWorkoutExercise(
-    id: string,
-  ): Promise<WorkoutExercise | undefined> {
+  public async getWorkoutExercise(id: string): Promise<WorkoutExercise | null> {
     await this.database.initialize();
-    return db.workout_exercises.get(id);
+    return (await db.workout_exercises.get(id)) ?? null;
   }
 
   public async deleteWorkoutExercise(id: string): Promise<void> {
@@ -181,6 +180,7 @@ export class WorkoutRepository {
   public async getWorkoutExerciseMaxOrderIndex(
     workoutId: string,
   ): Promise<number> {
+    await this.database.initialize();
     const items = await this.getWorkoutExercises(workoutId);
     return items.reduce((max, item) => Math.max(max, item.order_index), -1);
   }

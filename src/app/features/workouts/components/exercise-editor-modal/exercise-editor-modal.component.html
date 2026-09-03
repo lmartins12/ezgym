@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title style="text-align: start">
-      @if (exercise) {
+    <ion-title class="ion-text-start">
+      @if (exercise()) {
         {{ "EXERCISE.EDIT_TITLE" | translate }}
       } @else {
         {{ "EXERCISE.CREATE_TITLE" | translate }}
@@ -16,7 +16,7 @@
 </ion-header>
 
 <ion-content>
-  <form (ngSubmit)="submit()">
+  <form class="ez-modal-form" (ngSubmit)="submit()">
     <!-- Exercise Name -->
     <ion-input
       required
@@ -140,7 +140,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
+  <ion-toolbar class="ez-modal-footer">
     <ion-button expand="block" color="primary" (click)="submit()">
       {{ "COMMON.SAVE" | translate }}
     </ion-button>

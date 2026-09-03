@@ -13,11 +13,6 @@ import { addIcons } from 'ionicons';
 import { calendarOutline, closeCircle } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';
 
-addIcons({
-  calendarOutline,
-  closeCircle,
-});
-
 @Component({
   selector: 'app-dashboard-date-filter',
   imports: [
@@ -35,6 +30,13 @@ addIcons({
 })
 export class DashboardDateFilterComponent {
   private readonly backButton = inject(BackButtonService);
+
+  constructor() {
+    addIcons({
+      calendarOutline,
+      closeCircle,
+    });
+  }
 
   public readonly startDate = input<Date | null>(null);
   public readonly endDate = input<Date | null>(null);

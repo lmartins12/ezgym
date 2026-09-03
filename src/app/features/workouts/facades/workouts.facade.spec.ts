@@ -1,4 +1,5 @@
 import { db } from '@core/db/app-db';
+import { WorkoutRepository } from '@domain/workouts/workout.repository';
 import {
   buildExercise,
   buildSession,
@@ -8,6 +9,7 @@ import {
   injectService,
   resetDatabase,
 } from '@testing/db-test-helpers';
+import { vi } from 'vitest';
 import { WorkoutsFacade } from './workouts.facade';
 
 describe('WorkoutsFacade', () => {
@@ -203,6 +205,151 @@ describe('WorkoutsFacade', () => {
       ).resolves.toBeUndefined();
 
       expect(await db.exercises.toArray()).toHaveLength(1);
+    });
+  });
+
+  describe('addExercises (picker flow)', () => {
+    const pickerDefaults = { sets: 3, reps: '12', restSeconds: 60 };
+
+    it('creates one workout_exercise per picked option with defaults', async () => {
+      const workout = buildWorkout();
+      await db.workouts.add(workout);
+
+      await facade.addExercises([
+        {
+          workoutId: workout.id,
+          name: 'Supino Reto',
+          muscleGroup: 'chest',
+          equipment: 'Barra',
+          ...pickerDefaults,
+        },
+        {
+          workoutId: workout.id,
+          name: 'Puxada Alta',
+          muscleGroup: 'back',
+          equipment: 'Polia',
+          ...pickerDefaults,
+        },
+      ]);
+
+      const rows = await db.workout_exercises
+        .where('workout_id')
+        .equals(workout.id)
+        .toArray();
+      expect(rows).toHaveLength(2);
+      expect(rows.map((r) => r.order_index).sort((a, b) => a - b)).toEqual([
+        0, 1,
+      ]);
+      expect(
+        rows.every(
+          (r) =>
+            r.sets === 3 &&
+            r.reps === '12' &&
+            r.rest_seconds === 60 &&
+            r.target_weight === undefined,
+        ),
+      ).toBe(true);
+
+      const catalog = await db.exercises.toArray();
+      expect(catalog.map((e) => e.name).sort()).toEqual([
+        'Puxada Alta',
+        'Supino Reto',
+      ]);
+      const supino = catalog.find((e) => e.name === 'Supino Reto');
+      expect(supino).toMatchObject({
+        muscle_group: 'chest',
+        equipment: 'Barra',
+      });
+    });
+
+    it('reuses the existing exercise when the name matches (dedupe)', async () => {
+      const workout = buildWorkout();
+      const existing = buildExercise({
+        name: 'Supino Reto',
+        muscle_group: 'chest',
+        equipment: 'Barra',
+        notes: 'pegada média',
+      });
+      await db.workouts.add(workout);
+      await db.exercises.add(existing);
+
+      await facade.addExercises([
+        {
+          workoutId: workout.id,
+          name: 'Supino Reto',
+          muscleGroup: 'chest',
+          equipment: 'Barra',
+          notes: 'pegada média',
+          ...pickerDefaults,
+        },
+      ]);
+
+      expect(await db.exercises.count()).toBe(1);
+      const stored = await db.exercises.get(existing.id);
+      expect(stored).toMatchObject({
+        muscle_group: 'chest',
+        equipment: 'Barra',
+        notes: 'pegada média',
+      });
+      const rows = await db.workout_exercises
+        .where('workout_id')
+        .equals(workout.id)
+        .toArray();
+      expect(rows).toHaveLength(1);
+      expect(rows[0].exercise_id).toBe(existing.id);
+    });
+
+    it('preserves catalog notes of an existing exercise', async () => {
+      const workout = buildWorkout();
+      const existing = buildExercise({
+        name: 'Remada Curvada',
+        notes: 'coluna neutra',
+      });
+      await db.workouts.add(workout);
+      await db.exercises.add(existing);
+
+      await facade.addExercises([
+        {
+          workoutId: workout.id,
+          name: existing.name,
+          muscleGroup: existing.muscle_group,
+          equipment: existing.equipment,
+          notes: existing.notes,
+          ...pickerDefaults,
+        },
+      ]);
+
+      const stored = await db.exercises.get(existing.id);
+      expect(stored?.notes).toBe('coluna neutra');
+    });
+
+    it('rolls back the whole batch when one item fails', async () => {
+      const workout = buildWorkout();
+      await db.workouts.add(workout);
+      const workoutRepository = injectService(WorkoutRepository);
+      vi.spyOn(workoutRepository, 'addWorkoutExercise').mockRejectedValueOnce(
+        new Error('boom'),
+      );
+
+      await expect(
+        facade.addExercises([
+          {
+            workoutId: workout.id,
+            name: 'Supino Reto',
+            muscleGroup: 'chest',
+            ...pickerDefaults,
+          },
+          {
+            workoutId: workout.id,
+            name: 'Puxada Alta',
+            muscleGroup: 'back',
+            ...pickerDefaults,
+          },
+        ]),
+      ).rejects.toThrow('boom');
+
+      expect(await db.workout_exercises.count()).toBe(0);
+      expect(await db.exercises.count()).toBe(0);
     });
   });
 

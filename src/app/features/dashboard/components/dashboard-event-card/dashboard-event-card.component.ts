@@ -15,13 +15,6 @@ import type {
   WorkoutEvent,
 } from '../../models/dashboard.models';
 
-addIcons({
-  barbell,
-  ellipseOutline,
-  nutritionOutline,
-  moon,
-});
-
 @Component({
   selector: 'app-dashboard-event-card',
   imports: [DatePipe, IonIcon, IonItem, IonLabel, MuscleIconComponent],
@@ -32,6 +25,15 @@ export class DashboardEventCardComponent {
   public readonly event = input.required<DashboardEvent>();
   public readonly locale = input<'pt-BR' | 'en-US'>('pt-BR');
   public readonly cardClick = output<DashboardEvent>();
+
+  constructor() {
+    addIcons({
+      barbell,
+      ellipseOutline,
+      nutritionOutline,
+      moon,
+    });
+  }
 
   protected readonly localeValue = computed(() => this.locale());
 

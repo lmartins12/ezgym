@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, model } from '@angular/core';
+import { Component, computed, inject, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { MuscleGroup } from '@domain/shared/muscle-group';
 import type { Workout } from '@domain/workouts/workout';
@@ -48,12 +48,12 @@ export interface WorkoutFormResult {
   styleUrl: './workout-form-modal.component.scss',
 })
 export class WorkoutFormModalComponent {
-  @Input() public workout?: Workout;
+  public readonly workout = input<Workout | undefined>(undefined);
 
   public readonly name = model('');
   public readonly description = model('');
   public readonly muscleGroup = model<MuscleGroup | undefined>(undefined);
-  protected readonly isEditMode = computed(() => !!this.workout);
+  protected readonly isEditMode = computed(() => !!this.workout());
 
   protected readonly nameMaxLength = NAME_MAX_LENGTH;
   protected readonly descriptionMaxLength = DESCRIPTION_MAX_LENGTH;
@@ -61,15 +61,16 @@ export class WorkoutFormModalComponent {
   private readonly modalCtrl = inject(ModalController);
 
   public ionViewDidEnter(): void {
-    if (this.workout) {
-      this.name.set(this.workout.name);
-      this.description.set(this.workout.description ?? '');
-      this.muscleGroup.set(this.workout.muscle_group);
+    const workout = this.workout();
+    if (workout) {
+      this.name.set(workout.name);
+      this.description.set(workout.description ?? '');
+      this.muscleGroup.set(workout.muscle_group);
     }
   }
 
   public close(): void {
-    this.modalCtrl.dismiss();
+    void this.modalCtrl.dismiss();
   }
 
   public submit(): void {
@@ -89,6 +90,6 @@ export class WorkoutFormModalComponent {
       result.muscle_group = this.muscleGroup();
     }
 
-    this.modalCtrl.dismiss(result);
+    void this.modalCtrl.dismiss(result);
   }
 }

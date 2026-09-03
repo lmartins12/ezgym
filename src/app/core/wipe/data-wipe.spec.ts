@@ -47,11 +47,17 @@ describe('DataWipeService', () => {
   it('removes app preferences from localStorage', async () => {
     localStorage.setItem('app_theme', 'light');
     localStorage.setItem('app_language', 'en');
+    localStorage.setItem('app_onboarding_seen', 'true');
+    localStorage.setItem('app_pwa_visits', '3');
+    localStorage.setItem('app_pwa_install_dismissed', 'true');
 
     await service.wipeAll();
 
     expect(localStorage.getItem('app_theme')).toBeNull();
     expect(localStorage.getItem('app_language')).toBeNull();
+    expect(localStorage.getItem('app_onboarding_seen')).toBeNull();
+    expect(localStorage.getItem('app_pwa_visits')).toBeNull();
+    expect(localStorage.getItem('app_pwa_install_dismissed')).toBeNull();
   });
 
   it('keeps localStorage keys not owned by the app', async () => {

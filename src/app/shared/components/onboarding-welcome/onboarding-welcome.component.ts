@@ -5,10 +5,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { cloudOfflineOutline } from 'ionicons/icons';
 
-addIcons({
-  cloudOfflineOutline,
-});
-
 @Component({
   selector: 'app-onboarding-welcome',
   imports: [TranslatePipe, IonButton, IonIcon],
@@ -17,6 +13,12 @@ addIcons({
 })
 export class OnboardingWelcomeComponent {
   protected readonly onboarding = inject(OnboardingService);
+
+  constructor() {
+    addIcons({
+      cloudOfflineOutline,
+    });
+  }
 
   public dismiss(): void {
     this.onboarding.dismiss();

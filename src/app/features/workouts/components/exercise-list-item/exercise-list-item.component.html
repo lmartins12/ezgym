@@ -20,18 +20,22 @@
     </ion-label>
     <ion-icon
       slot="end"
-      class="swipe-affordance"
+      class="ez-swipe-affordance"
       name="chevron-forward-outline"
       aria-hidden="true"
     ></ion-icon>
   </ion-item>
   <ion-item-options side="end">
-    <ion-item-option (click)="editExercise.emit(exercise())">
+    <ion-item-option
+      (click)="editExercise.emit(exercise())"
+      [attr.aria-label]="'COMMON.EDIT' | translate"
+    >
       <ion-icon slot="icon-only" name="create-outline"></ion-icon>
     </ion-item-option>
     <ion-item-option
       (click)="deleteExercise.emit(exercise().id)"
       color="danger"
+      [attr.aria-label]="'COMMON.DELETE' | translate"
     >
       <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
     </ion-item-option>

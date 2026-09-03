@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { BackButtonService } from '@core/back-button/back-button';
 import { LanguageService } from '@core/i18n/language';
 import {
@@ -49,8 +49,7 @@ export class DashboardPage {
   private readonly modalController = inject(ModalController);
   private readonly backButton = inject(BackButtonService);
 
-  @ViewChild('content', { read: IonContent })
-  private readonly content?: IonContent;
+  private readonly content = viewChild<IonContent>('content');
 
   // Filter state
   public readonly filterStartDate = signal<Date | null>(null);
@@ -169,7 +168,7 @@ export class DashboardPage {
   }
 
   public scrollToTop(): void {
-    this.content?.scrollToTop(300);
+    void this.content()?.scrollToTop(300);
   }
 
   public async onEventClick(event: DashboardEvent): Promise<void> {

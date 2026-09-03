@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content style="--padding-bottom: 64px">
+<ion-content class="workouts-list__content">
   @if (loading()) {
   <div class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
@@ -39,7 +39,7 @@
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button
       (click)="openCreateModal()"
-      aria-label="{{ 'WORKOUTS.CREATE_TITLE' | translate }}"
+      [attr.aria-label]="'WORKOUTS.CREATE_TITLE' | translate"
     >
       <ion-icon name="add" aria-hidden="true"></ion-icon>
     </ion-fab-button>

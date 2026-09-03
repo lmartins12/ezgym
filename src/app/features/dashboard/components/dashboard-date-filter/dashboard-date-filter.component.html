@@ -17,7 +17,12 @@
           <span>{{ endDate() | date: "shortDate" : "" : localeValue() }}</span>
         }
       </div>
-      <ion-button fill="clear" size="small" (click)="onClear()">
+      <ion-button
+        fill="clear"
+        size="small"
+        (click)="onClear()"
+        [attr.aria-label]="'COMMON.CLEAR' | translate"
+      >
         <ion-icon name="close-circle" slot="icon-only" />
       </ion-button>
     </div>

@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="navigateWorkouts()">
+      <ion-button
+        (click)="navigateWorkouts()"
+        [attr.aria-label]="'COMMON.BACK' | translate"
+      >
         <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -26,11 +29,11 @@
   </ion-card>
   }
 
-  <ion-list-header>
+  <ion-list-header class="workout-detail__list-header">
     <ion-icon
+      class="workout-detail__list-header-icon"
       name="barbell-outline"
       aria-hidden="true"
-      style="font-size: 24px; margin-right: var(--space-2)"
     ></ion-icon>
     <ion-label>{{ 'WORKOUT_DETAIL.EXERCISES' | translate }}</ion-label>
     <ion-button fill="solid" color="primary" (click)="openAddExercise()">

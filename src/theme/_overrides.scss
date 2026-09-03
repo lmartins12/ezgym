@@ -12,7 +12,7 @@
   // Tab Bar
   --ion-tab-bar-background: var(--glass-bg-solid);
   --ion-tab-bar-border-color: var(--glass-border);
-  --ion-tab-bar-color: #71717a;
+  --ion-tab-bar-color: var(--ion-color-medium);
   --ion-tab-bar-color-selected: var(--ion-color-primary);
 
   // Item / List
@@ -32,12 +32,25 @@
   }
 }
 
+// iOS dark: o palette do Ionic (dark.class.css) remapeia as cores DENTRO de
+// ion-modal (bg em step-100, toolbar e borda em step-150/250) — origem do
+// cinza nos modais no iOS. Reverte para os valores globais do app.
+html.ion-palette-dark.ios ion-modal {
+  --ion-background-color: inherit;
+  --ion-toolbar-background: transparent;
+  --ion-toolbar-border-color: transparent;
+}
+
 // Tab Bar specific styles
 ion-tab-bar {
   --background: var(--ion-background-color);
   border-radius: var(--space-4) var(--space-4) 0 0;
   border-top: 1px solid var(--glass-border);
   height: calc(var(--space-12) + var(--ion-safe-area-bottom, 0px));
+}
+
+ion-item-divider {
+  --background: none;
 }
 
 ion-header {

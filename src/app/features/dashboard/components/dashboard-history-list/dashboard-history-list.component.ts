@@ -13,10 +13,6 @@ import { calendarOutline } from 'ionicons/icons';
 import type { DashboardEvent } from '../../models/dashboard.models';
 import { DashboardEventCardComponent } from '../dashboard-event-card/dashboard-event-card.component';
 
-addIcons({
-  calendarOutline,
-});
-
 @Component({
   selector: 'app-dashboard-history-list',
   imports: [
@@ -32,6 +28,12 @@ addIcons({
   styleUrl: './dashboard-history-list.component.scss',
 })
 export class DashboardHistoryListComponent {
+  constructor() {
+    addIcons({
+      calendarOutline,
+    });
+  }
+
   public readonly events = input.required<DashboardEvent[]>();
   public readonly loading = input(false);
   public readonly loadingMore = input(false);

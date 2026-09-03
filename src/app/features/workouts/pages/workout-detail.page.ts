@@ -32,12 +32,20 @@ import {
   playOutline,
   reorderTwoOutline,
 } from 'ionicons/icons';
-import type { ExerciseData } from '../components/exercise-editor-modal/exercise-editor-modal.component';
+import {
+  EXERCISE_DEFAULTS,
+  type ExerciseData,
+} from '../components/exercise-editor-modal/exercise-editor-modal.component';
 import { ExerciseEditorModalComponent } from '../components/exercise-editor-modal/exercise-editor-modal.component';
+import { ExercisePickerModalComponent } from '../components/exercise-picker-modal/exercise-picker-modal.component';
 import { ExerciseListItemComponent } from '../components/exercise-list-item/exercise-list-item.component';
 import type { WorkoutFormResult } from '../components/workout-form-modal/workout-form-modal.component';
 import { WorkoutFormModalComponent } from '../components/workout-form-modal/workout-form-modal.component';
 import { WorkoutsFacade } from '../facades/workouts.facade';
+import {
+  equipmentKindLabelKey,
+  type ExercisePickerOption,
+} from '../models/exercise-picker.models';
 
 @Component({
   selector: 'app-workout-detail',
@@ -165,7 +173,57 @@ export class WorkoutDetailPage {
 
   public async openAddExercise(): Promise<void> {
     const modal = await this.modalCtrl.create({
+      component: ExercisePickerModalComponent,
+    });
+
+    await modal.present();
+    void this.backButton.track(modal);
+
+    const { data, role } = await modal.onWillDismiss<
+      ExercisePickerOption[] | string | null
+    >();
+
+    if (role === 'confirm' && Array.isArray(data)) {
+      await this.addPickedExercises(data);
+      return;
+    }
+
+    if (role === 'create') {
+      await this.openExerciseEditor(
+        typeof data === 'string' ? data : undefined,
+      );
+    }
+  }
+
+  private async addPickedExercises(
+    options: ExercisePickerOption[],
+  ): Promise<void> {
+    const workoutId = this.id();
+    if (!workoutId || options.length === 0) return;
+
+    await this.workoutsFacade.addExercises(
+      options.map((option) => ({
+        workoutId,
+        name: option.name,
+        muscleGroup: option.muscle_group,
+        equipment: this.equipmentFor(option),
+        notes: option.notes,
+        sets: EXERCISE_DEFAULTS.sets,
+        reps: EXERCISE_DEFAULTS.reps,
+        restSeconds: EXERCISE_DEFAULTS.restSeconds,
+      })),
+    );
+    await this.loadExercises();
+  }
+
+  /**
+   * Manual escape hatch: the full editor, optionally pre-filled with a
+   * search term (picker's "create '<term>'" CTA).
+   */
+  private async openExerciseEditor(initialName?: string): Promise<void> {
+    const modal = await this.modalCtrl.create({
       component: ExerciseEditorModalComponent,
+      componentProps: initialName ? { initialName } : undefined,
     });
 
     await modal.present();
@@ -187,6 +245,15 @@ export class WorkoutDetailPage {
       });
       await this.loadExercises();
     }
+  }
+
+  private equipmentFor(option: ExercisePickerOption): string | undefined {
+    if (option.equipment_kind) {
+      return this.translate.instant(
+        equipmentKindLabelKey(option.equipment_kind),
+      );
+    }
+    return option.equipment || undefined;
   }
 
   public async openEditExercise(exercise: WorkoutExercise): Promise<void> {

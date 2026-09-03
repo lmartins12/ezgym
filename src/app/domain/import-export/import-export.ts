@@ -3,6 +3,7 @@ import { DatabaseService } from '@core/db/database';
 import { ExerciseRepository } from '@domain/exercises/exercise.repository';
 import type { ExerciseSeedData } from '@domain/exercises/exercise.repository';
 import type { MuscleGroup } from '@domain/shared/muscle-group';
+import { normalizeText } from '@domain/shared/normalize-text';
 import { WorkoutRepository } from '@domain/workouts/workout.repository';
 import type { Workout } from '@domain/workouts/workout';
 import { v4 as uuidv4 } from 'uuid';
@@ -206,7 +207,7 @@ export class ImportExport {
         }
 
         for (const exercise of workout.exercises) {
-          const normalizedName = exercise.exercise_name.toLowerCase();
+          const normalizedName = normalizeText(exercise.exercise_name);
           if (existingExercises.has(normalizedName)) {
             existingExercisesSet.add(exercise.exercise_name);
           } else {

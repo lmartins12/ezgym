@@ -1,10 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title style="text-align: start">
+    <ion-title class="ion-text-start">
       {{ "SESSION.IN_PROGRESS.EXERCISE_DETAILS" | translate }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="close()">
+      <ion-button
+        (click)="close()"
+        [attr.aria-label]="'COMMON.CLOSE' | translate"
+      >
         <ion-icon name="close-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -14,52 +17,54 @@
 <div class="exercise-details-content">
   <ion-card class="exercise-details-card">
     <ion-card-content>
-      <div class="exercise-title">
-        <app-muscle-icon
-          [muscleGroup]="exercise.muscle_group"
-          size="lg"
-        ></app-muscle-icon>
-        <div class="exercise-title-info">
-          <h2 class="ez-truncate">{{ exercise.exercise_name }}</h2>
-          @if (muscleGroupLabelKey; as labelKey) {
-            <p>{{ labelKey | translate }}</p>
+      @if (exercise(); as exerciseValue) {
+        <div class="exercise-title">
+          <app-muscle-icon
+            [muscleGroup]="exerciseValue.muscle_group"
+            size="lg"
+          ></app-muscle-icon>
+          <div class="exercise-title-info">
+            <h2 class="ez-truncate">{{ exerciseValue.exercise_name }}</h2>
+            @if (muscleGroupLabelKey(); as labelKey) {
+              <p>{{ labelKey | translate }}</p>
+            }
+          </div>
+        </div>
+
+        <div class="exercise-meta">
+          <div class="meta-item">
+            <ion-icon name="fitness"></ion-icon>
+            <span>
+              {{ exerciseValue.sets }} × {{ exerciseValue.reps }}
+              @if (exerciseValue.target_weight) {
+                <span>@ {{ exerciseValue.target_weight }}kg</span>
+              }
+            </span>
+          </div>
+
+          @if (exerciseValue.rest_seconds) {
+            <div class="meta-item">
+              <ion-icon name="time"></ion-icon>
+              <span>{{ exerciseValue.rest_seconds }}s</span>
+            </div>
+          }
+
+          @if (exerciseValue.equipment) {
+            <div class="meta-item">
+              <ion-icon name="barbell"></ion-icon>
+              <span>{{ exerciseValue.equipment }}</span>
+            </div>
           }
         </div>
-      </div>
 
-      <div class="exercise-meta">
-        <div class="meta-item">
-          <ion-icon name="fitness"></ion-icon>
-          <span>
-            {{ exercise.sets }} × {{ exercise.reps }}
-            @if (exercise.target_weight) {
-              <span>@ {{ exercise.target_weight }}kg</span>
-            }
-          </span>
-        </div>
-
-        @if (exercise.rest_seconds) {
-          <div class="meta-item">
-            <ion-icon name="time"></ion-icon>
-            <span>{{ exercise.rest_seconds }}s</span>
+        @if (exerciseValue.notes) {
+          <div class="exercise-notes">
+            <span class="notes-label">
+              {{ "SESSION.IN_PROGRESS.NOTES" | translate }}
+            </span>
+            <span class="notes-text">{{ exerciseValue.notes }}</span>
           </div>
         }
-
-        @if (exercise.equipment) {
-          <div class="meta-item">
-            <ion-icon name="barbell"></ion-icon>
-            <span>{{ exercise.equipment }}</span>
-          </div>
-        }
-      </div>
-
-      @if (exercise.notes) {
-        <div class="exercise-notes">
-          <span class="notes-label">
-            {{ "SESSION.IN_PROGRESS.NOTES" | translate }}
-          </span>
-          <span class="notes-text">{{ exercise.notes }}</span>
-        </div>
       }
     </ion-card-content>
   </ion-card>

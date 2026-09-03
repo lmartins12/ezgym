@@ -9,6 +9,8 @@ import {
   IonToolbar,
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
+import { addIcons } from 'ionicons';
+import { trendingUp } from 'ionicons/icons';
 import { ExercisePRsComponent } from '../components/exercise-prs/exercise-prs.component';
 import { FrequentWorkoutsComponent } from '../components/frequent-workouts/frequent-workouts.component';
 import { MuscleDistributionComponent } from '../components/muscle-distribution/muscle-distribution.component';
@@ -44,6 +46,10 @@ export class ProgressPage {
   public readonly currentLocale = computed(() =>
     this.languageService.isPortuguese() ? 'pt-BR' : 'en-US',
   );
+
+  constructor() {
+    addIcons({ trendingUp });
+  }
 
   public async ionViewWillEnter(): Promise<void> {
     await this.loadSnapshot();

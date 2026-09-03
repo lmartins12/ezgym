@@ -13,8 +13,6 @@ import { addIcons } from 'ionicons';
 import { barbell, time } from 'ionicons/icons';
 import type { FrequentWorkout } from '../../models/progress.models';
 
-addIcons({ barbell, time });
-
 @Component({
   selector: 'app-frequent-workouts',
   imports: [
@@ -34,6 +32,10 @@ export class FrequentWorkoutsComponent {
   private readonly translate = inject(TranslateService);
 
   public readonly workouts = input.required<FrequentWorkout[]>();
+
+  constructor() {
+    addIcons({ barbell, time });
+  }
 
   protected getRelativeTime(timestamp: number): string {
     const days = Math.floor((Date.now() - timestamp) / (1000 * 60 * 60 * 24));

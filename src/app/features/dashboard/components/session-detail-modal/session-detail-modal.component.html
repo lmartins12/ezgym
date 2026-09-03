@@ -1,10 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title style="text-align: start">{{
+    <ion-title class="ion-text-start">{{
       "DASHBOARD.SESSION_DETAIL.TITLE" | translate
     }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">
+      <ion-button
+        (click)="closeModal()"
+        [attr.aria-label]="'COMMON.CLOSE' | translate"
+      >
         <ion-icon name="close" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -12,7 +15,7 @@
 </ion-header>
 
 <ion-content>
-  @if (detail(); as detailValue) {
+  @if (sessionDetail(); as detailValue) {
     <div class="session-detail-container">
       <!-- Session Header Card -->
       <ion-card class="session-header-card">
@@ -24,13 +27,16 @@
             <div class="meta-item">
               <ion-icon name="fitness"></ion-icon>
               <span>{{
-                detailValue.startedAt | date: "longDate" : "" : locale
+                detailValue.startedAt | date: "longDate" : "" : locale()
               }}</span>
             </div>
             @if (detailValue.finishedAt) {
               <div class="meta-item">
                 <ion-icon name="barbell"></ion-icon>
-                <span>{{ durationMinutes() }} min</span>
+                <span
+                  >{{ durationMinutes() }}
+                  {{ "COMMON.MINUTES_SHORT" | translate }}</span
+                >
               </div>
             }
           </div>
@@ -71,7 +77,7 @@
           <ion-item class="exercise-item" lines="none">
             <app-muscle-icon
               [muscleGroup]="exercise.muscleGroup ?? 'other'"
-              style="margin-right: var(--space-4)"
+              class="session-detail-container__exercise-icon"
             ></app-muscle-icon>
             <div class="exercise-content">
               <div class="exercise-name ez-truncate">
