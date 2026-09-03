@@ -15,7 +15,9 @@ export class SessionRepository {
   private readonly database = inject(DatabaseService);
 
   public async getById(id: string): Promise<WorkoutSession | null> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return (await db.workout_sessions.get(id)) ?? null;
   }
 
@@ -26,7 +28,9 @@ export class SessionRepository {
    * unless a user finalizes them, so we flag it for maintenance.
    */
   public async getMostRecentActive(): Promise<WorkoutSession | null> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const activeSessions = await db.workout_sessions
       .where('status')
       .equals('IN_PROGRESS')
@@ -45,7 +49,9 @@ export class SessionRepository {
   public async getActiveByWorkoutId(
     workoutId: string,
   ): Promise<WorkoutSession | null> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const active = await db.workout_sessions
       .where('status')
       .equals('IN_PROGRESS')
@@ -54,7 +60,9 @@ export class SessionRepository {
   }
 
   public async add(session: WorkoutSession): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workout_sessions.add(session);
   }
 
@@ -62,12 +70,16 @@ export class SessionRepository {
     id: string,
     changes: Partial<WorkoutSession>,
   ): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workout_sessions.update(id, changes);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workout_sessions.delete(id);
   }
 
@@ -75,7 +87,9 @@ export class SessionRepository {
    * Deletes a session together with its set logs (atomic).
    */
   public async deleteWithLogs(sessionId: string): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.transaction('rw', [db.set_logs, db.workout_sessions], async () => {
       await db.set_logs.where('session_id').equals(sessionId).delete();
       await db.workout_sessions.delete(sessionId);
@@ -87,7 +101,9 @@ export class SessionRepository {
    * used when the workout itself is deleted). Atomic.
    */
   public async deleteByWorkoutId(workoutId: string): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.transaction('rw', [db.set_logs, db.workout_sessions], async () => {
       const sessions = await db.workout_sessions
         .where('workout_id')
@@ -106,7 +122,9 @@ export class SessionRepository {
    * Last started_at per workout via cursor — no materialization.
    */
   public async getLastTrainedMap(): Promise<Map<string, number>> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const map = new Map<string, number>();
     await db.workout_sessions.each((session) => {
       const current = map.get(session.workout_id);
@@ -121,7 +139,9 @@ export class SessionRepository {
    * Completed sessions via the indexed `status` field.
    */
   public async getCompleted(): Promise<WorkoutSession[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return db.workout_sessions.where('status').equals('COMPLETED').toArray();
   }
 
@@ -136,7 +156,9 @@ export class SessionRepository {
     offset: number,
     limit: number,
   ): Promise<WorkoutSession[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return db.workout_sessions
       .where('started_at')
       .between(start ?? Dexie.minKey, end ?? Dexie.maxKey, true, true)
@@ -150,7 +172,9 @@ export class SessionRepository {
     start: number | null,
     end: number | null,
   ): Promise<number> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return db.workout_sessions
       .where('started_at')
       .between(start ?? Dexie.minKey, end ?? Dexie.maxKey, true, true)
@@ -161,7 +185,9 @@ export class SessionRepository {
    * Unique started_at timestamps within a range (calendar highlighting).
    */
   public async getEventDates(start: number, end: number): Promise<number[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const keys = await db.workout_sessions
       .where('started_at')
       .between(start, end, true, true)
@@ -174,7 +200,9 @@ export class SessionRepository {
    * Unique started_at timestamps across all time (calendar highlighting).
    */
   public async getAllEventDates(): Promise<number[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const keys = await db.workout_sessions.orderBy('started_at').keys();
 
     return this.toUniqueDates(keys);
@@ -186,7 +214,9 @@ export class SessionRepository {
    * Set logs of one session, sorted by set_number.
    */
   public async getLogsBySession(sessionId: string): Promise<SetLog[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const logs = await db.set_logs
       .where('session_id')
       .equals(sessionId)
@@ -202,23 +232,31 @@ export class SessionRepository {
     sessionIds: string[],
     each: (log: SetLog) => void,
   ): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     if (sessionIds.length === 0) return;
     await db.set_logs.where('session_id').anyOf(sessionIds).each(each);
   }
 
   public async addLog(log: SetLog): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.set_logs.add(log);
   }
 
   public async updateLog(id: string, changes: Partial<SetLog>): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.set_logs.update(id, changes);
   }
 
   public async deleteLog(id: string): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.set_logs.delete(id);
   }
 

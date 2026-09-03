@@ -46,6 +46,26 @@ describe('DatabaseService', () => {
     expect(await db.workouts.count()).toBe(0);
   });
 
+  it('exposes inWriteTransaction only inside the write scope', async () => {
+    expect(service.inWriteTransaction).toBe(false);
+
+    await service.write(async () => {
+      expect(service.inWriteTransaction).toBe(true);
+    });
+
+    expect(service.inWriteTransaction).toBe(false);
+  });
+
+  it('resets inWriteTransaction when the transaction fails', async () => {
+    await expect(
+      service.write(async () => {
+        throw new Error('boom');
+      }),
+    ).rejects.toThrow('boom');
+
+    expect(service.inWriteTransaction).toBe(false);
+  });
+
   it('wipes the database and reopens it empty', async () => {
     await db.workouts.add(buildWorkout());
 

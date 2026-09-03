@@ -35,12 +35,16 @@ export class ExerciseRepository {
   private readonly database = inject(DatabaseService);
 
   public async getById(id: string): Promise<Exercise | null> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return (await db.exercises.get(id)) ?? null;
   }
 
   public async getByIds(ids: string[]): Promise<Exercise[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     if (ids.length === 0) return [];
     return db.exercises.where('id').anyOf(ids).toArray();
   }
@@ -49,7 +53,9 @@ export class ExerciseRepository {
    * Every catalog exercise (unordered read for pickers and merges).
    */
   public async listAll(): Promise<Exercise[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return db.exercises.toArray();
   }
 
@@ -58,7 +64,9 @@ export class ExerciseRepository {
    * name -> Exercise.
    */
   public async getNameMap(): Promise<Map<string, Exercise>> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const exercises = await db.exercises.toArray();
     return new Map(exercises.map((e) => [normalizeText(e.name), e]));
   }
@@ -67,7 +75,9 @@ export class ExerciseRepository {
    * Set of normalized (trimmed, lowercased, accent-free) exercise names.
    */
   public async getExistingNames(): Promise<Set<string>> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const names = await db.exercises.orderBy('name').keys();
     return new Set(
       names
@@ -83,7 +93,9 @@ export class ExerciseRepository {
     data: ExerciseSeedData,
     options: FindOrCreateOptions = {},
   ): Promise<{ exerciseId: string; isNew: boolean }> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const normalizedName = normalizeText(data.name);
 
     let existing: Exercise | undefined;
@@ -130,7 +142,9 @@ export class ExerciseRepository {
    * across every workout referencing the exercise.
    */
   public async update(id: string, changes: Partial<Exercise>): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.exercises.update(id, changes);
   }
 }

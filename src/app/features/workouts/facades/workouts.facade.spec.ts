@@ -1,4 +1,5 @@
 import { db } from '@core/db/app-db';
+import { DatabaseService } from '@core/db/database';
 import { WorkoutRepository } from '@domain/workouts/workout.repository';
 import {
   buildExercise,
@@ -125,6 +126,36 @@ describe('WorkoutsFacade', () => {
     it('returns null for unknown ids', async () => {
       const result = await facade.getById('nope');
       expect(result).toBeNull();
+    });
+  });
+
+  describe('addExercise (transaction safety)', () => {
+    it('initializes once per write: repositories skip init inside the transaction', async () => {
+      const database = injectService(DatabaseService);
+      const initializeSpy = vi.spyOn(database, 'initialize');
+      const workout = buildWorkout();
+      await db.workouts.add(workout);
+
+      await facade.addExercise({
+        workoutId: workout.id,
+        name: 'Supino Reto',
+        muscleGroup: 'chest',
+        sets: 3,
+        reps: '12',
+        restSeconds: 60,
+      });
+
+      // write() initializes before opening the transaction; every
+      // repository call inside must skip its defensive initialize()
+      // await — a native promise mid-transaction prematurely commits
+      // real IndexedDB transactions (PrematureCommitError).
+      expect(initializeSpy).toHaveBeenCalledTimes(1);
+
+      const rows = await db.workout_exercises
+        .where('workout_id')
+        .equals(workout.id)
+        .toArray();
+      expect(rows).toHaveLength(1);
     });
   });
 

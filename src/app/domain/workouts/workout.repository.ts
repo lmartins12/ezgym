@@ -18,34 +18,46 @@ export class WorkoutRepository {
   // --- Aggregate root: Workout ---
 
   public async getAll(): Promise<Workout[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return db.workouts.toArray();
   }
 
   public async getByIds(ids: string[]): Promise<Workout[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     if (ids.length === 0) return [];
     return db.workouts.where('id').anyOf(ids).toArray();
   }
 
   public async getById(id: string): Promise<Workout | null> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const workout = await db.workouts.get(id);
     return workout ?? null;
   }
 
   public async add(workout: Workout): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workouts.add(workout);
   }
 
   public async update(id: string, changes: Partial<Workout>): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workouts.update(id, changes);
   }
 
   public async delete(id: string): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workouts.delete(id);
   }
 
@@ -53,7 +65,9 @@ export class WorkoutRepository {
    * Highest order_index among workouts, or -1 when the table is empty.
    */
   public async getMaxOrderIndex(): Promise<number> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const workouts = await db.workouts.toArray();
     return workouts.reduce((max, w) => Math.max(max, w.order_index ?? 0), -1);
   }
@@ -62,7 +76,9 @@ export class WorkoutRepository {
    * Persists a new workout order atomically.
    */
   public async reorder(workoutIds: string[]): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.transaction('rw', db.workouts, async () => {
       const now = Date.now();
       for (let i = 0; i < workoutIds.length; i++) {
@@ -79,12 +95,16 @@ export class WorkoutRepository {
   public async getWorkoutExercises(
     workoutId: string,
   ): Promise<WorkoutExercise[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return db.workout_exercises.where('workout_id').equals(workoutId).toArray();
   }
 
   public async getAllWorkoutExercises(): Promise<WorkoutExercise[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return db.workout_exercises.toArray();
   }
 
@@ -94,7 +114,9 @@ export class WorkoutRepository {
   public async getDetailedWorkoutExercises(
     workoutId: string,
   ): Promise<WorkoutExercise[]> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const workoutExercises = await this.getWorkoutExercises(workoutId);
     if (workoutExercises.length === 0) return [];
 
@@ -120,7 +142,9 @@ export class WorkoutRepository {
    * Exercise count per workout via cursor — no materialization.
    */
   public async getExerciseCountMap(): Promise<Map<string, number>> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const map = new Map<string, number>();
     await db.workout_exercises.each((we) => {
       map.set(we.workout_id, (map.get(we.workout_id) ?? 0) + 1);
@@ -131,7 +155,9 @@ export class WorkoutRepository {
   public async addWorkoutExercise(
     workoutExercise: WorkoutExercise,
   ): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workout_exercises.add(workoutExercise);
   }
 
@@ -139,17 +165,23 @@ export class WorkoutRepository {
     id: string,
     changes: Partial<WorkoutExercise>,
   ): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workout_exercises.update(id, changes);
   }
 
   public async getWorkoutExercise(id: string): Promise<WorkoutExercise | null> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     return (await db.workout_exercises.get(id)) ?? null;
   }
 
   public async deleteWorkoutExercise(id: string): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workout_exercises.delete(id);
   }
 
@@ -157,14 +189,18 @@ export class WorkoutRepository {
    * Deletes every workout-exercise row of a workout (cascade).
    */
   public async deleteWorkoutExercises(workoutId: string): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.workout_exercises.where('workout_id').equals(workoutId).delete();
   }
 
   public async reorderWorkoutExercises(
     workoutExerciseIds: string[],
   ): Promise<void> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     await db.transaction('rw', db.workout_exercises, async () => {
       for (let i = 0; i < workoutExerciseIds.length; i++) {
         await db.workout_exercises.update(workoutExerciseIds[i], {
@@ -180,7 +216,9 @@ export class WorkoutRepository {
   public async getWorkoutExerciseMaxOrderIndex(
     workoutId: string,
   ): Promise<number> {
-    await this.database.initialize();
+    if (!this.database.inWriteTransaction) {
+      await this.database.initialize();
+    }
     const items = await this.getWorkoutExercises(workoutId);
     return items.reduce((max, item) => Math.max(max, item.order_index), -1);
   }

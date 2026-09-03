@@ -47,7 +47,8 @@ page → facade/store/query → repository → DatabaseService/db (Dexie)
 
 - **Páginas nunca importam repository nem `@core/db/*`** — usam facade/store/query da própria feature. Fronteira com lint próprio (`features/<x>/pages/**` falha no lint se importar `*.repository` ou `@core/db`).
 - Escritas **multi-agregado** (cascade delete, import) passam por `DatabaseService.write()` (`core/db/database.ts`), que abre `db.transaction('rw', [...todas as tabelas])` — rollback atômico.
-- Repositório (`*.repository.ts`): `@Injectable({ providedIn: 'root' })`, injeta `DatabaseService`, **todo método público começa com `await this.database.initialize()`** e retorna Promise (`Promise<T | null>`, nunca undefined). Sem interfaces — só existe Dexie.
+- **Dentro de `write()`, só promises Dexie podem sofrer `await`.** `await` em promise nativa (ex.: o `initialize()` defensivo dos repositories) perde a zona do Dexie e o IndexedDB real commita a transação no meio do escopo (`PrematureCommitError`; `fake-indexeddb` não reproduz — só aparece no device). Por isso todo método de repository começa com `if (!this.database.inWriteTransaction) { await this.database.initialize(); }` (`write()` já inicializa antes de abrir a transação).
+- Repositório (`*.repository.ts`): `@Injectable({ providedIn: 'root' })`, injeta `DatabaseService`, **todo método público começa com a guarda `inWriteTransaction` + `await this.database.initialize()`** e retorna Promise (`Promise<T | null>`, nunca undefined). Sem interfaces — só existe Dexie.
 - UUID (`uuidv4`) e timestamps (`created_at`/`updated_at = Date.now()`) gerados em **facade/store**; repository recebe a entidade pronta.
 - `SessionStore` (`providedIn: 'root'`) é singleton de propósito: sessão em andamento sobrevive à troca de tab. Não "consertar".
 
