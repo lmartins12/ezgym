@@ -24,18 +24,35 @@ export class LanguageService {
   }
 
   private initLanguage(): void {
-    const savedLang = (localStorage.getItem(LANGUAGE_KEY) as Language) || 'pt';
+    const savedLang = (this.readLanguage() as Language) || 'pt';
     this.setLanguage(savedLang);
   }
 
   public setLanguage(lang: Language): void {
     this.currentLang.set(lang);
     this.translate.use(lang);
-    localStorage.setItem(LANGUAGE_KEY, lang);
+    this.writeLanguage(lang);
   }
 
   public toggleLanguage(): void {
     const newLang: Language = this.currentLang() === 'pt' ? 'en' : 'pt';
     this.setLanguage(newLang);
+  }
+
+  private readLanguage(): string | null {
+    try {
+      return localStorage.getItem(LANGUAGE_KEY);
+    } catch {
+      // Storage unavailable (e.g. private mode): fall back to pt.
+      return null;
+    }
+  }
+
+  private writeLanguage(lang: Language): void {
+    try {
+      localStorage.setItem(LANGUAGE_KEY, lang);
+    } catch {
+      // Storage unavailable: the language only lives for this session.
+    }
   }
 }

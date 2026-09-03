@@ -107,6 +107,18 @@ describe('PwaUpdateService', () => {
     await expect(service.checkForUpdate()).resolves.toBe(false);
   });
 
+  it('prompts once when both the event and a manual check find a version', async () => {
+    const service = TestBed.inject(PwaUpdateService);
+    checkForUpdate.mockResolvedValue(true);
+
+    versionUpdates.next({ type: 'VERSION_READY' });
+    await expect(service.checkForUpdate()).resolves.toBe(true);
+    await flushMicrotasks();
+
+    expect(service.hasPendingUpdate()).toBe(true);
+    expect(toastConfigs).toHaveLength(1);
+  });
+
   it('propagates failures from the service worker check', async () => {
     const service = TestBed.inject(PwaUpdateService);
     checkForUpdate.mockRejectedValue(new Error('offline'));

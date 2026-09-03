@@ -194,4 +194,43 @@ describe('PwaInstallService', () => {
 
     await expect(service.promptInstall()).resolves.toBe(false);
   });
+
+  it('snoozes the invite for a week instead of dismissing forever', () => {
+    setUserAgent(IOS_UA);
+    simulateSecondVisit();
+    const service = TestBed.inject(PwaInstallService);
+    expect(service.canInvite()).toBe(true);
+
+    service.snooze();
+
+    expect(service.canInvite()).toBe(false);
+    expect(service.isDismissed()).toBe(false);
+    const snoozedUntil = Number(
+      localStorage.getItem('app_pwa_install_snoozed_until'),
+    );
+    expect(snoozedUntil).toBeGreaterThan(Date.now());
+  });
+
+  it('invites again once the snooze expires', () => {
+    setUserAgent(IOS_UA);
+    simulateSecondVisit();
+    localStorage.setItem('app_pwa_install_snoozed_until', '1');
+
+    const service = TestBed.inject(PwaInstallService);
+
+    expect(service.canInvite()).toBe(true);
+  });
+
+  it('keeps an active snooze across visits', () => {
+    setUserAgent(IOS_UA);
+    simulateSecondVisit();
+    localStorage.setItem(
+      'app_pwa_install_snoozed_until',
+      String(Date.now() + 1000),
+    );
+
+    const service = TestBed.inject(PwaInstallService);
+
+    expect(service.canInvite()).toBe(false);
+  });
 });

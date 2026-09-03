@@ -10,6 +10,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const INSTALL_DISMISS_KEY = 'app_pwa_install_dismissed';
+const INSTALL_SNOOZE_KEY = 'app_pwa_install_snoozed_until';
 const VISITS_KEY = 'app_pwa_visits';
 
 /**
@@ -18,20 +19,34 @@ const VISITS_KEY = 'app_pwa_visits';
  */
 const MIN_VISITS_BEFORE_INVITE = 2;
 
+/**
+ * "Later" hides the invite for a week instead of forever, so a
+ * hesitant user gets asked again without being nagged every launch.
+ */
+const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000;
+
 @Injectable({ providedIn: 'root' })
 export class PwaInstallService {
   private deferredPrompt: BeforeInstallPromptEvent | null = null;
 
-  public readonly canInstall = signal<boolean>(false);
-  public readonly isInstalled = signal<boolean>(false);
-  public readonly isIos = signal<boolean>(false);
-  public readonly isDismissed = signal<boolean>(false);
-  public readonly visitCount = signal<number>(0);
+  private readonly _canInstall = signal<boolean>(false);
+  private readonly _isInstalled = signal<boolean>(false);
+  private readonly _isIos = signal<boolean>(false);
+  private readonly _isDismissed = signal<boolean>(false);
+  private readonly _visitCount = signal<number>(0);
+  private readonly _snoozedUntil = signal<number>(0);
+
+  public readonly canInstall = this._canInstall.asReadonly();
+  public readonly isInstalled = this._isInstalled.asReadonly();
+  public readonly isIos = this._isIos.asReadonly();
+  public readonly isDismissed = this._isDismissed.asReadonly();
+  public readonly visitCount = this._visitCount.asReadonly();
 
   public readonly canInvite = computed(
     () =>
       !this.isInstalled() &&
       !this.isDismissed() &&
+      Date.now() >= this._snoozedUntil() &&
       this.visitCount() >= MIN_VISITS_BEFORE_INVITE &&
       (this.canInstall() || this.isIos()),
   );
@@ -48,21 +63,22 @@ export class PwaInstallService {
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as any).standalone === true;
 
-    this.isInstalled.set(isStandalone);
-    this.isIos.set(this.detectIos());
-    this.isDismissed.set(localStorage.getItem(INSTALL_DISMISS_KEY) === 'true');
+    this._isInstalled.set(isStandalone);
+    this._isIos.set(this.detectIos());
+    this._isDismissed.set(this.readStorage(INSTALL_DISMISS_KEY) === 'true');
+    this._snoozedUntil.set(Number(this.readStorage(INSTALL_SNOOZE_KEY)) || 0);
     this.registerVisit();
 
     window.addEventListener('beforeinstallprompt', (e: Event) => {
       e.preventDefault();
       this.deferredPrompt = e as BeforeInstallPromptEvent;
-      this.canInstall.set(true);
+      this._canInstall.set(true);
     });
 
     window.addEventListener('appinstalled', () => {
       this.deferredPrompt = null;
-      this.canInstall.set(false);
-      this.isInstalled.set(true);
+      this._canInstall.set(false);
+      this._isInstalled.set(true);
       this.persistDismissal();
     });
   }
@@ -74,7 +90,7 @@ export class PwaInstallService {
       await this.deferredPrompt.prompt();
       const choice = await this.deferredPrompt.userChoice;
       if (choice.outcome === 'accepted') {
-        this.canInstall.set(false);
+        this._canInstall.set(false);
         this.deferredPrompt = null;
         this.persistDismissal();
         return true;
@@ -93,9 +109,19 @@ export class PwaInstallService {
     this.persistDismissal();
   }
 
+  /**
+   * Hides the invite for a week ("Later"). The invite returns on a
+   * later visit once the snooze expires.
+   */
+  public snooze(): void {
+    const until = Date.now() + SNOOZE_MS;
+    this._snoozedUntil.set(until);
+    this.writeStorage(INSTALL_SNOOZE_KEY, String(until));
+  }
+
   private persistDismissal(): void {
-    this.isDismissed.set(true);
-    localStorage.setItem(INSTALL_DISMISS_KEY, 'true');
+    this._isDismissed.set(true);
+    this.writeStorage(INSTALL_DISMISS_KEY, 'true');
   }
 
   private detectIos(): boolean {
@@ -110,10 +136,27 @@ export class PwaInstallService {
   }
 
   private registerVisit(): void {
-    const stored = Number(localStorage.getItem(VISITS_KEY));
+    const stored = Number(this.readStorage(VISITS_KEY));
     const visits = Number.isFinite(stored) ? stored + 1 : 1;
 
-    localStorage.setItem(VISITS_KEY, String(visits));
-    this.visitCount.set(visits);
+    this.writeStorage(VISITS_KEY, String(visits));
+    this._visitCount.set(visits);
+  }
+
+  private readStorage(key: string): string | null {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      // Storage unavailable (e.g. private mode): fall back to defaults.
+      return null;
+    }
+  }
+
+  private writeStorage(key: string, value: string): void {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      // Storage unavailable: the preference only lives for this session.
+    }
   }
 }

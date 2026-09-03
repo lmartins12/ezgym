@@ -1,0 +1,40 @@
+// =============================================================================
+// SELF-HOSTED FONTS (Inter)
+// =============================================================================
+// Inter lives in src/assets/fonts/ and is served from /assets, so the
+// first paint works fully offline (no Google Fonts round-trip) and the
+// files are cached by the service worker like any other asset.
+// Absolute /assets URLs are intentional: Vite leaves them untouched,
+// avoiding a duplicated hashed copy in the bundle output.
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/assets/fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/inter-latin-700-normal.woff2") format("woff2");
+}

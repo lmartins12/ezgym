@@ -110,10 +110,9 @@ export class SettingsPage {
   }
 
   /**
-   * Manual update check (Settings). When a new version is found, the
-   * PwaUpdateService toast with the "Update" action shows up on its own
-   * (the SW re-broadcasts VERSION_READY on every check), so this only
-   * gives feedback for the "nothing to update" and failure cases.
+   * Manual update check (Settings). A found version prompts via
+   * PwaUpdateService itself, so this only gives feedback for the
+   * "nothing to update" and failure cases.
    */
   public async checkForUpdates(): Promise<void> {
     try {

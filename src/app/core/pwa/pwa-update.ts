@@ -21,7 +21,11 @@ export class PwaUpdateService {
   private readonly destroyRef = inject(DestroyRef);
 
   /** A new version was downloaded and awaits activation via reload. */
-  public readonly hasPendingUpdate = signal(false);
+  private readonly _hasPendingUpdate = signal(false);
+  public readonly hasPendingUpdate = this._hasPendingUpdate.asReadonly();
+
+  /** Guards against stacking one toast per update source. */
+  private updatePrompted = false;
 
   constructor() {
     this.swUpdate.versionUpdates
@@ -30,7 +34,7 @@ export class PwaUpdateService {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
-        this.hasPendingUpdate.set(true);
+        this._hasPendingUpdate.set(true);
         void this.promptUpdate();
       });
 
@@ -60,6 +64,11 @@ export class PwaUpdateService {
   }
 
   private async promptUpdate(): Promise<void> {
+    // Both VERSION_READY and a manual check resolve to "update found";
+    // prompt once so the two sources never stack two toasts.
+    if (this.updatePrompted) return;
+    this.updatePrompted = true;
+
     const toast = await this.toastCtrl.create({
       message: this.translate.instant('PWA.UPDATE_AVAILABLE'),
       duration: 0,
@@ -88,13 +97,16 @@ export class PwaUpdateService {
   /**
    * Asks the service worker to check the server for a new deploy.
    * Resolves `true` when a new version was found and is ready to use.
+   * A found version prompts immediately (no reliance on the SW
+   * re-broadcasting VERSION_READY for this check).
    */
   public async checkForUpdate(): Promise<boolean> {
     if (!this.swUpdate.isEnabled) return false;
 
     const found = await this.swUpdate.checkForUpdate();
     if (found) {
-      this.hasPendingUpdate.set(true);
+      this._hasPendingUpdate.set(true);
+      void this.promptUpdate();
     }
     return found;
   }

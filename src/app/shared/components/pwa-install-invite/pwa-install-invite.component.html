@@ -1,4 +1,4 @@
-@if (pwaInstall.canInvite()) {
+@if (visible()) {
   <div class="invite" role="dialog" aria-labelledby="pwa-invite-title">
     <div class="header">
       <ion-icon name="download-outline" aria-hidden="true"></ion-icon>
@@ -20,7 +20,7 @@
         <ion-button size="small" (click)="dismiss()">
           {{ "PWA.INSTALL_GOT_IT" | translate }}
         </ion-button>
-        <ion-button size="small" fill="clear" (click)="dismiss()">
+        <ion-button size="small" fill="clear" (click)="snooze()">
           {{ "PWA.INSTALL_LATER" | translate }}
         </ion-button>
       </div>
@@ -30,7 +30,7 @@
         <ion-button size="small" (click)="install()">
           {{ "PWA.INSTALL_BUTTON" | translate }}
         </ion-button>
-        <ion-button size="small" fill="clear" (click)="dismiss()">
+        <ion-button size="small" fill="clear" (click)="snooze()">
           {{ "PWA.INSTALL_LATER" | translate }}
         </ion-button>
       </div>

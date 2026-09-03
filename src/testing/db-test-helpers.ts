@@ -24,6 +24,7 @@ export function buildWorkout(overrides: Partial<Workout> = {}): Workout {
   return {
     id: nextId('w'),
     name: 'Push Day',
+    order_index: 0,
     created_at: Date.now(),
     updated_at: Date.now(),
     ...overrides,

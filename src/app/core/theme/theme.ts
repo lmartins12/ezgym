@@ -21,7 +21,7 @@ export class ThemeService {
   }
 
   public initTheme(): void {
-    const savedTheme = (localStorage.getItem(THEME_KEY) as Theme) || 'dark';
+    const savedTheme = (this.readTheme() as Theme) || 'dark';
     this.setTheme(savedTheme);
   }
 
@@ -35,7 +35,7 @@ export class ThemeService {
     }
 
     this.updateThemeColorMeta(theme);
-    localStorage.setItem(THEME_KEY, theme);
+    this.writeTheme(theme);
   }
 
   private updateThemeColorMeta(theme: Theme): void {
@@ -54,5 +54,22 @@ export class ThemeService {
   public toggleTheme(): void {
     const newTheme: Theme = this.currentTheme() === 'dark' ? 'light' : 'dark';
     this.setTheme(newTheme);
+  }
+
+  private readTheme(): string | null {
+    try {
+      return localStorage.getItem(THEME_KEY);
+    } catch {
+      // Storage unavailable (e.g. private mode): fall back to dark.
+      return null;
+    }
+  }
+
+  private writeTheme(theme: Theme): void {
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // Storage unavailable: the theme only lives for this session.
+    }
   }
 }

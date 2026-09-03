@@ -2,13 +2,41 @@
   "name": "EzGym - Workout Tracker",
   "short_name": "EzGym",
   "description": "Seu aplicativo simples e eficiente de treinos",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["health", "fitness", "sport"],
   "start_url": "/",
   "scope": "/",
   "id": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#000000",
+  "shortcuts": [
+    {
+      "name": "Treinos",
+      "url": "/tabs/workouts",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "type": "image/png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Sessão",
+      "url": "/tabs/session",
+      "icons": [
+        {
+          "src": "assets/icons/icon-192.png",
+          "type": "image/png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
   "icons": [
     {
       "src": "assets/icons/icon-48.webp",

@@ -102,9 +102,9 @@ Path aliases (`tsconfig.json`): `@core/*`, `@domain/*`, `@features/*`, `@shared/
 
 Mudanças de schema = nova `version(N)` no `app-db.ts` com migration do Dexie.
 
-**localStorage** (prefs do usuário, prefixo `app_`): `app_theme`, `app_language`, `app_onboarding_seen`, `app_pwa_visits`, `app_pwa_install_dismissed`. O wipe (`core/wipe`) limpa as tabelas Dexie e essas chaves.
+**localStorage** (prefs do usuário, prefixo `app_`): `app_theme`, `app_language`, `app_onboarding_seen`, `app_pwa_visits`, `app_pwa_install_dismissed`, `app_pwa_install_snoozed_until`. O wipe (`core/wipe`) limpa as tabelas Dexie e essas chaves.
 
-**Service worker** (`ngsw-config.json`): assets do app em `prefetch`, fontes/assets em `lazy` com `prefetch` no update. `core/pwa/pwa-update` cuida do fluxo de nova versão.
+**Service worker** (`ngsw-config.json`): assets do app em `prefetch`, fontes/assets em `lazy` com `prefetch` no update. `core/pwa/pwa-update` cuida do fluxo de nova versão. A fonte (Inter) é auto-hospedada em `src/assets/fonts` — zero dependência de CDN, primeiro paint 100% offline.
 
 ## i18n
 

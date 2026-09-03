@@ -28,12 +28,20 @@
     <meta name="apple-mobile-web-app-title" content="EzGym" />
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
 
-    <!-- Inter Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Inter Font (self-hosted in src/assets/fonts, works offline) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      href="assets/fonts/inter-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/inter-latin-700-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
 
     <link rel="icon" type="image/webp" href="assets/icons/icon-96.webp" />

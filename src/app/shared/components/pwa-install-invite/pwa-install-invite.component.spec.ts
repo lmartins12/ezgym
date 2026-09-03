@@ -51,4 +51,18 @@ describe('PwaInstallInviteComponent', () => {
 
     expect(localStorage.getItem('app_pwa_install_dismissed')).toBe('true');
   });
+
+  it('snoozes the invite without dismissing it forever', () => {
+    TestBed.inject(PwaInstallService);
+    const component = TestBed.createComponent(
+      PwaInstallInviteComponent,
+    ).componentInstance;
+
+    component.snooze();
+
+    expect(localStorage.getItem('app_pwa_install_dismissed')).toBeNull();
+    expect(
+      localStorage.getItem('app_pwa_install_snoozed_until'),
+    ).not.toBeNull();
+  });
 });

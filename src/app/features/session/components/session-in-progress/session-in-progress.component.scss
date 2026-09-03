@@ -10,7 +10,7 @@
 }
 
 .exercise-header {
-  padding: 16px;
+  padding: var(--space-4);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -51,8 +51,8 @@
 
   .set-counter {
     background: var(--ion-background-color-step-100);
-    padding: 4px 8px;
-    border-radius: 8px;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--glass-radius-sm);
     font-size: 12px;
     font-weight: 600;
   }
@@ -60,7 +60,7 @@
   .header-end {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--space-1);
     flex-shrink: 0;
 
     .header-chevron {
@@ -74,8 +74,8 @@
 .exercise-equipment {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin: 2px 0 0;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 0;
   font-size: 12px;
   color: var(--ion-text-color-step-550);
 
@@ -101,14 +101,14 @@
 
 .input-block {
   background: var(--ion-color-light);
-  border-radius: 8px;
-  padding: 10px 12px;
+  border-radius: var(--glass-radius-sm);
+  padding: var(--space-2) var(--space-3);
   width: 100%;
   overflow: hidden;
 
   .input-label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: var(--space-1);
     font-size: 12px;
     font-weight: 600;
     color: var(--ion-text-color-step-400);
@@ -122,7 +122,7 @@
 }
 
 .rpe-container {
-  padding: 8px 0;
+  padding: var(--space-2) 0;
 
   .rpe-header {
     display: flex;
@@ -131,8 +131,8 @@
   }
 
   .info-button {
-    --padding-start: 4px;
-    --padding-end: 4px;
+    --padding-start: var(--space-1);
+    --padding-end: var(--space-1);
     margin: 0;
     height: auto;
 

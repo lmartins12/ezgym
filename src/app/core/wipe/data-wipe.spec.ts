@@ -50,6 +50,7 @@ describe('DataWipeService', () => {
     localStorage.setItem('app_onboarding_seen', 'true');
     localStorage.setItem('app_pwa_visits', '3');
     localStorage.setItem('app_pwa_install_dismissed', 'true');
+    localStorage.setItem('app_pwa_install_snoozed_until', '123');
 
     await service.wipeAll();
 
@@ -58,6 +59,7 @@ describe('DataWipeService', () => {
     expect(localStorage.getItem('app_onboarding_seen')).toBeNull();
     expect(localStorage.getItem('app_pwa_visits')).toBeNull();
     expect(localStorage.getItem('app_pwa_install_dismissed')).toBeNull();
+    expect(localStorage.getItem('app_pwa_install_snoozed_until')).toBeNull();
   });
 
   it('keeps localStorage keys not owned by the app', async () => {

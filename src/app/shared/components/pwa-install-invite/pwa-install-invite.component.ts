@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { OnboardingService } from '@core/onboarding/onboarding';
 import { PwaInstallService } from '@core/pwa/pwa-install';
 import { IonButton, IonIcon } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -13,6 +14,15 @@ import { downloadOutline, shareOutline } from 'ionicons/icons';
 })
 export class PwaInstallInviteComponent {
   protected readonly pwaInstall = inject(PwaInstallService);
+  private readonly onboarding = inject(OnboardingService);
+
+  /**
+   * The onboarding backdrop takes precedence on first visits, so the
+   * invite waits until it is gone instead of stacking on top of it.
+   */
+  protected readonly visible = computed(
+    () => this.pwaInstall.canInvite() && !this.onboarding.shouldShow(),
+  );
 
   constructor() {
     addIcons({
@@ -27,5 +37,9 @@ export class PwaInstallInviteComponent {
 
   public dismiss(): void {
     this.pwaInstall.dismiss();
+  }
+
+  public snooze(): void {
+    this.pwaInstall.snooze();
   }
 }

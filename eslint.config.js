@@ -1,7 +1,17 @@
 // @ts-check
 const eslint = require('@eslint/js');
+const fs = require('node:fs');
+const path = require('node:path');
 const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
+
+// Derived from the filesystem so a new feature is protected automatically.
+const FEATURES = fs
+  .readdirSync(path.join(__dirname, 'src', 'app', 'features'), {
+    withFileTypes: true,
+  })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name);
 
 module.exports = tseslint.config(
   {
@@ -153,30 +163,64 @@ module.exports = tseslint.config(
       ],
     },
   },
-  ...['dashboard', 'progress', 'session', 'settings', 'workouts'].map(
-    (feature) => ({
-      files: [`src/app/features/${feature}/**/*.ts`],
-      ignores: ['**/*.spec.ts'],
-      rules: {
-        'no-restricted-imports': [
-          'error',
-          {
-            patterns: [
-              {
-                regex: `^@features/(?!${feature}(/|$))`,
-                message: 'a feature must not import another feature.',
-              },
-              {
-                regex: '^@core/db/app-db$',
-                message:
-                  'features must not touch the DB layer; use domain repositories.',
-              },
-            ],
-          },
-        ],
-      },
-    }),
-  ),
+  ...FEATURES.map((feature) => ({
+    files: [`src/app/features/${feature}/**/*.ts`],
+    ignores: ['**/*.spec.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: `^@features/(?!${feature}(/|$))`,
+              message: 'a feature must not import another feature.',
+            },
+            {
+              regex: '^@core/db/app-db$',
+              message:
+                'features must not touch the DB layer; use domain repositories.',
+            },
+          ],
+        },
+      ],
+    },
+  })),
+  // Pages are composition: they read/write through the feature
+  // facade/store/query, never through repositories or the DB layer.
+  // This block comes last so it wins over the feature block above for
+  // pages (ESLint uses the last matching rule) while keeping its bans.
+  ...FEATURES.map((feature) => ({
+    files: [`src/app/features/${feature}/pages/**/*.ts`],
+    ignores: ['**/*.spec.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: `^@features/(?!${feature}(/|$))`,
+              message: 'a feature must not import another feature.',
+            },
+            {
+              regex: '^@core/db/app-db$',
+              message:
+                'pages must use the feature facade/store/query, never the DB layer directly.',
+            },
+            {
+              regex: '^@core/db/database$',
+              message:
+                'pages must use the feature facade/store/query, never the DB layer directly.',
+            },
+            {
+              regex: '^@domain/.+\\.repository$',
+              message:
+                'pages must use the feature facade/store/query, never repositories directly.',
+            },
+          ],
+        },
+      ],
+    },
+  })),
   {
     files: ['**/*.spec.ts'],
     rules: {
