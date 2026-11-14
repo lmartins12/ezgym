@@ -12,6 +12,7 @@ import { BackButtonService } from '@core/back-button/back-button';
 import { addIcons } from 'ionicons';
 import { calendarOutline, closeCircle } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';
+import { parseLocalDate, toIsoDateString } from '@shared/utils/date.utils';
 
 @Component({
   selector: 'app-dashboard-date-filter',
@@ -49,16 +50,16 @@ export class DashboardDateFilterComponent {
   public readonly clearFilter = output<void>();
 
   protected readonly localeValue = computed(() => this.locale());
-  protected readonly startDateISO = computed(
-    () => this.startDate()?.toISOString() ?? null,
+  protected readonly startDateISO = computed(() =>
+    this.startDate() ? toIsoDateString(this.startDate()!) : null,
   );
-  protected readonly endDateISO = computed(
-    () => this.endDate()?.toISOString() ?? null,
+  protected readonly endDateISO = computed(() =>
+    this.endDate() ? toIsoDateString(this.endDate()!) : null,
   );
 
   protected onStartDateChange(event: CustomEvent): void {
     const value = event.detail.value;
-    const startDate = value ? new Date(value) : null;
+    const startDate = typeof value === 'string' ? parseLocalDate(value) : null;
     this.emitFilterChange(startDate, this.endDate());
   }
 
@@ -68,7 +69,7 @@ export class DashboardDateFilterComponent {
 
   protected onEndDateChange(event: CustomEvent): void {
     const value = event.detail.value;
-    const endDate = value ? new Date(value) : null;
+    const endDate = typeof value === 'string' ? parseLocalDate(value) : null;
     this.emitFilterChange(this.startDate(), endDate);
   }
 

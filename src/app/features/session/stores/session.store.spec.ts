@@ -74,6 +74,17 @@ describe('SessionStore', () => {
       const sessions = await db.workout_sessions.toArray();
       expect(sessions).toHaveLength(1);
     });
+
+    it('creates only one session when starts overlap', async () => {
+      const workout = buildWorkout();
+      await db.workouts.add(workout);
+      await store.initialize(workout.id);
+
+      await Promise.all([store.startSession(), store.startSession()]);
+
+      expect(await db.workout_sessions.count()).toBe(1);
+      expect(store.state()).toBe('IN_PROGRESS');
+    });
   });
 
   describe('set logging', () => {

@@ -1,6 +1,6 @@
 import { Component, computed, input, output } from '@angular/core';
 import { IonDatetime } from '@ionic/angular';
-import { toIsoDateString } from '@shared/utils/date.utils';
+import { parseLocalDate, toIsoDateString } from '@shared/utils/date.utils';
 
 interface HighlightedDate {
   date: string;
@@ -26,10 +26,10 @@ export class DashboardCalendarComponent {
 
   protected readonly localeValue = computed(() => this.locale());
   protected readonly currentMonthISO = computed(() =>
-    this.currentMonth().toISOString(),
+    toIsoDateString(this.currentMonth()),
   );
-  protected readonly selectedDateISO = computed(
-    () => this.selectedDate()?.toISOString() ?? null,
+  protected readonly selectedDateISO = computed(() =>
+    this.selectedDate() ? toIsoDateString(this.selectedDate()!) : null,
   );
 
   /**
@@ -68,7 +68,8 @@ export class DashboardCalendarComponent {
   protected onDateChange(event: CustomEvent): void {
     const value = event.detail.value;
     if (value) {
-      const date = new Date(value);
+      const date = typeof value === 'string' ? parseLocalDate(value) : null;
+      if (!date) return;
 
       // Check if month changed
       const currentMonth = this.currentMonth();

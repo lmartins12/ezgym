@@ -1,4 +1,11 @@
-import { Component, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  ErrorHandler,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BackButtonService } from '@core/back-button/back-button';
 import { HapticsService } from '@core/haptics/haptics';
@@ -60,11 +67,15 @@ export class SessionPage {
   }
 
   public readonly isDashboard = signal(false);
+  public readonly savingFinish = signal(false);
+  public readonly startingSession = signal(false);
   private readonly alertCtrl = inject(AlertController);
   private readonly navCtrl = inject(NavController);
   private readonly translate = inject(TranslateService);
   private readonly backButton = inject(BackButtonService);
   private readonly haptics = inject(HapticsService);
+  private readonly errorHandler = inject(ErrorHandler);
+  protected readonly sessionProgress = viewChild(SessionInProgressComponent);
 
   async ionViewWillEnter() {
     const workoutId = this.id();
@@ -83,6 +94,12 @@ export class SessionPage {
   }
 
   async onExitSession() {
+    if (
+      this.startingSession() ||
+      this.savingFinish() ||
+      this.sessionProgress()?.savingSet()
+    )
+      return;
     if (this.sessionStore.state() !== 'PREPARING') {
       const alert = await this.alertCtrl.create({
         header: this.translate.instant('SESSION.EXIT.TITLE'),
@@ -119,8 +136,16 @@ export class SessionPage {
     this.navCtrl.navigateBack('/tabs/workouts');
   }
 
-  onStartSession() {
-    void this.sessionStore.startSession();
+  async onStartSession(): Promise<void> {
+    if (this.startingSession()) return;
+    this.startingSession.set(true);
+    try {
+      await this.sessionStore.startSession();
+    } catch (error) {
+      this.errorHandler.handleError(error);
+    } finally {
+      this.startingSession.set(false);
+    }
   }
 
   onCancelSession() {
@@ -128,22 +153,30 @@ export class SessionPage {
     void this.cancelAndLeave();
   }
 
-  onLogSet(data: {
+  async onLogSet(data: {
     exerciseId: string;
     setNumber: number;
     reps: number;
     weight: number;
     rpe?: number;
-  }) {
-    void this.sessionStore
-      .logSet({
+  }): Promise<void> {
+    const progress = this.sessionProgress();
+    try {
+      if (!this.sessionStore.activeSession())
+        throw new Error('No active session');
+      await this.sessionStore.logSet({
         exercise_id: data.exerciseId,
         set_number: data.setNumber,
         reps: data.reps,
         weight: data.weight,
         rpe: data.rpe,
-      })
-      .then(() => this.haptics.light());
+      });
+      progress?.setSaveSucceeded();
+      this.haptics.light();
+    } catch (error) {
+      progress?.setSaveFailed();
+      this.errorHandler.handleError(error);
+    }
   }
 
   onDeleteSet(setId: string) {
@@ -159,16 +192,34 @@ export class SessionPage {
   }
 
   onSaveFinish(notes: string) {
+    if (this.savingFinish()) return;
+    this.savingFinish.set(true);
     void this.finishAndLeave(notes);
   }
 
-  onUpdateSet(log: SetLog) {
-    void this.sessionStore.updateSet(log).then(() => this.haptics.light());
+  async onUpdateSet(log: SetLog): Promise<void> {
+    const progress = this.sessionProgress();
+    try {
+      await this.sessionStore.updateSet(log);
+      progress?.setSaveSucceeded();
+      this.haptics.light();
+    } catch (error) {
+      progress?.setSaveFailed();
+      this.errorHandler.handleError(error);
+    }
   }
 
   private async finishAndLeave(notes: string): Promise<void> {
-    await this.sessionStore.finishSession(notes);
-    this.haptics.doubleTap();
-    this.navCtrl.navigateBack('/tabs/workouts');
+    try {
+      if (!this.sessionStore.activeSession())
+        throw new Error('No active session');
+      await this.sessionStore.finishSession(notes);
+      this.haptics.doubleTap();
+      await this.navCtrl.navigateBack('/tabs/workouts');
+    } catch (error) {
+      this.errorHandler.handleError(error);
+    } finally {
+      this.savingFinish.set(false);
+    }
   }
 }

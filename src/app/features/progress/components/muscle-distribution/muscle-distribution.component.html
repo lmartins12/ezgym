@@ -4,6 +4,9 @@
       <ion-list-header>
         <ion-label>{{ "PROGRESS.MUSCLE_DISTRIBUTION" | translate }}</ion-label>
       </ion-list-header>
+      <p class="muscle-distribution__description">
+        {{ "PROGRESS.MUSCLE_DISTRIBUTION_HELP" | translate }}
+      </p>
 
       @if (distribution().length === 0) {
         <div class="muscle-distribution__empty">

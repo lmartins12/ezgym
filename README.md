@@ -4,6 +4,12 @@ App de treinos (PWA) que funciona 100% offline, com dados no dispositivo. Este R
 
 License: MIT — see [LICENSE](./LICENSE).
 
+## Orientações de desenvolvimento
+
+As convenções do projeto estão em [AGENTS.md](AGENTS.md) e nas skills de `.agents/skills`. O harness versionado funciona em um clone novo; contexto e planejamentos locais opcionais não fazem parte da documentação pública.
+
+**Limite da exportação atual:** o JSON transporta treinos e exercícios associados; não inclui histórico de sessões/séries nem preferências. Ele não é um backup integral do dispositivo.
+
 ## Stack
 
 | Camada | Tecnologia |
@@ -104,7 +110,7 @@ Mudanças de schema = nova `version(N)` no `app-db.ts` com migration do Dexie.
 
 **localStorage** (prefs do usuário, prefixo `app_`): `app_theme`, `app_language`, `app_onboarding_seen`, `app_pwa_visits`, `app_pwa_install_dismissed`, `app_pwa_install_snoozed_until`. O wipe (`core/wipe`) limpa as tabelas Dexie e essas chaves.
 
-**Service worker** (`ngsw-config.json`): assets do app em `prefetch`, fontes/assets em `lazy` com `prefetch` no update. `core/pwa/pwa-update` cuida do fluxo de nova versão. A fonte (Inter) é auto-hospedada em `src/assets/fonts` — zero dependência de CDN, primeiro paint 100% offline.
+**Service worker** (`ngsw-config.json`): app shell, traduções e fontes em `prefetch`; os demais assets em `lazy` com `prefetch` no update. `core/pwa/pwa-update` cuida do fluxo de nova versão. A fonte Inter é auto-hospedada em `src/assets/fonts`, sem dependência de CDN. A primeira instalação precisa de rede e o cache precisa terminar antes do uso offline.
 
 ## i18n
 
@@ -114,7 +120,7 @@ Mudanças de schema = nova `version(N)` no `app-db.ts` com migration do Dexie.
 
 ## Backup e troubleshooting
 
-- Backup: a tela de configurações exporta/importa JSON (`features/settings`, `domain/import-export`). O payload carrega `APP_VERSION` para validar compatibilidade antes de importar.
+- Transferência: a tela de configurações exporta treinos em JSON e permite importar por texto ou arquivo local de até 5 MB (`features/settings`, `domain/import-export`). A versão do formato é validada antes da importação; `APP_VERSION` identifica o app que gerou o arquivo. Sessões, séries e preferências não fazem parte dessa transferência.
 - PWA não atualiza: `pnpm build` + sirva `www/` via HTTPS (o SW não registra em `pnpm start`). O fluxo de update vive em `core/pwa/pwa-update`.
 - Testes usam `fake-indexeddb` (`src/test-setup.ts`); nenhum banco externo é necessário. Seeds e `resetDatabase()` vivem em `src/testing/db-test-helpers.ts`.
 - Mudança de schema Dexie exige nova `version(N)` em `core/db/app-db.ts` com migration — nunca edite a versão existente.

@@ -69,6 +69,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-docs
+# Local context and planning; generic project documentation can be versioned.
+/docs/local-context.md
+/docs/agent-context.md
+/docs/redesign/
 
 resources/android/**/*

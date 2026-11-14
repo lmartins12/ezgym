@@ -42,6 +42,7 @@ import { timeOutline } from 'ionicons/icons';
 export class SessionPreparingComponent {
   public readonly workout = input.required<Workout>();
   public readonly exercises = input.required<WorkoutExercise[]>();
+  public readonly starting = input(false);
   startSession = output<void>();
   cancelSession = output<void>();
 

@@ -109,6 +109,8 @@ export class SessionInProgressComponent {
   // Local state
   public readonly currentExerciseIndex = signal(0);
   public readonly editingSetId = signal<string | null>(null);
+  public readonly savingSet = signal(false);
+  private afterSave: (() => void) | null = null;
 
   /** Rest flow: index where the rest started and where to focus when it ends. */
   private restStartIndex: number | null = null;
@@ -200,6 +202,12 @@ export class SessionInProgressComponent {
   }
 
   editSet(log: SetLog) {
+    if (this.savingSet()) return;
+    if (this.restTimer.isResting()) {
+      this.restTimer.skip();
+      this.restStartIndex = null;
+      this.pendingAdvanceIndex = null;
+    }
     this.editingSetId.set(log.id);
     this.reps = log.reps;
     this.weight = log.weight;
@@ -223,12 +231,19 @@ export class SessionInProgressComponent {
   }
 
   cancelEdit() {
+    if (this.savingSet()) return;
     this.resetForm();
   }
 
   onLogSet() {
     const exercise = this.currentExercise();
-    if (!exercise || this.reps === null || this.weight === null) return;
+    if (
+      !exercise ||
+      this.reps === null ||
+      this.weight === null ||
+      this.savingSet()
+    )
+      return;
 
     const reps = clampToRange(Number(this.reps), LOG_REPS_RANGE);
     const weight = clampToRange(Number(this.weight), WEIGHT_RANGE);
@@ -236,6 +251,8 @@ export class SessionInProgressComponent {
     if (this.editingSetId()) {
       const log = this.setLogs().find((l) => l.id === this.editingSetId());
       if (log) {
+        this.savingSet.set(true);
+        this.afterSave = () => this.resetForm();
         this.updateSet.emit({
           ...log,
           reps,
@@ -243,8 +260,9 @@ export class SessionInProgressComponent {
           rpe: this.rpe,
         });
       }
-      this.resetForm();
     } else {
+      this.afterSave = this.preparePostLogFlow();
+      this.savingSet.set(true);
       this.logSet.emit({
         exerciseId: exercise.exercise_id,
         setNumber: this.nextSetNumber(),
@@ -252,12 +270,23 @@ export class SessionInProgressComponent {
         weight,
         rpe: this.rpe,
       });
-      this.handlePostLogFlow();
     }
   }
 
+  public setSaveSucceeded(): void {
+    const afterSave = this.afterSave;
+    this.afterSave = null;
+    this.savingSet.set(false);
+    afterSave?.();
+  }
+
+  public setSaveFailed(): void {
+    this.afterSave = null;
+    this.savingSet.set(false);
+  }
+
   public selectExercise(index: number): void {
-    if (index >= 0 && index < this.exercises().length) {
+    if (!this.savingSet() && index >= 0 && index < this.exercises().length) {
       this.currentExerciseIndex.set(index);
       this.resetForm();
     }
@@ -292,9 +321,9 @@ export class SessionInProgressComponent {
    * advance, or finish — reading the logs as they were BEFORE this set
    * (the store patch is async).
    */
-  private handlePostLogFlow(): void {
+  private preparePostLogFlow(): () => void {
     const exercise = this.currentExercise();
-    if (!exercise) return;
+    if (!exercise) return () => {};
 
     const currentIndex = this.currentExerciseIndex();
     const willCompleteExercise = this.currentLogs().length + 1 >= exercise.sets;
@@ -303,20 +332,19 @@ export class SessionInProgressComponent {
       : currentIndex;
     const hasMoreWork = willCompleteExercise ? nextIndex !== null : true;
 
-    if (!hasMoreWork) {
-      this.finishSession.emit();
-      return;
-    }
-
     const restSeconds = exercise.rest_seconds ?? 0;
-    if (restSeconds <= 0) {
-      this.checkAndAdvanceToNextExercise(true);
-      return;
-    }
-
-    this.restStartIndex = currentIndex;
-    this.pendingAdvanceIndex = nextIndex;
-    this.restTimer.start(restSeconds, () => this.onRestCountdownEnd());
+    return () => {
+      if (!hasMoreWork) {
+        this.finishSession.emit();
+      } else if (restSeconds <= 0) {
+        if (nextIndex !== null && nextIndex !== currentIndex)
+          this.selectExercise(nextIndex);
+      } else {
+        this.restStartIndex = currentIndex;
+        this.pendingAdvanceIndex = nextIndex;
+        this.restTimer.start(restSeconds, () => this.onRestCountdownEnd());
+      }
+    };
   }
 
   private onRestCountdownEnd(): void {
@@ -375,35 +403,15 @@ export class SessionInProgressComponent {
     return null;
   }
 
-  private checkAndAdvanceToNextExercise(newSetAdded: boolean = false): void {
-    const currentIndex = this.currentExerciseIndex();
-    const currentExercise = this.exercises()[currentIndex];
-    if (!currentExercise) return;
-
-    const exerciseLogs = this.setLogs().filter(
-      (log) => log.exercise_id === currentExercise.exercise_id,
-    );
-    const expectedLogCount = newSetAdded
-      ? exerciseLogs.length + 1
-      : exerciseLogs.length;
-
-    if (expectedLogCount < currentExercise.sets) {
-      return;
-    }
-
-    const nextIndex = this.findNextIncompleteExerciseIndex(currentIndex);
-    if (nextIndex !== null) {
-      this.currentExerciseIndex.set(nextIndex);
-      this.resetForm();
-    }
-  }
-
   private scrollToActiveExercise(): void {
     requestAnimationFrame(() => {
       const activeItem = this.exerciseItems()[this.currentExerciseIndex()];
       if (activeItem) {
         activeItem.nativeElement.scrollIntoView({
-          behavior: 'smooth',
+          behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)')
+            .matches
+            ? 'instant'
+            : 'smooth',
           block: 'nearest',
           inline: 'center',
         });

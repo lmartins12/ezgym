@@ -1,17 +1,51 @@
 .workout-card {
+  &__open {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+    flex: 1;
+    min-width: 0;
+    min-height: 76px;
+    justify-content: center;
+    padding: var(--space-2) 0;
+    background: transparent;
+    color: var(--ion-text-color);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  &__name {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  &__meta,
   &__last-trained {
-    opacity: 0.6;
+    color: var(--ion-text-color-step-400);
     font-size: 13px;
   }
 }
 
+ion-item {
+  --background: transparent;
+  --min-height: 84px;
+}
+
 // Estilo para o botão Play inline
 ion-button[slot="end"] {
-  --padding-start: 12px;
-  --padding-end: 12px;
-  margin-inline-end: var(--space-2);
+  --padding-start: var(--space-2);
+  --padding-end: var(--space-2);
+  min-width: 44px;
+  margin-inline: 0;
 
   ion-icon {
     font-size: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  app-muscle-icon {
+    display: none;
   }
 }

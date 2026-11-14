@@ -35,6 +35,8 @@
     <ion-card-content>
       <ion-textarea
         [appTextLimit]="notesMaxLength"
+        [disabled]="saving()"
+        [attr.aria-label]="'SESSION.FINISHING.NOTES_PLACEHOLDER' | translate"
         [(ngModel)]="notes"
         placeholder="{{ 'SESSION.FINISHING.NOTES_PLACEHOLDER' | translate }}"
         autoGrow="true"
@@ -45,7 +47,13 @@
   </ion-card>
 
   <div class="session-finishing__actions">
-    <ion-button expand="block" fill="solid" color="primary" (click)="onSave()">
+    <ion-button
+      expand="block"
+      fill="solid"
+      color="primary"
+      [disabled]="saving()"
+      (click)="onSave()"
+    >
       {{ "SESSION.FINISHING.SAVE_FINISH" | translate }}
     </ion-button>
     <ion-button
@@ -53,6 +61,7 @@
       fill="clear"
       color="secondary"
       (click)="resumeSession.emit()"
+      [disabled]="saving()"
     >
       {{ "SESSION.FINISHING.RESUME" | translate }}
     </ion-button>

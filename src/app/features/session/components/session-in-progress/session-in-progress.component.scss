@@ -1,7 +1,7 @@
 .session-in-progress {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
 
   &__finish-button {
     padding: 0 var(--space-4);
@@ -56,6 +56,7 @@
     border-radius: var(--glass-radius-sm);
     font-size: 12px;
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
 
   &__header-end {
@@ -105,6 +106,7 @@
       min-height: 2rem;
       font-size: 24px;
       font-weight: 700;
+      font-variant-numeric: tabular-nums;
     }
   }
 
@@ -227,5 +229,21 @@
   &__carousel-target {
     font-size: 10px;
     color: var(--ion-text-color-step-400);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .session-in-progress {
+    &__input-card--rest-finished {
+      animation: none;
+    }
+
+    &__carousel-scroll {
+      scroll-behavior: auto;
+    }
+
+    &__carousel-item {
+      transition: none;
+    }
   }
 }

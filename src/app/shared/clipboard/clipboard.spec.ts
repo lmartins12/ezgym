@@ -40,6 +40,17 @@ describe('ClipboardService', () => {
     vi.unstubAllGlobals();
   });
 
+  it('reports a failed fallback copy and removes the temporary field', async () => {
+    vi.stubGlobal('navigator', { ...window.navigator, clipboard: undefined });
+    document.execCommand = vi.fn().mockReturnValue(false);
+    const originalCount = document.querySelectorAll('textarea').length;
+
+    await expect(service.copy('fallback')).rejects.toThrow(
+      'Clipboard copy failed',
+    );
+    expect(document.querySelectorAll('textarea')).toHaveLength(originalCount);
+  });
+
   it('reads clipboard text when supported', async () => {
     vi.stubGlobal('navigator', {
       ...window.navigator,

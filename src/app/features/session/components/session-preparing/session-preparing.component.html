@@ -52,6 +52,7 @@
       expand="block"
       fill="solid"
       color="primary"
+      [disabled]="starting()"
       (click)="startSession.emit()"
     >
       {{ "SESSION.PREPARING.START" | translate }}
@@ -61,6 +62,7 @@
       expand="block"
       fill="clear"
       color="danger"
+      [disabled]="starting()"
       (click)="cancelSession.emit()"
     >
       {{ "COMMON.CANCEL" | translate }}

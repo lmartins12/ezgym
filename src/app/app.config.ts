@@ -30,7 +30,9 @@ export const appConfig: ApplicationConfig = {
     { provide: ErrorHandler, useClass: EzGymErrorHandler },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({
-      animated: true,
+      animated:
+        typeof window === 'undefined' ||
+        !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
       navAnimation: iosTransitionAnimation,
       useSetInputAPI: true,
     }),

@@ -10,6 +10,8 @@
           "/favicon.ico",
           "/index.html",
           "/manifest.webmanifest",
+          "/assets/i18n/*.json",
+          "/assets/fonts/*.woff2",
           "/*.css",
           "/*.js"
         ]

@@ -57,6 +57,7 @@ export const SessionStore = signalStore(
   withMethods((store) => {
     const sessionRepository = inject(SessionRepository);
     const workoutRepository = inject(WorkoutRepository);
+    let starting = false;
 
     return {
       /**
@@ -127,29 +128,37 @@ export const SessionStore = signalStore(
        */
       async startSession(): Promise<void> {
         const workout = store.workout();
-        if (!workout) return;
+        if (!workout || starting) return;
+        starting = true;
 
-        // Guard: never create a second active session for the same workout
-        const current = await sessionRepository.getActiveByWorkoutId(
-          workout.id,
-        );
-        if (current) {
-          patchState(store, { activeSession: current, state: 'IN_PROGRESS' });
-          return;
+        try {
+          // Guard: never create a second active session for the same workout
+          const current = await sessionRepository.getActiveByWorkoutId(
+            workout.id,
+          );
+          if (current) {
+            patchState(store, { activeSession: current, state: 'IN_PROGRESS' });
+            return;
+          }
+
+          const now = Date.now();
+          const newSession: WorkoutSession = {
+            id: uuidv4(),
+            workout_id: workout.id,
+            started_at: now,
+            status: 'IN_PROGRESS',
+            finished_at: undefined,
+            notes: '',
+          };
+
+          await sessionRepository.add(newSession);
+          patchState(store, {
+            activeSession: newSession,
+            state: 'IN_PROGRESS',
+          });
+        } finally {
+          starting = false;
         }
-
-        const now = Date.now();
-        const newSession: WorkoutSession = {
-          id: uuidv4(),
-          workout_id: workout.id,
-          started_at: now,
-          status: 'IN_PROGRESS',
-          finished_at: undefined,
-          notes: '',
-        };
-
-        await sessionRepository.add(newSession);
-        patchState(store, { activeSession: newSession, state: 'IN_PROGRESS' });
       },
 
       /**

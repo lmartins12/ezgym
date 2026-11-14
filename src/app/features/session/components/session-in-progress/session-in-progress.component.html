@@ -14,6 +14,7 @@
           (click)="selectExercise(state.index)"
           [attr.aria-label]="state.exercise.exercise_name"
           [attr.aria-pressed]="state.isActive"
+          [disabled]="savingSet()"
         >
           <app-muscle-icon
             [muscleGroup]="state.exercise.muscle_group"
@@ -89,6 +90,8 @@
                 }}</span>
                 <ion-input
                   type="number"
+                  [disabled]="savingSet()"
+                  [attr.aria-label]="'SESSION.IN_PROGRESS.REPS' | translate"
                   inputmode="numeric"
                   helperText="{{
                     'COMMON.VALUE_RANGE'
@@ -111,6 +114,8 @@
                 }}</span>
                 <ion-input
                   type="number"
+                  [disabled]="savingSet()"
+                  [attr.aria-label]="'SESSION.IN_PROGRESS.WEIGHT' | translate"
                   inputmode="decimal"
                   helperText="{{
                     'COMMON.VALUE_RANGE'
@@ -151,6 +156,8 @@
                   </ion-button>
                 </div>
                 <ion-range
+                  [disabled]="savingSet()"
+                  [attr.aria-label]="'SESSION.IN_PROGRESS.RPE' | translate"
                   min="1"
                   max="10"
                   step="1"
@@ -166,7 +173,7 @@
           expand="block"
           (click)="onLogSet()"
           [color]="editingSetId() ? 'warning' : 'primary'"
-          [disabled]="!reps || weight === null"
+          [disabled]="savingSet() || !reps || weight === null"
         >
           @if (editingSetId()) {
             {{ "SESSION.IN_PROGRESS.UPDATE_SET" | translate }}
@@ -182,6 +189,7 @@
             fill="clear"
             color="medium"
             (click)="cancelEdit()"
+            [disabled]="savingSet()"
           >
             {{ "COMMON.CANCEL" | translate }}
           </ion-button>
@@ -194,6 +202,7 @@
   <app-session-logs-list
     [logs]="currentLogs()"
     [editingSetId]="editingSetId()"
+    [disabled]="savingSet()"
     (editSet)="editSet($event)"
     (deleteSet)="deleteSet.emit($event)"
   />
@@ -204,6 +213,7 @@
     [fill]="allExercisesComplete() ? 'solid' : 'clear'"
     [color]="allExercisesComplete() ? 'success' : 'warning'"
     (click)="finishSession.emit()"
+    [disabled]="savingSet()"
   >
     <ion-icon name="checkmark-circle" slot="start" />
     {{ "SESSION.IN_PROGRESS.FINISH" | translate }}

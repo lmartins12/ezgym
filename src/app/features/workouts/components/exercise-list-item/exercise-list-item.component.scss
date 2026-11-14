@@ -1,2 +1,27 @@
-// Swipe affordance, reorder handle and keyframes live in the shared
-// .ez-swipe-affordance utility (src/theme/_components.scss).
+ion-item-sliding {
+  width: calc(100% - 2 * var(--space-4));
+  margin: var(--space-2) var(--space-4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  overflow: hidden;
+}
+
+ion-item {
+  --background: var(--glass-bg);
+  --padding-start: var(--space-2);
+  --inner-padding-end: var(--space-1);
+  --min-height: 76px;
+}
+
+ion-button {
+  --padding-start: var(--space-2);
+  --padding-end: var(--space-2);
+  margin-inline: 0;
+  min-width: 44px;
+}
+
+@media (max-width: 360px) {
+  app-muscle-icon {
+    display: none;
+  }
+}

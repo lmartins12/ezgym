@@ -1,4 +1,11 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  type OnInit,
+} from '@angular/core';
 import type {
   ValidationErrorType,
   ValidationResult,
@@ -29,8 +36,8 @@ import { addIcons } from 'ionicons';
 import {
   clipboardOutline,
   closeOutline,
-  cloudDownloadOutline,
-  cloudUploadOutline,
+  downloadOutline,
+  documentTextOutline,
   shareOutline,
   sparklesOutline,
 } from 'ionicons/icons';
@@ -39,6 +46,7 @@ import { getAiPromptText } from '../../services/ai-prompt';
 export type ImportExportTab = 'export' | 'import';
 
 const TOAST_DURATION_MS = 3000;
+const MAX_IMPORT_BYTES = 5 * 1024 * 1024;
 
 @Component({
   selector: 'app-import-export-modal',
@@ -58,7 +66,7 @@ const TOAST_DURATION_MS = 3000;
   templateUrl: './import-export-modal.component.html',
   styleUrl: './import-export-modal.component.scss',
 })
-export class ImportExportModalComponent {
+export class ImportExportModalComponent implements OnInit {
   private readonly modalCtrl = inject(ModalController);
   private readonly importExport = inject(ImportExport);
   private readonly clipboard = inject(ClipboardService);
@@ -68,9 +76,20 @@ export class ImportExportModalComponent {
   private readonly backButton = inject(BackButtonService);
 
   public readonly initialTab = input<ImportExportTab>('export');
+  private validationSequence = 0;
 
   public readonly currentTab = signal<ImportExportTab>(this.initialTab());
-  public readonly isLoading = signal(false);
+  private readonly generating = signal(false);
+  private readonly reading = signal(false);
+  private readonly validating = signal(false);
+  public readonly importing = signal(false);
+  public readonly isLoading = computed(
+    () =>
+      this.generating() ||
+      this.reading() ||
+      this.validating() ||
+      this.importing(),
+  );
   public readonly exportJson = signal<string>('');
   public readonly importJson = signal<string>('');
   public readonly validationResult = signal<ValidationResult | null>(null);
@@ -100,8 +119,8 @@ export class ImportExportModalComponent {
   constructor() {
     addIcons({
       clipboardOutline,
-      cloudDownloadOutline,
-      cloudUploadOutline,
+      downloadOutline,
+      documentTextOutline,
       closeOutline,
       shareOutline,
       sparklesOutline,
@@ -109,12 +128,17 @@ export class ImportExportModalComponent {
     this.loadExportData();
   }
 
+  public ngOnInit(): void {
+    this.currentTab.set(this.initialTab());
+  }
+
   public switchTab(tab: ImportExportTab): void {
     this.currentTab.set(tab);
   }
 
   public async onGenerateJson(): Promise<void> {
-    this.isLoading.set(true);
+    if (this.generating()) return;
+    this.generating.set(true);
     try {
       const json = await this.importExport.exportWorkouts();
       this.exportJson.set(json);
@@ -122,7 +146,7 @@ export class ImportExportModalComponent {
       console.error('Export failed:', error);
       await this.showErrorToast('IMPORT_EXPORT.ERROR_EXPORT');
     } finally {
-      this.isLoading.set(false);
+      this.generating.set(false);
     }
   }
 
@@ -146,51 +170,63 @@ export class ImportExportModalComponent {
   }
 
   public async onPasteFromClipboard(): Promise<void> {
-    this.isLoading.set(true);
+    if (this.isLoading()) return;
+    const sequence = ++this.validationSequence;
+    this.reading.set(true);
     try {
       const result = await this.clipboard.read();
+      if (sequence !== this.validationSequence) return;
       if (result?.value) {
         this.importJson.set(result.value);
         await this.validateImport();
+      } else {
+        await this.showErrorToast('IMPORT_EXPORT.ERROR_PASTE');
       }
     } catch (error) {
       console.error('Paste failed:', error);
       await this.showErrorToast('IMPORT_EXPORT.ERROR_PASTE');
     } finally {
-      this.isLoading.set(false);
+      this.reading.set(false);
     }
   }
 
-  public async onValidate(): Promise<void> {
+  public async onValidate(value: string): Promise<void> {
+    if (this.importing()) return;
+    this.importJson.set(value);
     await this.validateImport();
   }
 
-  public async onPreviewImport(): Promise<void> {
-    const json = this.importJson();
-    if (!json) return;
-
-    this.isLoading.set(true);
+  public async onFileSelected(event: Event): Promise<void> {
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement.files?.[0];
+    inputElement.value = '';
+    if (!file || this.isLoading()) return;
+    const sequence = ++this.validationSequence;
+    this.validationResult.set(null);
+    this.importPreview.set(null);
+    this.showPreview.set(false);
+    if (file.size > MAX_IMPORT_BYTES) {
+      await this.showErrorToast('IMPORT_EXPORT.ERROR_FILE_SIZE');
+      return;
+    }
+    this.reading.set(true);
     try {
-      const preview = await this.importExport.getImportPreview(json);
-      if (preview) {
-        this.importPreview.set(preview);
-        this.showPreview.set(true);
-      } else {
-        await this.showErrorToast('IMPORT_EXPORT.ERROR_PREVIEW');
-      }
-    } catch (error) {
-      console.error('Preview failed:', error);
-      await this.showErrorToast('IMPORT_EXPORT.ERROR_PREVIEW');
+      const content = await file.text();
+      if (sequence !== this.validationSequence) return;
+      this.importJson.set(content);
+      await this.validateImport();
+    } catch {
+      await this.showErrorToast('IMPORT_EXPORT.ERROR_FILE_READ');
     } finally {
-      this.isLoading.set(false);
+      this.reading.set(false);
     }
   }
 
   public async onConfirmImport(): Promise<void> {
     const json = this.importJson();
-    if (!json) return;
+    if (!json || !this.canImport() || !this.showPreview()) return;
 
-    this.isLoading.set(true);
+    this.importing.set(true);
     try {
       const result = await this.importExport.importWorkouts(json);
       if (result.success) {
@@ -203,7 +239,7 @@ export class ImportExportModalComponent {
       console.error('Import failed:', error);
       await this.showErrorToast('IMPORT_EXPORT.ERROR_IMPORT');
     } finally {
-      this.isLoading.set(false);
+      this.importing.set(false);
     }
   }
 
@@ -229,23 +265,30 @@ export class ImportExportModalComponent {
 
   private async validateImport(): Promise<void> {
     const json = this.importJson();
+    const sequence = ++this.validationSequence;
+    this.validationResult.set(null);
+    this.importPreview.set(null);
+    this.showPreview.set(false);
     if (!json) {
-      this.validationResult.set(null);
-      this.importPreview.set(null);
-      this.showPreview.set(false);
+      this.validating.set(false);
       return;
     }
 
-    this.isLoading.set(true);
+    this.validating.set(true);
     try {
       const result = await ImportValidation.validateImport(json);
+      if (sequence !== this.validationSequence) return;
       this.validationResult.set(result);
 
       // Also get preview if valid
       if (result.isValid) {
-        await this.onPreviewImport();
+        const preview = await this.importExport.getImportPreview(json);
+        if (sequence !== this.validationSequence) return;
+        this.importPreview.set(preview);
+        this.showPreview.set(preview !== null);
       }
     } catch (error) {
+      if (sequence !== this.validationSequence) return;
       console.error('Validation failed:', error);
       this.validationResult.set({
         isValid: false,
@@ -260,7 +303,7 @@ export class ImportExportModalComponent {
         exerciseCount: 0,
       });
     } finally {
-      this.isLoading.set(false);
+      if (sequence === this.validationSequence) this.validating.set(false);
     }
   }
 
@@ -272,5 +315,6 @@ export class ImportExportModalComponent {
       color: 'danger',
     });
     await toast.present();
+    void this.backButton.track(toast);
   }
 }

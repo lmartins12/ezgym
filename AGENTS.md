@@ -68,3 +68,14 @@ Detalhes: skill `pwa`.
 
 - Nunca commitar secrets/keys (não há — manter assim).
 - Nenhuma telemetria ou chamada de rede silenciosa: dados do usuário não saem do dispositivo.
+
+## Execução por agentes
+
+- `AGENTS.md`, skills e documentação versionada descrevem convenções reutilizáveis e comportamento implementado. Planos temporários, contexto pessoal e evidências locais ficam em arquivos ignorados pelo Git.
+- Ao iniciar trabalho, verificar se existe `docs/local-context.md`. Se existir, ler como contexto complementar deste workspace; se não existir, seguir normalmente com estas instruções e as skills. A ausência desse arquivo não impede trabalhar em um clone novo.
+- Não confundir planejamento com funcionalidade implementada. Registrar resultados reais e limitações; não declarar critérios pendentes como concluídos.
+- Preservar mudanças preexistentes do usuário. Não atualizar dependências, schema, formato de exportação ou regras de negócio como efeito colateral de CSS.
+- Não usar dados pessoais para fixtures/capturas. Validar em origem/perfil isolado; nunca executar wipe/seed no banco de uso real.
+- Mudança visual exige revisão renderizada além de lint/test/build: conferir temas, responsividade, foco, teclado e contraste. Falta de browser/aparelho é pendência, não aprovação.
+- Manter controles legíveis, respeitar reduced motion e oferecer fallback para efeitos visuais não suportados.
+- Exportação atual é de **treinos**, não backup integral: `ExportData` não contém sessões, séries ou preferências. Não prometer recuperação do histórico com esse arquivo.

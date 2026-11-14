@@ -41,6 +41,7 @@ export class ValidationListComponent {
 
     if (error.value !== undefined) {
       params['value'] = String(error.value);
+      params['version'] = String(error.value);
     }
     if (error.workoutName) {
       params['workout'] = error.workoutName;
@@ -49,19 +50,7 @@ export class ValidationListComponent {
       params['exercise'] = error.exerciseName;
     }
 
-    // Replace placeholders in the translated message
-    let message = this.translate.instant(key, params);
-
-    // If translation returns the key, try a more specific format
-    if (message === key) {
-      if (error.type === 'UNSUPPORTED_VERSION') {
-        message = this.translate.instant('IMPORT_EXPORT.UNSUPPORTED_VERSION', {
-          version: error.value,
-        });
-      }
-    }
-
-    return message;
+    return this.translate.instant(key, params);
   }
 
   public getWarningMessage(warning: ValidationWarning): string {

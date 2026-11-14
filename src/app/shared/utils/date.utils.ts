@@ -75,6 +75,21 @@ export function toIsoDateString(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
+/** Interpret an Ionic calendar value as a local calendar day, not UTC. */
+export function parseLocalDate(value: string): Date | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})(?:T.*)?$/.exec(value);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+    ? date
+    : null;
+}
+
 /**
  * Format duration in milliseconds to human-readable string.
  */

@@ -40,7 +40,7 @@ ion-item {
   }
 
   ion-label p {
-    opacity: 0.6;
+    color: var(--ion-text-color-step-400);
   }
 }
 
@@ -53,6 +53,7 @@ ion-button {
   --border-radius: var(--glass-radius-sm);
   font-weight: var(--font-weight-medium);
   letter-spacing: -0.01em;
+  min-height: 44px;
 }
 
 ion-chip {
@@ -63,7 +64,9 @@ ion-chip {
 
 ion-card {
   --border-radius: var(--glass-radius);
+  border-radius: var(--glass-radius);
   border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
   margin: var(--space-4);
 }
 
@@ -107,13 +110,11 @@ ion-modal.exercise-details-modal {
   font-size: 14px;
   margin-inline-start: var(--space-2);
   opacity: 0.7;
-  animation: swipe-sway 7s ease-in-out 1.2s infinite;
 }
 
 ion-reorder {
   --color: var(--ion-color-medium);
   opacity: 0.8;
-  animation: handle-pulse 7s ease-in-out infinite;
 }
 
 @keyframes handle-pulse {

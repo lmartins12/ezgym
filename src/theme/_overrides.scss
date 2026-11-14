@@ -16,7 +16,7 @@
   --ion-tab-bar-color-selected: var(--ion-color-primary);
 
   // Item / List
-  --ion-item-background: var(--ion-background-color);
+  --ion-item-background: transparent;
   --ion-item-border-color: var(--glass-border);
   --ion-item-color: var(--ion-text-color);
 
@@ -24,38 +24,134 @@
   --ion-card-background: var(--glass-bg);
 }
 
-// iOS-specific backdrop blur
-:root.ios {
-  ion-tab-bar {
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-  }
-}
-
 // iOS dark: o palette do Ionic (dark.class.css) remapeia as cores DENTRO de
 // ion-modal (bg em step-100, toolbar e borda em step-150/250) — origem do
 // cinza nos modais no iOS. Reverte para os valores globais do app.
 html.ion-palette-dark.ios ion-modal {
   --ion-background-color: inherit;
+  --ion-background-color-rgb: inherit;
+  --ion-item-background: transparent;
   --ion-toolbar-background: transparent;
   --ion-toolbar-border-color: transparent;
 }
 
+// The canvas also sits behind rounded chrome and modal content; otherwise
+// Ionic's opaque page/overlay background shows through at their edges.
+ion-app {
+  background: var(--app-canvas);
+}
+
+ion-modal {
+  --background: var(--app-canvas);
+}
+
+ion-list {
+  background: transparent;
+}
+
+// Filled controls need their own surface instead of Ionic's near-black step.
+ion-input[fill='solid'].input-fill-solid,
+ion-textarea[fill='solid'].textarea-fill-solid,
+ion-searchbar.md,
+ion-searchbar.ios {
+  --background: var(--glass-bg);
+}
+
 // Tab Bar specific styles
 ion-tab-bar {
-  --background: var(--ion-background-color);
-  border-radius: var(--space-4) var(--space-4) 0 0;
-  border-top: 1px solid var(--glass-border);
-  height: calc(var(--space-12) + var(--ion-safe-area-bottom, 0px));
+  --background: var(--glass-bg-fallback);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow), var(--glass-inset);
+  margin: 0 var(--space-3) calc(var(--space-2) + var(--ion-safe-area-bottom, 0px));
+  min-height: 60px;
+  padding-bottom: 0;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  ion-tab-bar {
+    --background: var(--glass-bg-solid);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  ion-tab-bar {
+    --background: var(--glass-bg-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+ion-tab-button {
+  --color: var(--ion-text-color-step-400);
+  --color-selected: var(--ion-text-color);
+  min-height: 52px;
+  min-width: 0;
+}
+
+ion-tab-button.tab-selected ion-icon {
+  transform: scale(1.08);
+}
+
+ion-tab-button::part(native) {
+  padding-inline: var(--space-1);
+}
+
+@media (max-width: 400px) {
+  ion-tab-button ion-label {
+    font-size: 10px;
+    letter-spacing: -0.02em;
+  }
 }
 
 ion-item-divider {
   --background: none;
 }
 
+ion-content {
+  --background: var(--app-canvas);
+}
+
+button:focus-visible,
+ion-button::part(native):focus-visible,
+ion-tab-button::part(native):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+ion-header,
+ion-footer {
+  background: var(--glass-bg-fallback);
+}
+
 ion-header {
-  background: var(--ion-background-color);
   border-radius: 0 0 var(--space-4) var(--space-4);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+ion-footer {
+  border-radius: var(--space-4) var(--space-4) 0 0;
+  border-top: 1px solid var(--glass-border);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  ion-header,
+  ion-footer {
+    background: var(--glass-bg-solid);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  ion-header,
+  ion-footer {
+    background: var(--glass-bg-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 // RPE Info Alert - preserve line breaks and adjust size

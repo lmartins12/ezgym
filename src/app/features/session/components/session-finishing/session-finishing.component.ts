@@ -35,6 +35,7 @@ export class SessionFinishingComponent {
   public readonly session = input.required<WorkoutSession>();
   public readonly workout = input.required<Workout>();
   public readonly setLogs = input.required<SetLog[]>();
+  public readonly saving = input(false);
 
   saveSession = output<string>(); // emits notes
   resumeSession = output<void>();
@@ -60,6 +61,7 @@ export class SessionFinishingComponent {
   });
 
   onSave() {
+    if (this.saving()) return;
     this.saveSession.emit(this.notes.trim());
   }
 }

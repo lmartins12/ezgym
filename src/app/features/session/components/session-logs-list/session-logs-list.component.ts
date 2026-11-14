@@ -34,6 +34,7 @@ import { createOutline, trashOutline } from 'ionicons/icons';
 export class SessionLogsListComponent {
   public readonly logs = input.required<SetLog[]>();
   public readonly editingSetId = input.required<string | null>();
+  public readonly disabled = input(false);
 
   public readonly editSet = output<SetLog>();
   public readonly deleteSet = output<string>();

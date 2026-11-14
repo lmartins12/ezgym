@@ -5,6 +5,15 @@
     );
   }
 
+  &__content ion-list {
+    margin: var(--space-2) var(--space-4);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius);
+    box-shadow: var(--glass-inset);
+    overflow: hidden;
+  }
+
   &__loading {
     display: flex;
     justify-content: center;

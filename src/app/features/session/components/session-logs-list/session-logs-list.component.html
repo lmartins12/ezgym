@@ -5,12 +5,7 @@
 
   <ion-list lines="none">
     @for (log of logs(); track log.id) {
-      <ion-item
-        button
-        (click)="editSet.emit(log)"
-        [color]="editingSetId() === log.id ? 'light' : ''"
-      >
-        <ion-icon slot="start" name="create-outline" color="primary"></ion-icon>
+      <ion-item [color]="editingSetId() === log.id ? 'light' : ''">
         <ion-label>
           <h3>
             {{ "SESSION.IN_PROGRESS.SET" | translate }}
@@ -24,12 +19,42 @@
         </ion-label>
         <ion-button
           fill="clear"
+          slot="end"
+          [disabled]="disabled()"
+          (click)="editSet.emit(log)"
+          [attr.aria-label]="
+            ('COMMON.EDIT' | translate) +
+            ': ' +
+            ('SESSION.IN_PROGRESS.SET' | translate) +
+            ' ' +
+            (log.set_number + 1)
+          "
+        >
+          <ion-icon
+            slot="icon-only"
+            name="create-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
           color="danger"
           slot="end"
-          (click)="$event.stopPropagation(); deleteSet.emit(log.id)"
-          [attr.aria-label]="'COMMON.DELETE' | translate"
+          [disabled]="disabled()"
+          (click)="deleteSet.emit(log.id)"
+          [attr.aria-label]="
+            ('COMMON.DELETE' | translate) +
+            ': ' +
+            ('SESSION.IN_PROGRESS.SET' | translate) +
+            ' ' +
+            (log.set_number + 1)
+          "
         >
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          <ion-icon
+            slot="icon-only"
+            name="trash-outline"
+            aria-hidden="true"
+          ></ion-icon>
         </ion-button>
       </ion-item>
     }

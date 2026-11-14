@@ -6,6 +6,7 @@ import {
   getMonthStart,
   isSameDay,
   isToday,
+  parseLocalDate,
   toIsoDateString,
   unixToDate,
 } from './date.utils';
@@ -91,6 +92,21 @@ describe('date.utils', () => {
 
     it('formats a two-digit day and month', () => {
       expect(toIsoDateString(new Date(2026, 11, 25))).toBe('2026-12-25');
+    });
+  });
+
+  describe('parseLocalDate', () => {
+    it('preserves the selected local day for date-only and Ionic date-time values', () => {
+      for (const value of ['2026-11-13', '2026-11-13T00:00:00.000Z']) {
+        const date = parseLocalDate(value);
+        expect(date).not.toBeNull();
+        expect(toIsoDateString(date!)).toBe('2026-11-13');
+      }
+    });
+
+    it('rejects invalid calendar dates', () => {
+      expect(parseLocalDate('2026-02-30')).toBeNull();
+      expect(parseLocalDate('invalid')).toBeNull();
     });
   });
 

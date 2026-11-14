@@ -18,12 +18,35 @@
         • {{ exercise().rest_seconds }}s
       </p>
     </ion-label>
-    <ion-icon
+    <ion-button
+      fill="clear"
       slot="end"
-      class="ez-swipe-affordance"
-      name="chevron-forward-outline"
-      aria-hidden="true"
-    ></ion-icon>
+      (click)="editExercise.emit(exercise())"
+      [attr.aria-label]="
+        ('COMMON.EDIT' | translate) + ': ' + exercise().exercise_name
+      "
+    >
+      <ion-icon
+        slot="icon-only"
+        name="create-outline"
+        aria-hidden="true"
+      ></ion-icon>
+    </ion-button>
+    <ion-button
+      fill="clear"
+      color="danger"
+      slot="end"
+      (click)="deleteExercise.emit(exercise().id)"
+      [attr.aria-label]="
+        ('COMMON.DELETE' | translate) + ': ' + exercise().exercise_name
+      "
+    >
+      <ion-icon
+        slot="icon-only"
+        name="trash-outline"
+        aria-hidden="true"
+      ></ion-icon>
+    </ion-button>
   </ion-item>
   <ion-item-options side="end">
     <ion-item-option

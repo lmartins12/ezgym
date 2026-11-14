@@ -1,15 +1,4 @@
 .import-export-modal {
-  &__header {
-    ion-toolbar {
-      --background: var(--glass-bg);
-      border-bottom: 1px solid var(--glass-border);
-    }
-  }
-
-  &__content {
-    --background: var(--ion-background-color);
-  }
-
   &__tabs {
     display: flex;
     gap: var(--space-2);
@@ -30,7 +19,6 @@
     color: var(--ion-color-medium);
     font-size: 0.875rem;
     font-weight: 500;
-    transition: all 0.2s ease;
     cursor: pointer;
 
     ion-icon {
@@ -56,44 +44,64 @@
     line-height: 1.5;
   }
 
-  &__actions {
+  &__actions,
+  &__json-actions {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+  }
+
+  &__actions {
     margin-bottom: var(--space-4);
   }
 
-  &__json-actions {
+  &__file {
     display: flex;
-    gap: var(--space-2);
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius-sm);
+    position: relative;
 
-    ion-button {
-      flex: 1;
+    input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+
+    &:focus-within {
+      outline: 2px solid var(--focus-ring);
     }
   }
 
-  &__json-output {
-    --background: var(--ion-background-color-step-50);
-    --color: var(--ion-text-color);
-    --padding-start: var(--space-3);
-    --padding-end: var(--space-3);
-    margin-top: var(--space-4);
-    font-family: "Courier New", monospace;
-    font-size: 0.75rem;
-    border-radius: var(--glass-radius);
-  }
-
+  &__json-output,
   &__json-input {
     --background: var(--ion-background-color-step-50);
     --color: var(--ion-text-color);
     --padding-start: var(--space-3);
     --padding-end: var(--space-3);
     font-family: "Courier New", monospace;
-    font-size: 0.875rem;
     border-radius: var(--glass-radius);
+  }
+
+  &__json-output {
+    margin-top: var(--space-4);
+    font-size: 0.75rem;
+  }
+
+  &__details {
+    summary {
+      padding: var(--space-3) 0;
+    }
+  }
+
+  &__json-input {
+    font-size: 0.875rem;
   }
 
   &__import-button {
     margin-top: var(--space-4);
   }
 }
+

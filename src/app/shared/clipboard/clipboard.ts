@@ -15,10 +15,14 @@ export class ClipboardService {
       textArea.style.position = 'fixed';
       textArea.style.opacity = '0';
       document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
+      try {
+        textArea.focus();
+        textArea.select();
+        if (!document.execCommand('copy'))
+          throw new Error('Clipboard copy failed');
+      } finally {
+        textArea.remove();
+      }
     }
   }
 

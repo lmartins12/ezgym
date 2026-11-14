@@ -112,6 +112,7 @@ describe('SessionInProgressComponent', () => {
     component.reps = 10;
     component.weight = 50;
     component.onLogSet();
+    component.setSaveSucceeded();
 
     expect(component.currentExerciseIndex()).toBe(1);
     expect(component.reps).toBe(8);
@@ -138,6 +139,31 @@ describe('SessionInProgressComponent', () => {
       reps: 10,
       weight: 50,
     });
+  });
+
+  it('waits for persistence and preserves the input if saving fails', () => {
+    const { component } = setup();
+    const emitted: unknown[] = [];
+    component.logSet.subscribe((value) => emitted.push(value));
+    component.reps = 10;
+    component.weight = 50;
+
+    component.onLogSet();
+    component.onLogSet();
+    expect(emitted).toHaveLength(1);
+    expect(component.savingSet()).toBe(true);
+    expect(component.restTimer.isResting()).toBe(false);
+    component.editSet(buildSetLog({ reps: 5, weight: 10 }));
+    expect(component.editingSetId()).toBeNull();
+    expect(component.reps).toBe(10);
+
+    component.setSaveFailed();
+    expect(component.savingSet()).toBe(false);
+    expect(component.reps).toBe(10);
+    expect(component.weight).toBe(50);
+    expect(component.restTimer.isResting()).toBe(false);
+    component.onLogSet();
+    expect(emitted).toHaveLength(2);
   });
 });
 
@@ -214,6 +240,7 @@ describe('SessionInProgressComponent rest flow', () => {
     component.reps = 10;
     component.weight = 50;
     component.onLogSet();
+    component.setSaveSucceeded();
   }
 
   it('starts the rest countdown after logging a set when more work remains', () => {
@@ -223,6 +250,20 @@ describe('SessionInProgressComponent rest flow', () => {
 
     expect(component.restTimer.isResting()).toBe(true);
     expect(component.restTimer.restRemaining()).toBe(60);
+    expect(component.currentExerciseIndex()).toBe(0);
+  });
+
+  it('opens editing immediately when a set is selected during rest', () => {
+    const { component, exercises } = setup();
+    logSet(component);
+    const log = buildSetLog({ exercise_id: exercises[0].exercise_id, reps: 9 });
+
+    component.editSet(log);
+
+    expect(component.restTimer.isResting()).toBe(false);
+    expect(component.editingSetId()).toBe(log.id);
+    expect(component.reps).toBe(9);
+    vi.advanceTimersByTime(60_000);
     expect(component.currentExerciseIndex()).toBe(0);
   });
 

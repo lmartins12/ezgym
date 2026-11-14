@@ -2,6 +2,7 @@ import { Component, input, output } from '@angular/core';
 import type { WorkoutExercise } from '@domain/workouts/workout-exercise';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import {
+  IonButton,
   IonIcon,
   IonItem,
   IonItemOption,
@@ -12,16 +13,13 @@ import {
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
-import {
-  chevronForwardOutline,
-  createOutline,
-  trashOutline,
-} from 'ionicons/icons';
+import { createOutline, trashOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-exercise-list-item',
   imports: [
     IonItem,
+    IonButton,
     IonItemOption,
     IonItemOptions,
     IonItemSliding,
@@ -41,7 +39,6 @@ export class ExerciseListItemComponent {
 
   constructor() {
     addIcons({
-      chevronForwardOutline,
       createOutline,
       trashOutline,
     });

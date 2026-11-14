@@ -55,7 +55,7 @@
     <ion-icon name="reorder-two-outline" aria-hidden="true"></ion-icon>
     {{ 'WORKOUT_DETAIL.REORDER_HINT' | translate }}
   </p>
-  <ion-list lines="full">
+  <ion-list lines="none" class="workout-detail__list">
     <ion-reorder-group
       disabled="false"
       (ionReorderEnd)="reorderExercises($event)"

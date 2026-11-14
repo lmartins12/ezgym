@@ -9,6 +9,7 @@
     <ion-buttons slot="end">
       <ion-button
         (click)="onExitSession()"
+        [disabled]="startingSession() || savingFinish() || !!sessionProgress()?.savingSet()"
         [attr.aria-label]="'COMMON.CLOSE' | translate"
       >
         <ion-icon name="close-outline" slot="icon-only"></ion-icon>
@@ -51,6 +52,7 @@
   <app-session-preparing
     [workout]="workout"
     [exercises]="sessionStore.exercises()"
+    [starting]="startingSession()"
     (startSession)="onStartSession()"
     (cancelSession)="onCancelSession()"
   ></app-session-preparing>
@@ -70,6 +72,7 @@
     [session]="session"
     [workout]="workout"
     [setLogs]="sessionStore.setLogs()"
+    [saving]="savingFinish()"
     (saveSession)="onSaveFinish($event)"
     (resumeSession)="onResumeSession()"
   ></app-session-finishing>

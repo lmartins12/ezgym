@@ -3,22 +3,18 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { LanguageService } from '@core/i18n/language';
 import {
+  IonButton,
   IonIcon,
   IonItem,
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
-  IonLabel,
   IonReorder,
 } from '@ionic/angular';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MuscleIconComponent } from '@shared/components/muscle-icon/muscle-icon.component';
 import { addIcons } from 'ionicons';
-import {
-  chevronForwardOutline,
-  playOutline,
-  trashOutline,
-} from 'ionicons/icons';
+import { playOutline, trashOutline } from 'ionicons/icons';
 import type { WorkoutDetail } from '../../models/workout-detail.models';
 
 @Component({
@@ -27,11 +23,11 @@ import type { WorkoutDetail } from '../../models/workout-detail.models';
     DatePipe,
     TranslatePipe,
     IonItem,
+    IonButton,
     IonItemSliding,
     IonItemOptions,
     IonItemOption,
     IonIcon,
-    IonLabel,
     IonReorder,
     MuscleIconComponent,
   ],
@@ -52,7 +48,6 @@ export class WorkoutCardComponent {
 
   constructor() {
     addIcons({
-      chevronForwardOutline,
       playOutline,
       trashOutline,
     });

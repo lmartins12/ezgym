@@ -1,4 +1,7 @@
 .workout-detail {
+  &__list {
+    background: transparent;
+  }
   &__loading {
     display: flex;
     justify-content: center;

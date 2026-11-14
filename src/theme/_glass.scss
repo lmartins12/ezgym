@@ -4,19 +4,34 @@
 
 // Light theme (default)
 :root {
-  --glass-bg: rgba(0, 0, 0, 0.03);
-  --glass-bg-elevated: rgba(0, 0, 0, 0.06);
-  --glass-bg-solid: rgba(245, 245, 245, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.08);
+  --app-canvas: radial-gradient(ellipse at 50% 0%, #f1f2f6 0%, #fafafa 62%);
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.95);
+  --glass-bg-solid: rgba(248, 248, 250, 0.9);
+  --glass-bg-fallback: #f8f8fa;
+  --glass-border: rgba(20, 20, 28, 0.12);
   --glass-blur: blur(16px);
-  --glass-radius: 14px;
-  --glass-radius-sm: 10px;
+  --glass-radius: 20px;
+  --glass-radius-sm: 12px;
+  --glass-shadow: 0 8px 28px rgba(20, 20, 28, 0.08);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --focus-ring: #245ec9;
 }
 
 // Dark theme
 .ion-palette-dark {
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-bg-elevated: rgba(255, 255, 255, 0.06);
-  --glass-bg-solid: rgba(24, 24, 27, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  // Low-contrast ambient light gives translucent surfaces depth without
+  // competing with workout data or creating a bright central spotlight.
+  --app-canvas:
+    radial-gradient(ellipse 110% 65% at 0% 0%, rgba(93, 109, 131, 0.16), transparent 72%),
+    radial-gradient(ellipse 100% 60% at 100% 100%, rgba(76, 88, 105, 0.12), transparent 75%),
+    linear-gradient(155deg, #101218 0%, #0c0e12 55%, #101116 100%);
+  --glass-bg: rgba(35, 35, 41, 0.9);
+  --glass-bg-elevated: rgba(48, 48, 55, 0.96);
+  --glass-bg-solid: rgba(28, 28, 33, 0.92);
+  --glass-bg-fallback: #1c1c21;
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --focus-ring: #9dc1ff;
 }
