@@ -6,8 +6,6 @@ import {
   IonButton,
   IonIcon,
   IonItem,
-  IonItemOption,
-  IonItemOptions,
   IonItemSliding,
   IonReorder,
 } from '@ionic/angular';
@@ -25,8 +23,6 @@ import type { WorkoutDetail } from '../../models/workout-detail.models';
     IonItem,
     IonButton,
     IonItemSliding,
-    IonItemOptions,
-    IonItemOption,
     IonIcon,
     IonReorder,
     MuscleIconComponent,

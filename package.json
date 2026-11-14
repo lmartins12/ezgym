@@ -1,6 +1,6 @@
 {
   "name": "ezgym",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Workout PWA that works 100% offline (Angular + Ionic + Dexie).",
   "license": "MIT",
   "packageManager": "pnpm@10.34.5",
